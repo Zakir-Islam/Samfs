@@ -1,0 +1,59 @@
+.badge-completed{
+    background-color: #198754 !important;
+  }
+  .badge-incomplete{
+    background-color: #751987  !important;
+  }
+.form-container {
+    max-height: 80vh; 
+    min-height: 100vh;/* Makes right-side scrollable */
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    border-radius: 8px;
+  }
+  .container{
+    min-width: 90% !important;
+  }
+  .btn-spouse{
+    background-color: #9eeaf9;
+    border: 1px solid #9eeaf9;
+  }
+  .btn-student{
+    background-color: #a3cfbb;
+    border: 1px solid #a3cfbb;
+  }
+  .btn-parent{
+    background-color: #ffe69c;
+    border: 1px solid #ffe69c;
+  }
+  .alert-additional-child{
+    background-color: #198754;
+    color:white;
+  }
+  .alert-emergency{
+    background-color: #6c757d;
+    color: white;
+  }
+ 
+  .badge-info{
+   background-color: green;
+   margin-left: 10px;
+  }
+  .badge-fees{
+    background-color: rgb(150, 28, 49);
+    margin-left: 10px;
+   }
+   .card-black{
+    color: white;
+    background-color:black;
+  }
+  .card-grey{
+    color: white;
+    background-color:#6c757d;
+  }
+  .btn{
+    margin-left: 10px;
+  }
+ 

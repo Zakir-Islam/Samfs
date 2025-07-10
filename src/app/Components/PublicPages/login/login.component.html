@@ -1,0 +1,60 @@
+@if (!this.isUser() && !isServer){
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+      <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%">
+        <div class="card-header text-center bg-transparent border-0">
+          <img
+            src="../../../assets/images/logo-dark.png"
+            class="mb-3"
+            style=" width: 150px"
+            alt="Logo"
+          />
+          <h3 class="font-weight-bold">Login</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm">
+            <div class="form-group mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                [formControl]="email"
+                placeholder="Enter your email"
+              />
+              <small class="text-danger" [hidden]="email.valid || email.untouched"
+                >Please enter a valid email</small
+              >
+            </div>
+            <div class="form-group mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                [formControl]="password"
+                placeholder="Enter your password"
+              />
+            </div>
+            <button
+              type="button"
+              (click)="login()"
+              class="btn btn-primary btn-block w-100 mt-4"
+              [disabled]="loginForm.invalid"
+            >
+              Login
+            </button>
+            <button
+              type="button"
+              (click)="reset()"
+              class="btn btn-primary btn-block w-100 mt-2"
+              style="background-color: #6c757d; border-color: #6c757d"
+            >
+              Reset
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+  
+  

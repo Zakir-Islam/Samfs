@@ -1,0 +1,161 @@
+<div class="row px-5">
+  <div class="col-md-9 mt-5">
+    <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Membership Type</th>
+          <th>Annual Fee</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Individual</td>
+          <td>$150</td>
+          <td>Covers a single member.</td>
+        </tr>
+        <tr>
+          <td>Family</td>
+          <td>$300</td>
+          <td>Covers a couple or parents with up to two dependent children (under 18 years).</td>
+        </tr>
+        <tr>
+          <td>Additional Dependent Child</td>
+          <td>$50 each</td>
+          <td>Applies to additional dependent children under 18 years.</td>
+        </tr>
+        <tr>
+          <td>Dependent Parent</td>
+          <td>$50</td>
+          <td>Applies to elderly parents who are living with and dependent on their children (who are SAMFS members).</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-4">
+      <h3 class="text-success">No Joining Fee</h3>
+      <ul class="list-group">
+        <li class="list-group-item">No Credit Card Or Additional Charges</li>
+        <li class="list-group-item">Membership starts from the date of joining if the full fee is paid.</li>
+        <!-- <li class="list-group-item">Members can pay annually, half-yearly, or quarterly via credit card.</li> -->
+      </ul>
+    </div>
+    <!-- <div class="mt-4">
+      <h3 class="text-primary">Payment Options & Instalment Plans</h3>
+      <div class="accordion" id="paymentOptions">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#fullPayment">
+              Full Annual Payment
+            </button>
+          </h2>
+          <div id="fullPayment" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <ul>
+                <li>Pay the total amount upfront.</li>
+                <li>Membership is valid for one full year from the date of joining.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#halfYearly">
+              Half-Yearly Instalments
+            </button>
+          </h2>
+          <div id="halfYearly" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <ul>
+                <li>50% of the total fee is paid every six months.</li>
+                <li>Payments are due on 1st January and 1st July.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#quarterly">
+              Quarterly Instalments
+            </button>
+          </h2>
+          <div id="quarterly" class="accordion-collapse collapse">
+            <div class="accordion-body">
+              <ul>
+                <li>25% of the total fee is paid every three months.</li>
+                <li>Payments are due on 1st January, 1st April, 1st July, and 1st October.</li>
+                <li>If a payment is missed, a 14-day grace period is provided before suspension.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+  <!-- Registration Form -->
+  <div class="col-md-3 mt-5">
+    <div class="card shadow-lg p-4">
+      <div class="text-center">
+        <a href="#" class="d-block auth-logo">
+          <img src="/assets/images/logo-dark.png" alt="Logo" height="100" class="mb-3">
+        </a>
+        <h5 class="text-primary">Registration for Membership</h5>
+        <p class="text-muted">Fill the form below to become a member of SA Muslim Funeral Services.</p>
+      </div>
+
+      <form [formGroup]="membershipForm">
+        <!-- Membership Type -->
+        <label class="form-label fw-bold">Membership Type: <code>*</code></label>
+        <div class="mb-3">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="membershipType" value="individual" checked required formControlName="memberShipTypeName">
+            <label class="form-check-label">Individual</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="membershipType" value="family" required formControlName="memberShipTypeName">
+            <label class="form-check-label">Family</label>
+          </div>
+        </div>
+
+        <!-- Name Fields -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Full Name: <code>*</code></label>
+          <input type="text" class="form-control" placeholder="First Name" formControlName="memberFName">
+          <input type="text" class="form-control mt-2" placeholder="Middle Name (Optional)" formControlName="memberMName">
+          <input type="text" class="form-control mt-2" placeholder="Last Name" formControlName="memberLName">
+        </div>
+
+        <!-- Contact Fields -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Email: <code>*</code></label>
+          <input type="text" class="form-control" placeholder="Email" formControlName="email">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Phone Number:</label>
+          <input type="text" class="form-control" placeholder="Phone Number" formControlName="phoneH">
+        </div>
+
+        
+        <!-- <div class="mb-3">
+          <label class="form-label fw-bold">Gender:  <code>*</code></label>
+          <select class="form-select" formControlName="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Date of Birth:  <code>*</code></label>
+          <input type="date" class="form-control" formControlName="dateofBirth">
+        </div> -->
+
+        <!-- Submit Button -->
+        <button type="button" (click)="submitForm()" class="btn btn-primary w-100" [disabled]="isSubmitDisabled"> Register</button>
+        
+        <span *ngIf="isSubmitDisabled">Please wait while we are saving data...</span>
+      </form>
+    </div>
+  </div>
+</div>

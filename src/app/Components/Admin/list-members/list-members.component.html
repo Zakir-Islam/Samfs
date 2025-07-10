@@ -1,0 +1,284 @@
+<div class="page-header d-print-none ms-2 mt-2">
+    <div class="container-fluid pb-2">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">List Members</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid ms-2 mt-1">
+    <div class="card">
+        <!-- <div class="card-header">
+        <h2 class="mb-0">Sales Orders</h2>
+      </div> -->
+        <div class="card-body">
+            <form [formGroup]="form">
+
+                <div class="row">
+                    <div class="col-md-12 mt-2">
+                        <input type="radio" style="margin-right: 5px;margin-left: 10px;" formControlName="membershipTypeId"
+                            (change)="loadAllMembers()" [value]="2">
+                        <label for="notSent">Family</label>
+                        <input type="radio" style="margin-right: 5px;margin-left: 10px;" formControlName="membershipTypeId"
+                            (change)="loadAllMembers()" [value]="1">
+                        <label for="sent">Independent</label>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive mt-3">
+                <table class="table table-striped table-bordered table-hover" id="membersDT">
+                    <thead>
+                        <tr>
+                            <th>Name </th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Date Of Birth</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="memberDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Member Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body"  *ngIf="memberDetails">
+                <div class="row" *ngIf="memberDetails.primaryMember">
+                    <div class="col-md-4">
+            
+                        <div class="card">
+                            <div class="card-header card-black">
+                                <h4>Primary Member Details
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div><b>Membership Type :</b><span
+                                        class="badge badge-info">{{(memberDetails.primaryMember.membershipTypeId==2?"Family":"Individual")}}</span>
+                                </div>
+                                <div><b>Member Name :</b> {{memberDetails.primaryMember.memberFName}}
+                                    {{memberDetails.primaryMember.memberMName}} {{memberDetails.primaryMember.memberLName}}</div>
+                                <div><b>Phone :</b> {{memberDetails.primaryMember.phoneH}} </div>
+                                <div><b>Email :</b> {{memberDetails.primaryMember.email}}</div>
+                                <div><b>DOB :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}</div>
+                                <div><b>Primary Fees : </b> $
+                                    {{memberDetails.primaryMember.membershipCategory.membershipFees.toFixed(2)}}</div>
+                                <div><b>Total Fees : </b><span class="badge badge-fees">$
+                                        {{memberDetails.totalFees.toFixed(2)}}</span></div>
+                              
+                                <div *ngIf="memberDetails.primaryMember.isCompleted "><a [href]="memberDetails.primaryMember.lastOnlineInvoiceURL" target="_blank"><b>Invocie</b></a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Left Side Form -->
+            
+            
+                    <!-- Right Side Display -->
+                    <div class="col-md-8">
+                        <div class="card " *ngIf="memberDetails.primaryMember.membershipTypeId==2">
+                            <div class="card-header card-black">
+                                <h4><fa-icon [icon]="familyIcon"></fa-icon> Family Details</h4>
+                            </div>
+                            <div class="card-body">
+            
+                                <div *ngIf="memberDetails.spouse">
+                                    <strong>Spouse:</strong>
+                                    <div class="alert alert-info">
+                                        <div class="member-box row">
+                                            <div class="member-field-box col-md-2">
+                                                {{ memberDetails.spouse.memberFName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ memberDetails.spouse.memberMName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ memberDetails.spouse.memberLName }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{ memberDetails.spouse.phoneH }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{memberDetails.spouse.gender }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{memberDetails.spouse.dateofBirth | date:'dd/MM/yyyy'}}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                $ {{memberDetails.spouse.membershipCategory.membershipFees.toFixed(2)}}
+                                            </div>
+                                        
+            
+                                        </div>
+            
+            
+                                    </div>
+                                </div>
+            
+                                <!-- Children List -->
+                                <div *ngIf="memberDetails.dependentChild.length > 0">
+                                    <strong>Dependent Child:</strong>
+                                    <div *ngFor="let c of memberDetails.dependentChild;" class="alert alert-success">
+                                        <div class="member-box row">
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.memberFName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberMName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberLName }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.phoneH }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{c.gender }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                                            </div>
+                                 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="memberDetails.additionalDependentChild.length > 0">
+                                    <strong>Additional Dependent Child:</strong>
+                                    <div *ngFor="let c of memberDetails.additionalDependentChild;"
+                                        class="alert alert-additional-child">
+                                        <div class="member-box row">
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.memberFName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberMName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberLName }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.phoneH }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{c.gender }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                                            </div>
+  
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="memberDetails.additionalIndependentChild.length > 0">
+                                    <strong>Additional Independent Child:</strong> (Over 18s are treated as individual members within a family membership)
+                                    <div *ngFor="let c of memberDetails.additionalIndependentChild;" class="alert alert-secondary">
+                                        <div class="member-box row">
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.memberFName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberMName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberLName }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.phoneH }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{c.gender }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                                            </div>
+     
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Parents List -->
+                                <div *ngIf="memberDetails.dependentParents.length > 0 ">
+                                    <strong>Parents:</strong>
+                                    <div *ngFor="let c of memberDetails.dependentParents; let i = index"
+                                        class="alert alert-warning">
+                                        <div class="member-box row">
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.memberFName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberMName }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{ c.memberLName }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.phoneH }}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                {{c.gender }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                                            </div>
+                                            <div class="member-field-box col-md-1">
+                                                $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                                            </div>
+                                        </div>
+            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card  mt-3" *ngIf="memberDetails.emergencyContacts.length > 0">
+                            <div class="card-header card-grey">
+                                <h4><fa-icon [icon]="contactIcon"></fa-icon> Emergency Contacts</h4>
+                            </div>
+                            <div class="card-body">
+                                <div *ngIf="memberDetails.emergencyContacts.length > 0 ">
+                                    <div *ngFor="let c of memberDetails.emergencyContacts; let i = index" class="alert">
+                                        <div class="member-box row">
+                                            <div class="member-field-box col-md-3">
+                                                {{ c.fullName }}
+                                            </div>
+                                            <div class="member-field-box col-md-3">
+                                                {{ c.phone }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.gender }}
+                                            </div>
+                                            <div class="member-field-box col-md-2">
+                                                {{ c.relationship.relationshipName }}
+                                            </div>
+            
+                                        </div>
+            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
