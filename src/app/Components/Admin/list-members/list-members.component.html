@@ -17,11 +17,11 @@
 
                 <div class="row">
                     <div class="col-md-12 mt-2">
-                        <input type="radio" style="margin-right: 5px;margin-left: 10px;" formControlName="membershipTypeId"
-                            (change)="loadAllMembers()" [value]="2">
+                        <input type="radio" style="margin-right: 5px;margin-left: 10px;"
+                            formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="2">
                         <label for="notSent">Family</label>
-                        <input type="radio" style="margin-right: 5px;margin-left: 10px;" formControlName="membershipTypeId"
-                            (change)="loadAllMembers()" [value]="1">
+                        <input type="radio" style="margin-right: 5px;margin-left: 10px;"
+                            formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="1">
                         <label for="sent">Independent</label>
                     </div>
                 </div>
@@ -34,6 +34,10 @@
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Date Of Birth</th>
+                            <th>Renewel Date</th>
+                            <th>Fees</th>
+                            <th>Last Sent Date</th>
+                            <th>Reminder </th>
                             <th>Gender</th>
                             <th>Status</th>
                         </tr>
@@ -54,10 +58,10 @@
                 <h5 class="modal-title">Member Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body"  *ngIf="memberDetails">
+            <div class="modal-body" *ngIf="memberDetails">
                 <div class="row" *ngIf="memberDetails.primaryMember">
                     <div class="col-md-4">
-            
+
                         <div class="card">
                             <div class="card-header card-black">
                                 <h4>Primary Member Details
@@ -68,24 +72,28 @@
                                         class="badge badge-info">{{(memberDetails.primaryMember.membershipTypeId==2?"Family":"Individual")}}</span>
                                 </div>
                                 <div><b>Member Name :</b> {{memberDetails.primaryMember.memberFName}}
-                                    {{memberDetails.primaryMember.memberMName}} {{memberDetails.primaryMember.memberLName}}</div>
+                                    {{memberDetails.primaryMember.memberMName}}
+                                    {{memberDetails.primaryMember.memberLName}}</div>
                                 <div><b>Phone :</b> {{memberDetails.primaryMember.phoneH}} </div>
                                 <div><b>Email :</b> {{memberDetails.primaryMember.email}}</div>
-                                <div><b>DOB :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}</div>
+                                <div><b>DOB :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}
+                                </div>
                                 <div><b>Primary Fees : </b> $
                                     {{memberDetails.primaryMember.membershipCategory.membershipFees.toFixed(2)}}</div>
                                 <div><b>Total Fees : </b><span class="badge badge-fees">$
                                         {{memberDetails.totalFees.toFixed(2)}}</span></div>
-                              
-                                <div *ngIf="memberDetails.primaryMember.isCompleted "><a [href]="memberDetails.primaryMember.lastOnlineInvoiceURL" target="_blank"><b>Invocie</b></a>
+
+                                <div *ngIf="memberDetails.primaryMember.isCompleted "><a
+                                        [href]="memberDetails.primaryMember.lastOnlineInvoiceURL"
+                                        target="_blank"><b>Invocie</b></a>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
                     <!-- Left Side Form -->
-            
-            
+
+
                     <!-- Right Side Display -->
                     <div class="col-md-8">
                         <div class="card " *ngIf="memberDetails.primaryMember.membershipTypeId==2">
@@ -93,7 +101,7 @@
                                 <h4><fa-icon [icon]="familyIcon"></fa-icon> Family Details</h4>
                             </div>
                             <div class="card-body">
-            
+
                                 <div *ngIf="memberDetails.spouse">
                                     <strong>Spouse:</strong>
                                     <div class="alert alert-info">
@@ -119,14 +127,14 @@
                                             <div class="member-field-box col-md-1">
                                                 $ {{memberDetails.spouse.membershipCategory.membershipFees.toFixed(2)}}
                                             </div>
-                                        
-            
+
+
                                         </div>
-            
-            
+
+
                                     </div>
                                 </div>
-            
+
                                 <!-- Children List -->
                                 <div *ngIf="memberDetails.dependentChild.length > 0">
                                     <strong>Dependent Child:</strong>
@@ -153,7 +161,7 @@
                                             <div class="member-field-box col-md-1">
                                                 $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                             </div>
-                                 
+
                                         </div>
                                     </div>
                                 </div>
@@ -183,13 +191,15 @@
                                             <div class="member-field-box col-md-1">
                                                 $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                             </div>
-  
+
                                         </div>
                                     </div>
                                 </div>
                                 <div *ngIf="memberDetails.additionalIndependentChild.length > 0">
-                                    <strong>Additional Independent Child:</strong> (Over 18s are treated as individual members within a family membership)
-                                    <div *ngFor="let c of memberDetails.additionalIndependentChild;" class="alert alert-secondary">
+                                    <strong>Additional Independent Child:</strong> (Over 18s are treated as individual
+                                    members within a family membership)
+                                    <div *ngFor="let c of memberDetails.additionalIndependentChild;"
+                                        class="alert alert-secondary">
                                         <div class="member-box row">
                                             <div class="member-field-box col-md-2">
                                                 {{ c.memberFName }}
@@ -212,7 +222,7 @@
                                             <div class="member-field-box col-md-1">
                                                 $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                             </div>
-     
+
                                         </div>
                                     </div>
                                 </div>
@@ -244,7 +254,7 @@
                                                 $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                             </div>
                                         </div>
-            
+
                                     </div>
                                 </div>
                             </div>
@@ -269,13 +279,51 @@
                                             <div class="member-field-box col-md-2">
                                                 {{ c.relationship.relationshipName }}
                                             </div>
-            
+
                                         </div>
-            
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="reminderEmailTemplate" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reminder Email Template</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" *ngIf="emailTemplate">
+                    <div class="col-md-12">
+                        <b>Subject : </b> {{emailTemplate.subject}}
+                    </div>
+                    <div class="col-md-12">
+                        <b>Email : </b> {{emailTemplate.email}}
+                    </div>
+                    <div class="col-md-12">
+                        <b>CC : </b> {{emailTemplate.cc}}
+                    </div>
+                    <div class="col-md-12">
+                        <b>CC : </b> {{emailTemplate.bcc}}
+                    </div>
+                    <div class="col-md-12">
+                        <b>Body : </b>
+                    </div>
+                    <div class="col-md-12" [innerHTML]="emailTemplate.body">
+
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-primary" style="margin-left: 0px;" (click)="sendEmail()"> Send
+                            Email</button>
                     </div>
                 </div>
             </div>

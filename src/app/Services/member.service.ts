@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { baseApiURL } from '../Core/Constants/constant';
+import { EmailTemplate } from '../Models/email-template';
+import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +35,11 @@ export class MemberService {
   }
   saveAndGenerateInvoice(uid:any): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/SaveAndGenerateInvoice?uid=${uid}`);
+  }
+    GetReminderEmailTemplate(memberUid:any): Observable<EmailTemplate> {
+    return this.http.get<EmailTemplate>(`${this.baseURL}/GetReminderEmailTemplate?memberUid=${memberUid}`);
+  }
+  SendReminderEmailTemplate(emailTemplateDTO:any,memberId:any): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}/SendReminderEmailTemplate?memberId=${memberId}`,emailTemplateDTO);
   }
 }
