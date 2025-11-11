@@ -27,6 +27,7 @@ export class ListMembersComponent {
   familyIcon = faUserGroup;
   faEditIcon = faEdit
   membershipTypeId = new FormControl(2);
+  status = new FormControl(true);
   form!: FormGroup;
   members: any[] = [];
   memberDetails: any;
@@ -34,11 +35,12 @@ export class ListMembersComponent {
   ngOnInit() {
     this.loadAllMembers();
     this.form = this.fb.group({
-      membershipTypeId: this.membershipTypeId
+      membershipTypeId: this.membershipTypeId,
+      status: this.status
     });
   }
   loadAllMembers() {
-    this.manageMemberService.getAllMembers(this.membershipTypeId.value).subscribe((data) => {
+    this.manageMemberService.getAllMembers(this.membershipTypeId.value, this.status.value).subscribe((data) => {
       this.members = data;
       this.initializeDataTable();
     })
@@ -99,10 +101,10 @@ export class ListMembersComponent {
 
             }
           },
-             {
+          {
             data: 'totalFees', render: (data: any, type: any, row: any) => {
               if (data) {
-                return '$'+data.toFixed(2)
+                return '$' + data.toFixed(2)
               }
               else {
                 return '';
@@ -110,6 +112,16 @@ export class ListMembersComponent {
 
 
             }
+          },
+          {
+            data: 'accountNo', render: (data: any) => data ?? '',
+          },
+          {
+            data: 'bsb', render: (data: any) => data ?? '',
+          },
+
+          {
+            data: 'modeOfPayment', render: (data: any) => data ?? '',
           },
           {
             data: 'lastSentDate', render: (data: any, type: any, row: any) => {

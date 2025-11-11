@@ -11,8 +11,8 @@ export class ManageMemberService {
 
   constructor(private http:HttpClient) { }
 
-  getAllMembers(membershipTypeId:any): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/GetAllMembers?membershipTypeId=${membershipTypeId}`);
+  getAllMembers(membershipTypeId:any,status:any): Observable<any> {
+    return this.http.get<any>(`${this.baseURL}/GetAllMembers?membershipTypeId=${membershipTypeId}&status=${status}`);
   }
 
 }

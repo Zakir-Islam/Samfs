@@ -17,12 +17,25 @@
 
                 <div class="row">
                     <div class="col-md-12 mt-2">
+                        <strong>Type : </strong>
                         <input type="radio" style="margin-right: 5px;margin-left: 10px;"
                             formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="2">
                         <label for="notSent">Family</label>
                         <input type="radio" style="margin-right: 5px;margin-left: 10px;"
                             formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="1">
                         <label for="sent">Independent</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mt-2">
+                        <strong>Status : </strong>
+                        <input type="radio" style="margin-right: 5px;margin-left: 10px;" formControlName="status"
+                            (change)="loadAllMembers()" [value]="true">
+                        <label for="notSent">Active</label>
+                        <input type="radio" style="margin-right: 5px;margin-left: 10px;" formControlName="status"
+                            (change)="loadAllMembers()" [value]="false">
+                        <label for="sent">In Active</label>
                     </div>
                 </div>
             </form>
@@ -36,6 +49,9 @@
                             <th>Date Of Birth</th>
                             <th>Renewel Date</th>
                             <th>Fees</th>
+                            <th>Account No</th>
+                            <th>BSB</th>
+                             <th>Mode Of Payment</th>
                             <th>Last Sent Date</th>
                             <th>Reminder </th>
                             <th>Gender</th>
