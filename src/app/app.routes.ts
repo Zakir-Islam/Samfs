@@ -4,10 +4,18 @@ import { RegistrationDetailsComponent } from './Components/PublicPages/registrat
 import { LoginComponent } from './Components/PublicPages/login/login.component';
 import { ListMembersComponent } from './Components/Admin/list-members/list-members.component';
 import { AuthGuard } from './Core/Interceptors/auth.guard';
+import { EmailTemplatesComponent } from './Components/Admin/email-templates/email-templates.component';
+import { UpdateEmailTemplateComponent } from './Components/Admin/update-email-template/update-email-template.component';
 
 export const routes: Routes = [
     { path: '', component: RegisterMemberComponent },
     { path: 'registration-details/:uid', component: RegistrationDetailsComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'list-members', component: ListMembersComponent,canActivate:[AuthGuard], },
+    { path: 'list-members', component: ListMembersComponent, canActivate: [AuthGuard], },
+    { path: 'email-templates', component: EmailTemplatesComponent, canActivate: [AuthGuard] },
+    {
+        path: 'update-email-template/:id',
+        component: UpdateEmailTemplateComponent,
+        canActivate: [AuthGuard]
+    },
 ];

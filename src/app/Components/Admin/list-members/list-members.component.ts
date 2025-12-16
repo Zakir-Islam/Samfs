@@ -38,6 +38,9 @@ export class ListMembersComponent {
       membershipTypeId: this.membershipTypeId,
       status: this.status
     });
+    this.updateForm = this.fb.group({
+      validUpto: ['']
+    });
   }
   loadAllMembers() {
     this.manageMemberService.getAllMembers(this.membershipTypeId.value, this.status.value).subscribe((data) => {
@@ -90,17 +93,37 @@ export class ListMembersComponent {
             }
           },
           {
-            data: 'validUpto', render: (data: any, type: any, row: any) => {
-              if (data) {
-                return this.datePipe.transform(data, 'dd/MM/yyyy');
-              }
-              else {
+            data: 'validUpto',
+            render: (data: any, type: any, row: any) => {
+              return `
+                ${this.datePipe.transform(data, 'dd/MM/yyyy') ?? ''}
+                <br/>
+                <a href="javascript:void(0);" 
+                  class="update-valid-upto"
+                  data-id="${row.memberId}"
+                  data-date="${data}">
+                  Update
+                </a>
+              `;
+            }
+          },
+
+          {
+            data: 'daysRemaining',
+            render: (data: any, type: any, row: any) => {
+
+              if (data == null || data === '') {
                 return '';
               }
 
+              if (data < 30) {
+                return `<span class="badge bg-danger">${data} days</span>`;
+              }
 
+              return `<span class="badge bg-success">${data} days</span>`;
             }
-          },
+          }
+          ,
           {
             data: 'totalFees', render: (data: any, type: any, row: any) => {
               if (data) {
@@ -155,6 +178,13 @@ export class ListMembersComponent {
 
         this.loadMemberDetails(id);
       });
+      $('#membersDT').on('click', '.update-valid-upto', (event: any) => {
+        const memberId = $(event.target).data('id');
+        const validUpto = $(event.target).data('date');
+
+        this.openUpdateValidUptoModal(memberId, validUpto);
+      });
+
       $('#membersDT').on('click', '.14days-reminder', (event: any) => {
         const id = $(event.target).data('id'); // Extract the ID
         const mid = $(event.target).data('mid');// Extract the ID
@@ -195,6 +225,37 @@ export class ListMembersComponent {
     this.memberService.SendReminderEmailTemplate(this.emailTemplate, this.memberId).subscribe((data) => {
       this.toastr.success("Send Successfully!");
     })
+  }
+
+  updateMemberId!: number;
+  updateForm!: FormGroup;
+
+  openUpdateValidUptoModal(memberId: number, validUpto: any) {
+    this.updateMemberId = memberId;
+
+    this.updateForm.patchValue({
+      validUpto: this.datePipe.transform(validUpto, 'yyyy-MM-dd')
+    });
+
+    const modal = new bootstrap.Modal(
+      document.getElementById('updateValidUptoModal')!
+    );
+    modal.show();
+  }
+
+  updateValidUpto() {
+    const validUpto = this.updateForm.value.validUpto;
+
+    this.manageMemberService.updateValidUpto(this.updateMemberId, validUpto)
+      .subscribe(() => {
+        this.toastr.success('Valid Upto updated successfully');
+
+        bootstrap.Modal.getInstance(
+          document.getElementById('updateValidUptoModal')!
+        )?.hide();
+
+        this.loadAllMembers(); // refresh table
+      });
   }
 
 }

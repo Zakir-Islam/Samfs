@@ -1,0 +1,29 @@
+<div class="container-fluid ms-2 mt-1">
+<div>
+  <h2 class="section-header">Email Templates</h2>
+  <div class="row">
+    <div
+      class="col-md-4"
+      *ngFor="let category of emailTemplatesByCategory | keyvalue"
+    >
+      <div class="card">
+        <div class="card-header">
+          Templates
+        </div>
+        <div class="card-body">
+          <div *ngFor="let emailTemplate of category.value">
+            <a
+              [routerLink]="[
+                '/update-email-template',
+                emailTemplate.emailTemplateId
+              ]"
+            >
+              {{ emailTemplate.emailTemplateName }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

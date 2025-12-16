@@ -1,31 +1,52 @@
-@if(!isLoginPage && isAuthenticated) {
+@if (!isLoginPage && isAuthenticated) {
 
-<header class="navbar navbar-expand-md d-print-none border-bottom">
-
+<header class="navbar navbar-expand-md navbar-light bg-white d-print-none border-bottom shadow-sm">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
-      aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbar-menu">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center me-4">
+      <img src="../../../assets/images/logo-dark.png" height="45" alt="Logo" class="me-2" />
+      <span class="fw-semibold text-dark">Membership Portal</span>
+    </a>
 
-    <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-md-3 pe-md-3 mx-2">
-      <a>
-        <img src="../../../assets/images/logo-dark.png" height="50" alt="Logo" />
-      </a>
-    </h1>
+    <!-- Menu -->
+    <div class="collapse navbar-collapse" id="navbar-menu">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
 
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/list-members" routerLinkActive="active">
+            Members
+          </a>
+        </li>
 
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/email-templates" routerLinkActive="active">
+            Email Templates
+          </a>
+        </li>
 
-  
-    <div class="navbar-nav flex-row order-md-last">
-      <div class="nav-item dropdown ">
-        <a class="btn btn-primary"  (click)="Logout()">
+      </ul>
+
+      <!-- Right Side -->
+      <div class="d-flex align-items-center gap-3">
+
+        <span class="text-muted small">
+          Welcome, {{ userName }}
+        </span>
+
+        <button class="btn btn-outline-danger btn-sm" (click)="Logout()">
           Logout
-        </a>
+        </button>
+
       </div>
     </div>
   </div>
-
 </header>
+
 }

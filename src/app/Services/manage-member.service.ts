@@ -14,5 +14,7 @@ export class ManageMemberService {
   getAllMembers(membershipTypeId:any,status:any): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/GetAllMembers?membershipTypeId=${membershipTypeId}&status=${status}`);
   }
-
+    updateValidUpto(updateMemberId:any,validUpto:any): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}/update-valid-upto?memberId=${updateMemberId}&validUpto=${validUpto}`,null);
+  }
 }

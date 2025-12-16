@@ -48,6 +48,7 @@
                             <th>Phone</th>
                             <th>Date Of Birth</th>
                             <th>Renewel Date</th>
+                            <th>Days Remaining</th>
                             <th>Fees</th>
                             <th>Account No</th>
                             <th>BSB</th>
@@ -345,4 +346,35 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="updateValidUptoModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Update Valid Upto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="updateForm">
+          <label><b>Valid Upto Date</b></label>
+          <input type="date"
+                 class="form-control"
+                 formControlName="validUpto">
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-primary" (click)="updateValidUpto()">
+          Update
+        </button>
+      </div>
+
+    </div>
+  </div>
 </div>

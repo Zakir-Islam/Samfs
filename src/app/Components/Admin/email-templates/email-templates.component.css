@@ -1,0 +1,42 @@
+.section-header {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color:#0d6efd9c ;
+  color: #fff;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-body a {
+  color: #4f4b34;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.card-body a:hover {
+  color: #3e3a28; 
+  text-decoration: underline;
+}
+
+.row {
+  margin-bottom: 1.5rem;
+}
