@@ -1,0 +1,92 @@
+<div class="page-header d-print-none ms-2 mt-2">
+    <div class="container-fluid pb-2">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">Email Logs</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0" *ngIf="member">{{member.membershipNo}}-{{getFullName()}}</h5>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-hover table-sm mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Date</th>
+          <th>To</th>
+          <th>Subject</th>
+          <th width="80"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of emailLogs">
+          <td>{{ log.addedDate | date:'dd/MM/yyyy hh:mm a' }}</td>
+          <td>{{ log.emailTo }}</td>
+          <td>{{ log.subject }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#emailModal"
+              (click)="openEmail(log)">
+              View
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="emailLogs.length === 0">
+          <td colspan="4" class="text-center text-muted py-3">
+            No email logs found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Email Details Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Email Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedEmail">
+
+        <div class="mb-2">
+          <strong>To:</strong> {{ selectedEmail.emailTo }}
+        </div>
+
+        <div class="mb-2" *ngIf="selectedEmail.emailCC">
+          <strong>CC:</strong> {{ selectedEmail.emailCC }}
+        </div>
+
+        <div class="mb-2" *ngIf="selectedEmail.emailBCC">
+          <strong>BCC:</strong> {{ selectedEmail.emailBCC }}
+        </div>
+
+        <div class="mb-2">
+          <strong>Subject:</strong> {{ selectedEmail.subject }}
+        </div>
+
+        <hr />
+
+        <!-- Email body -->
+        <div class="border p-2" [innerHTML]="selectedEmail.body"></div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -10,6 +10,7 @@ import { faContactCard, faEdit, faPlus, faTrash, faUserGroup } from '@fortawesom
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EmailTemplate } from '../../../Models/email-template';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 declare var $: any;
 @Component({
   selector: 'app-list-members',
@@ -31,7 +32,9 @@ export class ListMembersComponent {
   form!: FormGroup;
   members: any[] = [];
   memberDetails: any;
-  constructor(private manageMemberService: ManageMemberService, private memberService: MemberService, private toastr: ToastrService, private datePipe: DatePipe, private fb: FormBuilder, private sanitizer: DomSanitizer,) { }
+  isDisabled=false;
+  constructor(private manageMemberService: ManageMemberService, private memberService: MemberService, private toastr: ToastrService,
+    private datePipe: DatePipe, private fb: FormBuilder, private sanitizer: DomSanitizer, private router: Router) { }
   ngOnInit() {
     this.loadAllMembers();
     this.form = this.fb.group({
@@ -61,6 +64,14 @@ export class ListMembersComponent {
         data: this.members,
         columns: [
           {
+            data: 'membershipNo',
+            render: (data: any, type: any, row: any) => {
+              var html = ''
+              html = `<a href='javascript:void(0);' class='goto-member' data-id='${row.memberUID}' >${data}</a>`
+              return html;
+            }
+          },
+          {
             data: 'memberFName',
             render: (data: any, type: any, row: any) => {
               var html = ''
@@ -70,7 +81,7 @@ export class ListMembersComponent {
                 html += ' ' + row.memberMName;
               if (row.memberLName)
                 html += ' ' + row.memberLName;
-              html = `<a href='javascript:void(0);' class='goto-member' data-id='${row.memberUID}' >${html}</a>`
+              html = `<a href='javascript:void(0);' class='goto-email-logs' data-id='${row.memberId}' >${data}</a>`
               return html;
             }
           },
@@ -160,9 +171,16 @@ export class ListMembersComponent {
           },
           {
             data: 'memberFName', render: (data: any, type: any, row: any) => {
-              var html = `<a href='javascript:void(0);' class='14days-reminder' data-id='${row.memberUID}' data-mid='${row.memberId}' >send 30 days reminder</a> | `
-              html += `<a href='javascript:void(0);' class='30days-reminder' data-id='${row.memberUID}'  data-mid='${row.memberId}' >send 14 days reminder</a>`
-              return html
+              if (row.modeOfPayment == 'BANK TRANSFER') {
+                var html = `<a href='javascript:void(0);' class='14days-reminder' data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
+                html += `<a href='javascript:void(0);' class='30days-reminder' data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
+                return html
+              } else {
+                var html = `<a href='javascript:void(0);' class='14days-reminder' data-id='${row.memberUID}' data-emtemp='Send DDR 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
+                html += `<a href='javascript:void(0);' class='30days-reminder' data-id='${row.memberUID}' data-emtemp='Send DDR 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
+                return html
+              }
+
             }
           },
           {
@@ -178,6 +196,15 @@ export class ListMembersComponent {
 
         this.loadMemberDetails(id);
       });
+      $('#membersDT').on('click', '.goto-email-logs', (event: any) => {
+        const id = $(event.target).data('id');
+
+        const url = this.router.serializeUrl(
+          this.router.createUrlTree(['/email-logs', id])
+        );
+
+        window.open(url, '_blank');
+      });
       $('#membersDT').on('click', '.update-valid-upto', (event: any) => {
         const memberId = $(event.target).data('id');
         const validUpto = $(event.target).data('date');
@@ -188,12 +215,14 @@ export class ListMembersComponent {
       $('#membersDT').on('click', '.14days-reminder', (event: any) => {
         const id = $(event.target).data('id'); // Extract the ID
         const mid = $(event.target).data('mid');// Extract the ID
-        this.loadEmailTemplate(id, mid);
+        const emTemp = $(event.target).data('emtemp');
+        this.loadEmailTemplate(id, mid, emTemp);
       });
       $('#membersDT').on('click', '.30days-reminder', (event: any) => {
         const id = $(event.target).data('id'); // Extract the ID
         const mid = $(event.target).data('mid');// Extract the ID
-        this.loadEmailTemplate(id, mid);
+        const emTemp = $(event.target).data('emtemp');
+        this.loadEmailTemplate(id, mid, emTemp);
       });
     }, 500);
   }
@@ -209,8 +238,8 @@ export class ListMembersComponent {
   }
   emailTemplate!: EmailTemplate;
   memberId = 0;
-  loadEmailTemplate(uid: any, mid: any) {
-    this.memberService.GetReminderEmailTemplate(uid).subscribe((data) => {
+  loadEmailTemplate(uid: any, mid: any, templateName: any) {
+    this.memberService.GetReminderEmailTemplate(uid, templateName).subscribe((data) => {
       this.emailTemplate = data;
       this.memberId = mid;
       const modal = new bootstrap.Modal(document.getElementById('reminderEmailTemplate')!);
@@ -222,8 +251,10 @@ export class ListMembersComponent {
     return this.sanitizer.bypassSecurityTrustHtml(this.emailTemplate.email || '');
   }
   sendEmail() {
+    this.isDisabled=true;
     this.memberService.SendReminderEmailTemplate(this.emailTemplate, this.memberId).subscribe((data) => {
       this.toastr.success("Send Successfully!");
+         this.isDisabled=false;
     })
   }
 
