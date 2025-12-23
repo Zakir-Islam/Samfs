@@ -4,7 +4,7 @@
 
             <div class="card">
                 <div class="card-header card-black">
-                    <h4>Primary Member Details <button *ngIf="!memberDetails.primaryMember.isCompleted"
+                    <h4>Primary Member Details <button 
                             (click)="openMemberEditModal(memberDetails.primaryMember)"
                             class="btn btn-warning  btn-sm   float-end">
                             <fa-icon [icon]="faEditIcon"></fa-icon>
@@ -24,7 +24,7 @@
                         {{memberDetails.primaryMember.membershipCategory.membershipFees.toFixed(2)}}</div>
                     <div><b>Total Fees : </b><span class="badge badge-fees">$
                             {{memberDetails.totalFees.toFixed(2)}}</span></div>
-                    @if(memberDetails.primaryMember.membershipTypeId==2 && !memberDetails.primaryMember.isCompleted ){
+                    @if(memberDetails.primaryMember.membershipTypeId==2  ){
                     <button class="btn btn-spouse w-100 mb-2 mt-2" (click)="openModal('spouse')"
                         *ngIf="!isSpouseFilled"><fa-icon [icon]="addIcon"></fa-icon> Would you like to add a spouse?
                         <fa-icon [icon]="familyIcon"></fa-icon></button>
@@ -35,13 +35,13 @@
                             [icon]="addIcon"></fa-icon> Would you like to add
                         a parent? <fa-icon [icon]="familyIcon"></fa-icon></button>
                     }
-                    @if(!memberDetails.primaryMember.isCompleted ){
+        
                     <button class="btn btn-secondary w-100 mb-2 mt-1" (click)="openEmergencyContactModal()"> <fa-icon
                             [icon]="addIcon"></fa-icon> Would you
                         like to add an emergency contact? <fa-icon [icon]="contactIcon"></fa-icon></button>
                     <span class="text-danger" *ngIf="memberDetails.emergencyContacts.length < 2">Minimum 2 emergency
                         contacts are required</span>
-
+            @if(!memberDetails.primaryMember.isCompleted ){
                     <button *ngIf="memberDetails.emergencyContacts.length >= 2" class="btn btn-primary w-100 mb-2 mt-4"
                         (click)="saveAndGenerateInvoice()" [disabled]="isInvoiceButtonDisabled"> <i
                             class="spinner-border spinner-border-sm" [hidden]="!isInvoiceButtonDisabled"></i>
@@ -104,7 +104,7 @@
                                     $ {{memberDetails.spouse.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
                                 <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
+                                 >
                                     <button class="btn btn-danger btn-sm float-end"
                                         (click)="removeMember(memberDetails.spouse)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
@@ -147,7 +147,7 @@
                                     $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
                                 <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
+                                    >
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -185,7 +185,7 @@
                                     $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
                                 <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
+                                   >
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -223,7 +223,7 @@
                                     $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
                                 <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
+                                  >
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -263,7 +263,7 @@
                                 </div>
 
                                 <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
+                                    >
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -300,7 +300,7 @@
 
 
                                 <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
+                                  >
                                     <button class="btn btn-danger btn-sm float-end"
                                         (click)="removeEmergencyCotnact(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>

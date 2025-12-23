@@ -49,6 +49,7 @@ export class ListMembersComponent {
     this.manageMemberService.getAllMembers(this.membershipTypeId.value, this.status.value).subscribe((data) => {
       this.members = data;
       this.initializeDataTable();
+        this.isLoading = false;
     })
   }
   table: any;
@@ -133,7 +134,43 @@ export class ListMembersComponent {
 
               return `<span class="badge bg-success">${data} days</span>`;
             }
+          },
+          {
+            data: 'lastOnlineInvoiceURL',
+            render: (data: any, type: any, row: any) => {
+
+              const generateInvoice = `
+      <a href="javascript:void(0);" 
+         class="GenInvoice ms-2" 
+         data-id="${row.memberUID}" 
+         title="Generate New Invoice">
+         <i   data-id="${row.memberUID}" class="fa fa-plus-circle text-primary"></i>
+      </a>`;
+
+              // If last invoice exists
+              if (data) {
+                return `
+        <a href="${data}" 
+           target="_blank" 
+           title="View Last Invoice">
+           <i class="fa fa-file-pdf text-danger"></i>
+        </a>
+        ${generateInvoice}
+      `;
+              }
+
+              // If last invoice does NOT exist
+              return `
+         <a href="javascript:void(0);" 
+         class="GenInvoice ms-2" 
+         data-id="${row.memberUID}" 
+         title="Generate New Invoice">
+         <i   data-id="${row.memberUID}" class="fa fa-plus-circle text-primary"></i>
+      </a>
+    `;
+            }
           }
+
           ,
           {
             data: 'totalFees', render: (data: any, type: any, row: any) => {
@@ -216,6 +253,11 @@ export class ListMembersComponent {
 
         this.openUpdateValidUptoModal(memberId, validUpto);
       });
+      $('#membersDT').on('click', '.GenInvoice', (event: any) => {
+        const muid = $(event.target).data('id');
+
+        this.saveAndGenerateInvoice(muid);
+      });
 
       $('#membersDT').on('click', '.14days-reminder', (event: any) => {
         const id = $(event.target).data('id'); // Extract the ID
@@ -230,6 +272,15 @@ export class ListMembersComponent {
         this.loadEmailTemplate(id, mid, emTemp);
       });
     }, 500);
+  }
+  isLoading = false;
+
+  saveAndGenerateInvoice(memberUid: any) {
+    this.isLoading = true; // 👈 show spinner
+    this.memberService.saveAndGenerateInvoice(memberUid).subscribe((data) => {
+      this.loadAllMembers();
+     // 👈 hide spinner
+    })
   }
   loadMemberDetails(uid: any) {
     this.memberService.getMemberDetails(uid).subscribe(

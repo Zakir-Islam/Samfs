@@ -9,10 +9,22 @@
 </div>
 <div class="container-fluid ms-2 mt-1">
     <div class="card">
+
+
         <!-- <div class="card-header">
         <h2 class="mb-0">Sales Orders</h2>
       </div> -->
-        <div class="card-body">
+        <div class="card-body" *ngIf="isLoading">
+            <div class="loading-overlay">
+                <div class="spinner-container">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="mt-2 fw-bold">Generating Invoice...</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" *ngIf="!isLoading">
             <form [formGroup]="form">
 
                 <div class="row">
@@ -43,17 +55,18 @@
                 <table class="table table-striped table-bordered table-hover" id="membersDT">
                     <thead>
                         <tr>
-                             <th>Membership No# </th>
+                            <th>Membership No# </th>
                             <th>Name </th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Date Of Birth</th>
                             <th>Renewel Date</th>
                             <th>Days Remaining</th>
+                            <th>Invoice URL</th>
                             <th>Fees</th>
                             <th>Account No</th>
                             <th>BSB</th>
-                             <th>Mode Of Payment</th>
+                            <th>Mode Of Payment</th>
                             <th>Last Sent Date</th>
                             <th>Reminder </th>
                             <th>Gender</th>
@@ -340,8 +353,9 @@
 
                     </div>
                     <div class="col-md-12">
-                        <button class="btn btn-primary" style="margin-left: 0px;" (click)="sendEmail()"[disabled]="isDisabled"> <i
-                                    class="spinner-border spinner-border-sm" [hidden]="!isDisabled"></i>  Send
+                        <button class="btn btn-primary" style="margin-left: 0px;" (click)="sendEmail()"
+                            [disabled]="isDisabled"> <i class="spinner-border spinner-border-sm"
+                                [hidden]="!isDisabled"></i> Send
                             Email</button>
                     </div>
                 </div>
@@ -351,32 +365,30 @@
 </div>
 
 <div class="modal fade" id="updateValidUptoModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title">Update Valid Upto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Update Valid Upto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
 
-      <div class="modal-body">
-        <form [formGroup]="updateForm">
-          <label><b>Valid Upto Date</b></label>
-          <input type="date"
-                 class="form-control"
-                 formControlName="validUpto">
-        </form>
-      </div>
+            <div class="modal-body">
+                <form [formGroup]="updateForm">
+                    <label><b>Valid Upto Date</b></label>
+                    <input type="date" class="form-control" formControlName="validUpto">
+                </form>
+            </div>
 
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancel
-        </button>
-        <button class="btn btn-primary" (click)="updateValidUpto()">
-          Update
-        </button>
-      </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button class="btn btn-primary" (click)="updateValidUpto()">
+                    Update
+                </button>
+            </div>
 
+        </div>
     </div>
-  </div>
 </div>
