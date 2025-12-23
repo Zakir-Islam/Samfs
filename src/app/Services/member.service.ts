@@ -19,6 +19,7 @@ export class MemberService {
     return this.http.get<any>(`${this.baseURL}/GetMemberDetails?uid=${uid}`);
   }
   addFamilyMember(member:any): Observable<any> {
+
     return this.http.post<any>(`${this.baseURL}/addFamilyMember`, member);
   }
   DeleteMember(memberId:any): Observable<any> {

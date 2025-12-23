@@ -32,7 +32,7 @@ export class ListMembersComponent {
   form!: FormGroup;
   members: any[] = [];
   memberDetails: any;
-  isDisabled=false;
+  isDisabled = false;
   constructor(private manageMemberService: ManageMemberService, private memberService: MemberService, private toastr: ToastrService,
     private datePipe: DatePipe, private fb: FormBuilder, private sanitizer: DomSanitizer, private router: Router) { }
   ngOnInit() {
@@ -194,7 +194,12 @@ export class ListMembersComponent {
       $('#membersDT').on('click', '.goto-member', (event: any) => {
         const id = $(event.target).data('id');
 
-        this.loadMemberDetails(id);
+        const url = this.router.serializeUrl(
+          this.router.createUrlTree(['/admin-registration-details', id])
+        );
+
+        window.open(url, '_blank');
+        // this.loadMemberDetails(id);
       });
       $('#membersDT').on('click', '.goto-email-logs', (event: any) => {
         const id = $(event.target).data('id');
@@ -251,10 +256,10 @@ export class ListMembersComponent {
     return this.sanitizer.bypassSecurityTrustHtml(this.emailTemplate.email || '');
   }
   sendEmail() {
-    this.isDisabled=true;
+    this.isDisabled = true;
     this.memberService.SendReminderEmailTemplate(this.emailTemplate, this.memberId).subscribe((data) => {
       this.toastr.success("Send Successfully!");
-         this.isDisabled=false;
+      this.isDisabled = false;
     })
   }
 

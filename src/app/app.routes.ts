@@ -7,10 +7,12 @@ import { AuthGuard } from './Core/Interceptors/auth.guard';
 import { EmailTemplatesComponent } from './Components/Admin/email-templates/email-templates.component';
 import { UpdateEmailTemplateComponent } from './Components/Admin/update-email-template/update-email-template.component';
 import { EmailLogComponent } from './Components/Admin/email-log/email-log.component';
+import { AdminRegistrationDetailsComponent } from './Components/Admin/admin-registration-details/admin-registration-details.component';
 
 export const routes: Routes = [
     { path: '', component: RegisterMemberComponent },
     { path: 'registration-details/:uid', component: RegistrationDetailsComponent },
+    { path: 'admin-registration-details/:uid', component: AdminRegistrationDetailsComponent,canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'list-members', component: ListMembersComponent, canActivate: [AuthGuard], },
     { path: 'email-templates', component: EmailTemplatesComponent, canActivate: [AuthGuard] },
