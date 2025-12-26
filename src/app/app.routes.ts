@@ -8,6 +8,7 @@ import { EmailTemplatesComponent } from './Components/Admin/email-templates/emai
 import { UpdateEmailTemplateComponent } from './Components/Admin/update-email-template/update-email-template.component';
 import { EmailLogComponent } from './Components/Admin/email-log/email-log.component';
 import { AdminRegistrationDetailsComponent } from './Components/Admin/admin-registration-details/admin-registration-details.component';
+import { AddEmailTemplateComponent } from './Components/Admin/add-email-template/add-email-template.component';
 
 export const routes: Routes = [
     { path: '', component: RegisterMemberComponent },
@@ -24,6 +25,11 @@ export const routes: Routes = [
     {
         path: 'email-logs/:recordId',
         component: EmailLogComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'add-email-template',
+        component: AddEmailTemplateComponent,
         canActivate: [AuthGuard]
     }
 

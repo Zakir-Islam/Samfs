@@ -21,4 +21,7 @@ export class EmailTemplateService {
   updateEmailTemplate(emailTemplate:any): Observable<any> {
     return this.http.put<any>(`${this.baseURL}/${emailTemplate.emailTemplateId}`,emailTemplate);
   }
+  AddEmailTemplate(emailTemplate:any): Observable<any> {
+    return this.http.post<any>(`${this.baseURL}`,emailTemplate);
+  }
 }

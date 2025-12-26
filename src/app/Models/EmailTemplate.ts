@@ -16,4 +16,5 @@ export interface EmailTemplate {
     addedByUser?: User;
     lastUpdateByUser?: User;
     emailTypeId?:number;
+    isSendEmail?:boolean;
 }

@@ -76,10 +76,11 @@ export class UpdateEmailTemplateComponent implements OnInit{
 
       });
     }
-    onSubmit(): void {
+    onSubmit(isSendEmail:any): void {
       if (this.updateEmailTemplateForm.valid) {
         const updatedEmailTemplate: EmailTemplate = this.updateEmailTemplateForm.value;
         updatedEmailTemplate.emailTypeId=this.emailTemplate.emailTypeId||0
+        updatedEmailTemplate.isSendEmail=isSendEmail||false;
         this.emailTemplateService.updateEmailTemplate(updatedEmailTemplate).subscribe(
           response => {
           this.toaster.success("saved successfully")

@@ -1,0 +1,46 @@
+<!-- update-email-template.component.html -->
+<div class="container-fluid mt-2 ms-2">
+    <h2>{{emailTemplate.emailTemplateName}}</h2>
+    <form [formGroup]="updateEmailTemplateForm" (ngSubmit)="onSubmit()">
+      <div class="form-group" >
+        <label for="emailTemplateName">Email Template Name</label>
+        <input id="emailTemplateName" formControlName="emailTemplateName" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="emailTo">Email To</label>
+        <input id="emailTo" formControlName="emailTo" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="emailCc">Email CC</label>
+        <input id="emailCc" formControlName="emailCc" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="emailBCc">Email BCC</label>
+        <input id="emailBCc" formControlName="emailBCc" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input id="subject" formControlName="subject" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label for="body">Body</label>
+        <editor
+        id="body" formControlName="body" class="form-control"
+        [init]="init"
+      />
+
+      </div>
+
+      <!-- <div class="form-group">
+        <label for="body">Category</label>
+        <input id="body" formControlName="category" class="form-control" />
+      </div> -->
+
+      <button type="submit" class="btn btn-primary mt-2 mb-2" [disabled]="updateEmailTemplateForm.invalid">Add</button>
+    </form>
+  </div>
