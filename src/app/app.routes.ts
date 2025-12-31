@@ -9,6 +9,8 @@ import { UpdateEmailTemplateComponent } from './Components/Admin/update-email-te
 import { EmailLogComponent } from './Components/Admin/email-log/email-log.component';
 import { AdminRegistrationDetailsComponent } from './Components/Admin/admin-registration-details/admin-registration-details.component';
 import { AddEmailTemplateComponent } from './Components/Admin/add-email-template/add-email-template.component';
+import { ContactListService } from './Services/contact-list.service';
+import { ContactListsComponent } from './Components/Admin/contact-lists/contact-lists.component';
 
 export const routes: Routes = [
     { path: '', component: RegisterMemberComponent },
@@ -30,6 +32,11 @@ export const routes: Routes = [
     {
         path: 'add-email-template',
         component: AddEmailTemplateComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'contact-lists',
+        component: ContactListsComponent,
         canActivate: [AuthGuard]
     }
 
