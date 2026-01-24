@@ -46,10 +46,12 @@ export class ListMembersComponent {
     });
   }
   loadAllMembers() {
+     this.members=[];
+     this.initializeDataTable();
     this.manageMemberService.getAllMembers(this.membershipTypeId.value, this.status.value).subscribe((data) => {
       this.members = data;
       this.initializeDataTable();
-        this.isLoading = false;
+      this.isLoading = false;
     })
   }
   table: any;
@@ -279,7 +281,7 @@ export class ListMembersComponent {
     this.isLoading = true; // 👈 show spinner
     this.memberService.saveAndGenerateInvoice(memberUid).subscribe((data) => {
       this.loadAllMembers();
-     // 👈 hide spinner
+      // 👈 hide spinner
     })
   }
   loadMemberDetails(uid: any) {
@@ -319,10 +321,12 @@ export class ListMembersComponent {
 
   openUpdateValidUptoModal(memberId: number, validUpto: any) {
     this.updateMemberId = memberId;
+    if (validUpto!="undefined") {
+      this.updateForm.patchValue({
+        validUpto: this.datePipe.transform(validUpto, 'yyyy-MM-dd')
+      });
 
-    this.updateForm.patchValue({
-      validUpto: this.datePipe.transform(validUpto, 'yyyy-MM-dd')
-    });
+    }
 
     const modal = new bootstrap.Modal(
       document.getElementById('updateValidUptoModal')!
@@ -332,17 +336,22 @@ export class ListMembersComponent {
 
   updateValidUpto() {
     const validUpto = this.updateForm.value.validUpto;
-
+   
     this.manageMemberService.updateValidUpto(this.updateMemberId, validUpto)
       .subscribe(() => {
         this.toastr.success('Valid Upto updated successfully');
 
-        bootstrap.Modal.getInstance(
+       this.hideValidUpto();
+
+        location.reload(); // refresh table
+      });
+  }
+  
+  hideValidUpto(){
+    $('.modal-backdrop').removeClass('show')
+     bootstrap.Modal.getInstance(
           document.getElementById('updateValidUptoModal')!
         )?.hide();
-
-        this.loadAllMembers(); // refresh table
-      });
   }
 
 }

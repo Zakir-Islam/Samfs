@@ -30,12 +30,16 @@
                 <div class="row">
                     <div class="col-md-12 mt-2">
                         <strong>Type : </strong>
+                          <input type="radio" style="margin-right: 5px;margin-left: 10px;"
+                            formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="0">
+                        <label for="sent">All</label>
                         <input type="radio" style="margin-right: 5px;margin-left: 10px;"
                             formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="2">
                         <label for="notSent">Family</label>
                         <input type="radio" style="margin-right: 5px;margin-left: 10px;"
                             formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="1">
                         <label for="sent">Independent</label>
+                        
                     </div>
                 </div>
 
@@ -77,6 +81,9 @@
 
                     </tbody>
                 </table>
+            </div>
+            <div *ngIf="members.length==0">
+                   Loading data........
             </div>
         </div>
     </div>
@@ -364,7 +371,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="updateValidUptoModal" tabindex="-1">
+<div  class="modal fade" id="updateValidUptoModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -381,10 +388,10 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                <button class="btn btn-secondary"(click)="hideValidUpto()">
                     Cancel
                 </button>
-                <button class="btn btn-primary" (click)="updateValidUpto()">
+                <button class="btn btn-primary"  (click)="updateValidUpto()">
                     Update
                 </button>
             </div>
