@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import  * as bootstrap from 'bootstrap';
+import * as bootstrap from 'bootstrap';
 import { MemberService } from '../../../Services/member.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AddFamilyMember } from '../../../Models/member-classes';
@@ -13,38 +13,38 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-registration-details',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule,FontAwesomeModule,DatePipe],
-  providers:[DatePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule, DatePipe],
+  providers: [DatePipe],
   templateUrl: './registration-details.component.html',
   styleUrl: './registration-details.component.css'
 })
 export class RegistrationDetailsComponent {
-  addIcon=faPlus;
-  trashIcon=faTrash;
-  contactIcon=faContactCard;
-  familyIcon=faUserGroup;
-  faEditIcon=faEdit
+  addIcon = faPlus;
+  trashIcon = faTrash;
+  contactIcon = faContactCard;
+  familyIcon = faUserGroup;
+  faEditIcon = faEdit
   membershipForm!: FormGroup;
   emergencyContactForm!: FormGroup;
   selectedType: string = '';
   modalForm!: FormGroup;
-  isSpouseFilled:boolean=false;
-  memberDetails:any;
-  memberUid:any;
-  relationships:any;
-  isSubmitDisabled=false;
-  isInvoiceButtonDisabled=false;
-  constructor(private fb: FormBuilder,private memberService:MemberService,private activatedRoute:ActivatedRoute,private toast:ToastrService,private router:Router,private datePipe:DatePipe) {}
+  isSpouseFilled: boolean = false;
+  memberDetails: any;
+  memberUid: any;
+  relationships: any;
+  isSubmitDisabled = false;
+  isInvoiceButtonDisabled = false;
+  constructor(private fb: FormBuilder, private memberService: MemberService, private activatedRoute: ActivatedRoute, private toast: ToastrService, private router: Router, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe((param)=>{
-      const newMemberUid= param.get('uid');
-      if(this.memberUid!=newMemberUid){
-        this.memberUid=newMemberUid;
+    this.activatedRoute.paramMap.subscribe((param) => {
+      const newMemberUid = param.get('uid');
+      if (this.memberUid != newMemberUid) {
+        this.memberUid = newMemberUid;
         this.loadMemberDetails(this.memberUid);
       }
     })
-     this.loadRelationships();
+    this.loadRelationships();
     this.membershipForm = this.fb.group({
       spouse: this.fb.array([]),
       children: this.fb.array([]),
@@ -52,36 +52,37 @@ export class RegistrationDetailsComponent {
     });
 
     this.modalForm = this.createMemberGroup();
-    this.emergencyContactForm=this.createEmergencyContactGroup();
+    this.emergencyContactForm = this.createEmergencyContactGroup();
   }
-  loadRelationships(){
+  loadRelationships() {
     this.memberService.getAllRelationships().subscribe(
-      (data:any)=>{
-        this.relationships=data;
+      (data: any) => {
+        this.relationships = data;
       }
     )
   }
-  loadMemberDetails(uid:any){
+  loadMemberDetails(uid: any) {
     this.memberService.getMemberDetails(uid).subscribe(
-      (data:any)=>{
+      (data: any) => {
         debugger
-        this.memberDetails=data;
-        if(data.spouse)
+        this.memberDetails = data;
+        if (data.spouse)
           this.isSpouseFilled = true;
         else
-          this.isSpouseFilled=false;
+          this.isSpouseFilled = false;
       }
     )
   }
   createMemberGroup(): FormGroup {
     return this.fb.group({
-      memberId:[0],
+      memberId: [0],
       memberFName: ['', Validators.required],
       memberMName: [''],
       memberLName: ['', Validators.required],
       gender: ['', Validators.required],
       dateofBirth: ['', Validators.required],
-      phoneH: ['']
+      phoneH: [''],
+      modeOfPayment: ['']
     });
   }
   createEmergencyContactGroup(): FormGroup {
@@ -90,7 +91,7 @@ export class RegistrationDetailsComponent {
       phone: ['', Validators.required],
       gender: ['', Validators.required],
       relationshipId: ['', Validators.required],
-      contactId:[0]
+      contactId: [0]
     });
   }
   get spouse(): FormArray {
@@ -113,52 +114,52 @@ export class RegistrationDetailsComponent {
   }
   openEmergencyContactModal(contact?: EmergencyContactDTO): void {
     this.emergencyContactForm.reset(); // Clear previous data
-  
+
     if (contact) {
       this.emergencyContactForm.patchValue(contact); // Fill form with selected contact
     }
-  
+
     const modal = new bootstrap.Modal(document.getElementById('emergencyContactModal')!);
     modal.show();
   }
-  
+
   addMember(): void {
     if (this.modalForm.valid) {
-      const member: AddFamilyMember = { 
+      const member: AddFamilyMember = {
         ...this.modalForm.value,
-        membershipTypeId:this.memberDetails.primaryMember.membershipTypeId,
-        parentMemberId:this.memberDetails.primaryMember.memberId
+        membershipTypeId: this.memberDetails.primaryMember.membershipTypeId,
+        parentMemberId: this.memberDetails.primaryMember.memberId
       };
 
       if (this.selectedType === 'child') {
-        member.relationshipId = this.modalForm.get('gender')?.value == "male" ? 3 :4;
-        member.membershipCategoryId=2;
+        member.relationshipId = this.modalForm.get('gender')?.value == "male" ? 3 : 4;
+        member.membershipCategoryId = 2;
       } else if (this.selectedType === 'parent') {
         member.relationshipId = this.modalForm.get('gender')?.value == "male" ? 5 : 6;
-        member.membershipCategoryId=5;
+        member.membershipCategoryId = 5;
       } else if (this.selectedType === 'spouse') {
         member.relationshipId = this.modalForm.get('gender')?.value == "male" ? 1 : 2;
-        member.membershipCategoryId=2;
+        member.membershipCategoryId = 2;
         this.isSpouseFilled = true;
       }
-    debugger;
+      debugger;
       this.saveFamilyMember(member);
       document.getElementById('closeModal')?.click();
     }
-    else{
+    else {
       this.toast.error('Please fill all required fields!')
     }
   }
-  saveFamilyMember(member:any){
-    this.isSubmitDisabled=true;;
-      this.memberService.addFamilyMember(member).subscribe(
-        (data)=>{
-         this.loadMemberDetails(this.memberUid);
-         this.isSubmitDisabled=false;
-        }
-      )
+  saveFamilyMember(member: any) {
+    this.isSubmitDisabled = true;;
+    this.memberService.addFamilyMember(member).subscribe(
+      (data) => {
+        this.loadMemberDetails(this.memberUid);
+        this.isSubmitDisabled = false;
+      }
+    )
   }
-  removeMember(member:any): void {
+  removeMember(member: any): void {
     Swal.fire({
       title: 'Are you sure?',
       text: 'You won’t be able to revert this!',
@@ -169,18 +170,18 @@ export class RegistrationDetailsComponent {
       confirmButtonColor: 'red'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.memberService.DeleteMember(member.memberId).subscribe((data)=>{
-          if(data==1){
+        this.memberService.DeleteMember(member.memberId).subscribe((data) => {
+          if (data == 1) {
             Swal.fire('Deleted!', 'Your family member has been deleted.', 'success');
-             this.loadMemberDetails(this.memberUid);
+            this.loadMemberDetails(this.memberUid);
           }
         });
 
       }
     });
-   
+
   }
-  removeEmergencyCotnact(contact:any): void {
+  removeEmergencyCotnact(contact: any): void {
     Swal.fire({
       title: 'Are you sure?',
       text: 'You won’t be able to revert this!',
@@ -188,63 +189,63 @@ export class RegistrationDetailsComponent {
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it',
-       confirmButtonColor: 'red'
+      confirmButtonColor: 'red'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.memberService.deleteEmergencyContact(contact.contactId).subscribe((data)=>{
-          if(data==1){
+        this.memberService.deleteEmergencyContact(contact.contactId).subscribe((data) => {
+          if (data == 1) {
             Swal.fire('Deleted!', 'Your contact has been deleted.', 'success');
-             this.loadMemberDetails(this.memberUid);
+            this.loadMemberDetails(this.memberUid);
           }
         });
 
       }
     });
-    
- 
+
+
   }
-  saveAndGenerateInvoice(){
-    this.isInvoiceButtonDisabled=true;
-    this.memberService.saveAndGenerateInvoice(this.memberUid).subscribe((data)=>{
+  saveAndGenerateInvoice() {
+    this.isInvoiceButtonDisabled = true;
+    this.memberService.saveAndGenerateInvoice(this.memberUid).subscribe((data) => {
       // window.open(data.pdfUrl, '_blank');
-      this.isInvoiceButtonDisabled=false;
+      this.isInvoiceButtonDisabled = false;
       this.loadMemberDetails(this.memberUid);
     })
   }
   addEmergencyContact(): void {
     if (this.emergencyContactForm.valid) {
-      this.isSubmitDisabled=true;
-      const emergencyContact: EmergencyContactDTO = { 
+      this.isSubmitDisabled = true;
+      const emergencyContact: EmergencyContactDTO = {
         ...this.emergencyContactForm.value,
-        memberId:this.memberDetails.primaryMember.memberId
+        memberId: this.memberDetails.primaryMember.memberId
       };
       this.memberService.addEmergencyContact(emergencyContact).subscribe(
-        (data)=>{
-         this.loadMemberDetails(this.memberUid);
-         this.isSubmitDisabled=false;
+        (data) => {
+          this.loadMemberDetails(this.memberUid);
+          this.isSubmitDisabled = false;
         }
       )
       document.getElementById('closeEmergencyCotnactModal')?.click();
     }
-    else{
-      this.isSubmitDisabled=false;
+    else {
+      this.isSubmitDisabled = false;
       this.toast.error('Please fill all required fields!')
     }
   }
   openMemberEditModal(member: any): void {
     this.modalForm.reset();
-      
+
     // Convert date to YYYY-MM-DD format before patching
-    const formattedDate =this.datePipe.transform (member.dateofBirth,"yyyy-MM-dd") ;
+    const formattedDate = this.datePipe.transform(member.dateofBirth, "yyyy-MM-dd");
     this.modalForm.patchValue({
       ...member,
       dateofBirth: formattedDate // ✅ Convert date before setting
     });
-  
+
     this.selectedType = member.relationshipType;
-  
+
     const modal = new bootstrap.Modal(document.getElementById('familyModal')!);
     modal.show();
   }
-  
+
 }
