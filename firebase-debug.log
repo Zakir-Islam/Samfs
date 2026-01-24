@@ -12,3 +12,8 @@
 [debug] [2026-01-24T17:59:08.891Z] > refreshing access token with scopes: []
 [debug] [2026-01-24T17:59:08.893Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
 [debug] [2026-01-24T17:59:08.893Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-01-24T17:59:09.553Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-01-24T17:59:09.553Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-01-24T17:59:09.563Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/samfs-app:testIamPermissions [none]
+[debug] [2026-01-24T17:59:09.563Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/samfs-app:testIamPermissions x-goog-quota-user=projects/samfs-app
+[debug] [2026-01-24T17:59:09.563Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/samfs-app:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
