@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12 mt-2">
                         <strong>Type : </strong>
-                          <input type="radio" style="margin-right: 5px;margin-left: 10px;"
+                        <input type="radio" style="margin-right: 5px;margin-left: 10px;"
                             formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="0">
                         <label for="sent">All</label>
                         <input type="radio" style="margin-right: 5px;margin-left: 10px;"
@@ -39,7 +39,7 @@
                         <input type="radio" style="margin-right: 5px;margin-left: 10px;"
                             formControlName="membershipTypeId" (change)="loadAllMembers()" [value]="1">
                         <label for="sent">Independent</label>
-                        
+
                     </div>
                 </div>
 
@@ -60,16 +60,14 @@
                     <thead>
                         <tr>
                             <th>Membership No# </th>
+                            <th>Type </th>
                             <th>Name </th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>Date Of Birth</th>
                             <th>Renewel Date</th>
                             <th>Days Remaining</th>
                             <th>Invoice URL</th>
-                            <th>Fees</th>
-                            <th>Account No</th>
-                            <th>BSB</th>
+                            <!-- <th>Fees</th> -->
+                            <th>BSB Account No</th>
                             <th>Mode Of Payment</th>
                             <th>Last Sent Date</th>
                             <th>Reminder </th>
@@ -83,7 +81,7 @@
                 </table>
             </div>
             <div *ngIf="members.length==0">
-                   Loading data........
+                Loading data........
             </div>
         </div>
     </div>
@@ -371,7 +369,7 @@
     </div>
 </div>
 
-<div  class="modal fade" id="updateValidUptoModal" tabindex="-1">
+<div class="modal fade" id="updateValidUptoModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -388,10 +386,10 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-secondary"(click)="hideValidUpto()">
+                <button class="btn btn-secondary" data-bs-dismiss="modal" >
                     Cancel
                 </button>
-                <button class="btn btn-primary"  (click)="updateValidUpto()">
+                <button class="btn btn-primary" data-bs-dismiss="modal" (click)="updateValidUpto()">
                     Update
                 </button>
             </div>

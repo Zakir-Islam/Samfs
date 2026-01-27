@@ -46,8 +46,8 @@ export class ListMembersComponent {
     });
   }
   loadAllMembers() {
-     this.members=[];
-     this.initializeDataTable();
+    this.members = [];
+    this.initializeDataTable();
     this.manageMemberService.getAllMembers(this.membershipTypeId.value, this.status.value).subscribe((data) => {
       this.members = data;
       this.initializeDataTable();
@@ -75,6 +75,14 @@ export class ListMembersComponent {
             }
           },
           {
+            data: 'membershipTypeId',
+            render: (data: any, type: any, row: any) => {
+              var html = ''
+              html = row?.membershipTypeId == 2 ? '<span class="badge bg-warning">Family</span>' : '<span class="badge bg-info">Independent</span>'
+              return html;
+            }
+          },
+          {
             data: 'memberFName',
             render: (data: any, type: any, row: any) => {
               var html = ''
@@ -84,38 +92,25 @@ export class ListMembersComponent {
                 html += ' ' + row.memberMName;
               if (row.memberLName)
                 html += ' ' + row.memberLName;
-              html = `<a href='javascript:void(0);' class='goto-email-logs' data-id='${row.memberId}' >${data}</a>`
+              html = `<a href='javascript:void(0);' class='goto-email-logs' data-id='${row.memberId}' >${html}</a>`
               return html;
             }
           },
           {
             data: 'email', render: (data: any) => data ?? ''
           },
-          {
-            data: 'phoneH', render: (data: any) => data ?? '',
-          },
-          {
-            data: 'dateofBirth', render: (data: any, type: any, row: any) => {
-              if (data) {
-                return this.datePipe.transform(data, 'dd/MM/yyyy');
-              }
-              else {
-                return '';
-              }
 
-
-            }
-          },
           {
             data: 'validUpto',
             render: (data: any, type: any, row: any) => {
               return `
                 ${this.datePipe.transform(data, 'dd/MM/yyyy') ?? ''}
                 <br/>
-                <a href="javascript:void(0);" 
+                <a  data-bs-toggle="modal"
+  data-bs-target="#updateValidUptoModal" href="javascript:void(0);" 
                   class="update-valid-upto"
                   data-id="${row.memberId}"
-                  data-date="${data}">
+                  data-date="${data}" id='ele-${row.memberId}'>
                   Update
                 </a>
               `;
@@ -174,25 +169,21 @@ export class ListMembersComponent {
           }
 
           ,
-          {
-            data: 'totalFees', render: (data: any, type: any, row: any) => {
-              if (data) {
-                return '$' + data.toFixed(2)
-              }
-              else {
-                return '';
-              }
+          // {
+          //   data: 'totalFees', render: (data: any, type: any, row: any) => {
+          //     if (data) {
+          //       return '$' + data.toFixed(2)
+          //     }
+          //     else {
+          //       return '';
+          //     }
 
 
-            }
-          },
+          //   }
+          // },
           {
-            data: 'accountNo', render: (data: any) => data ?? '',
+            data: 'accountNo', render: (data: any, type: any, row: any) => `${row.bsb || ''} ${row.accountNo || ''}`,
           },
-          {
-            data: 'bsb', render: (data: any) => data ?? '',
-          },
-
           {
             data: 'modeOfPayment', render: (data: any) => data ?? '',
           },
@@ -211,12 +202,16 @@ export class ListMembersComponent {
           {
             data: 'memberFName', render: (data: any, type: any, row: any) => {
               if (row.modeOfPayment == 'BANK TRANSFER') {
-                var html = `<a href='javascript:void(0);' class='14days-reminder' data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
-                html += `<a href='javascript:void(0);' class='30days-reminder' data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
+                var html = `<a href='javascript:void(0);' class='14days-reminder' data-bs-toggle="modal"
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
+                html += `<a href='javascript:void(0);' class='30days-reminder' data-bs-toggle="modal"
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
                 return html
               } else {
-                var html = `<a href='javascript:void(0);' class='14days-reminder' data-id='${row.memberUID}' data-emtemp='Send DDR 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
-                html += `<a href='javascript:void(0);' class='30days-reminder' data-id='${row.memberUID}' data-emtemp='Send DDR 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
+                var html = `<a href='javascript:void(0);' class='14days-reminder' data-bs-toggle="modal"
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send DDR 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
+                html += `<a href='javascript:void(0);' class='30days-reminder' data-bs-toggle="modal"
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send DDR 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
                 return html
               }
 
@@ -289,8 +284,8 @@ export class ListMembersComponent {
       (data: any) => {
         debugger
         this.memberDetails = data;
-        const modal = new bootstrap.Modal(document.getElementById('memberDetailsModal')!);
-        modal.show();
+        // const modal = new bootstrap.Modal(document.getElementById('memberDetailsModal')!);
+        // modal.show();
       }
     )
   }
@@ -300,8 +295,8 @@ export class ListMembersComponent {
     this.memberService.GetReminderEmailTemplate(uid, templateName).subscribe((data) => {
       this.emailTemplate = data;
       this.memberId = mid;
-      const modal = new bootstrap.Modal(document.getElementById('reminderEmailTemplate')!);
-      modal.show();
+      // const modal = new bootstrap.Modal(document.getElementById('reminderEmailTemplate')!);
+      // modal.show();
     })
   }
 
@@ -321,37 +316,34 @@ export class ListMembersComponent {
 
   openUpdateValidUptoModal(memberId: number, validUpto: any) {
     this.updateMemberId = memberId;
-    if (validUpto!="undefined") {
+    if (validUpto != "undefined") {
       this.updateForm.patchValue({
         validUpto: this.datePipe.transform(validUpto, 'yyyy-MM-dd')
       });
 
     }
 
-    const modal = new bootstrap.Modal(
-      document.getElementById('updateValidUptoModal')!
-    );
-    modal.show();
+    // const modal = new bootstrap.Modal(
+    //   document.getElementById('updateValidUptoModal')!
+    // );
+    // modal.show();
   }
 
   updateValidUpto() {
     const validUpto = this.updateForm.value.validUpto;
-   
+
     this.manageMemberService.updateValidUpto(this.updateMemberId, validUpto)
       .subscribe(() => {
         this.toastr.success('Valid Upto updated successfully');
+       let member=this.members.find(x=>x.memberId==this.updateMemberId);
+       member.validUpto=validUpto;
+       this.initializeDataTable();
+        // this.hideValidUpto();
 
-       this.hideValidUpto();
-
-        location.reload(); // refresh table
+        // location.reload(); // refresh table
       });
   }
-  
-  hideValidUpto(){
-    $('.modal-backdrop').removeClass('show')
-     bootstrap.Modal.getInstance(
-          document.getElementById('updateValidUptoModal')!
-        )?.hide();
-  }
+
+
 
 }
