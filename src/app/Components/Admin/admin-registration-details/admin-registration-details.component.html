@@ -4,8 +4,7 @@
 
             <div class="card">
                 <div class="card-header card-black">
-                    <h4>Primary Member Details <button 
-                            (click)="openMemberEditModal(memberDetails.primaryMember)"
+                    <h4>Primary Member Details <button (click)="openMemberEditModal(memberDetails.primaryMember)"
                             class="btn btn-warning  btn-sm   float-end">
                             <fa-icon [icon]="faEditIcon"></fa-icon>
                         </button>
@@ -15,16 +14,23 @@
                     <div><b>Membership Type :</b><span
                             class="badge badge-info">{{(memberDetails.primaryMember.membershipTypeId==2?"Family":"Individual")}}</span>
                     </div>
+                    <div><b>Status</b>
+                        <span class="badge badge-info" *ngIf="memberDetails.primaryMember.isActive">Active</span>
+                        <span class="badge badge-danger" *ngIf="!memberDetails.primaryMember.isActive">In Active</span>
+                    </div>
                     <div><b>Member Name :</b> {{memberDetails.primaryMember.memberFName}}
                         {{memberDetails.primaryMember.memberMName}} {{memberDetails.primaryMember.memberLName}}</div>
                     <div><b>Phone :</b> {{memberDetails.primaryMember.phoneH}} </div>
                     <div><b>Email :</b> {{memberDetails.primaryMember.email}}</div>
                     <div><b>DOB :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}</div>
+                    <div *ngIf="showBsbAndAccountNo"><b>BSB & Account No :</b> {{memberDetails.primaryMember.bsb}}
+                        {{memberDetails.primaryMember.accountNo}}</div>
+
                     <div><b>Primary Fees : </b> $
                         {{memberDetails.primaryMember.membershipCategory.membershipFees.toFixed(2)}}</div>
                     <div><b>Total Fees : </b><span class="badge badge-fees">$
                             {{memberDetails.totalFees.toFixed(2)}}</span></div>
-                    @if(memberDetails.primaryMember.membershipTypeId==2  ){
+                    @if(memberDetails.primaryMember.membershipTypeId==2 ){
                     <button class="btn btn-spouse w-100 mb-2 mt-2" (click)="openModal('spouse')"
                         *ngIf="!isSpouseFilled"><fa-icon [icon]="addIcon"></fa-icon> Would you like to add a spouse?
                         <fa-icon [icon]="familyIcon"></fa-icon></button>
@@ -35,13 +41,26 @@
                             [icon]="addIcon"></fa-icon> Would you like to add
                         a parent? <fa-icon [icon]="familyIcon"></fa-icon></button>
                     }
-        
+
                     <button class="btn btn-secondary w-100 mb-2 mt-1" (click)="openEmergencyContactModal()"> <fa-icon
                             [icon]="addIcon"></fa-icon> Would you
                         like to add an emergency contact? <fa-icon [icon]="contactIcon"></fa-icon></button>
+
+                    <div *ngIf="validationSummary.length > 0" class="alert alert-danger mt-3">
+                        <h6 class="mb-2">
+                            <fa-icon icon="exclamation-triangle"></fa-icon>
+                            Please complete the following:
+                        </h6>
+                        <ul class="mb-0">
+                            <li *ngFor="let error of validationSummary">
+                                {{ error }}
+                            </li>
+                        </ul>
+                    </div>
+
                     <span class="text-danger" *ngIf="memberDetails.emergencyContacts.length < 2">Minimum 2 emergency
                         contacts are required</span>
-            @if(!memberDetails.primaryMember.isCompleted ){
+                    @if(!memberDetails.primaryMember.isCompleted ){
                     <button *ngIf="memberDetails.emergencyContacts.length >= 2" class="btn btn-primary w-100 mb-2 mt-4"
                         (click)="saveAndGenerateInvoice()" [disabled]="isInvoiceButtonDisabled"> <i
                             class="spinner-border spinner-border-sm" [hidden]="!isInvoiceButtonDisabled"></i>
@@ -103,8 +122,7 @@
                                 <div class="member-field-box col-md-1">
                                     $ {{memberDetails.spouse.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
-                                <div class="member-field-box col-md-2"
-                                 >
+                                <div class="member-field-box col-md-2">
                                     <button class="btn btn-danger btn-sm float-end"
                                         (click)="removeMember(memberDetails.spouse)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
@@ -146,8 +164,7 @@
                                 <div class="member-field-box col-md-1">
                                     $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
-                                <div class="member-field-box col-md-2"
-                                    >
+                                <div class="member-field-box col-md-2">
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -184,8 +201,7 @@
                                 <div class="member-field-box col-md-1">
                                     $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
-                                <div class="member-field-box col-md-2"
-                                   >
+                                <div class="member-field-box col-md-2">
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -222,8 +238,7 @@
                                 <div class="member-field-box col-md-1">
                                     $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
-                                <div class="member-field-box col-md-2"
-                                  >
+                                <div class="member-field-box col-md-2">
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -262,8 +277,7 @@
                                     $ {{c.membershipCategory.membershipFees.toFixed(2)}}
                                 </div>
 
-                                <div class="member-field-box col-md-2"
-                                    >
+                                <div class="member-field-box col-md-2">
                                     <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
                                     <button (click)="openMemberEditModal(c)"
@@ -299,8 +313,7 @@
                                 </div>
 
 
-                                <div class="member-field-box col-md-2"
-                                  >
+                                <div class="member-field-box col-md-2">
                                     <button class="btn btn-danger btn-sm float-end"
                                         (click)="removeEmergencyCotnact(c)"><fa-icon
                                             [icon]="trashIcon"></fa-icon></button>
@@ -358,12 +371,23 @@
                             <label>Phone (Optional)</label>
                             <input type="text" class="form-control" formControlName="phoneH">
                         </div>
-                                       <div class="mb-2">
+                        @if(showBsbAndAccountNo){
+                        <div class="mb-2">
+                            <label>BSB</label>
+                            <input type="text" class="form-control" formControlName="bsb">
+                        </div>
+                        <div class="mb-2">
+                            <label>Account No</label>
+                            <input type="text" class="form-control" formControlName="accountNo">
+                        </div>
+                        }
+                        @if(showPaymentMethodField){
+                        <div class="mb-2">
                             <label class="d-block">Payment Method <code>*</code></label>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" id="DDR" value="DDR"
-                                    formControlName="modeOfPayment">
+                                    formControlName="modeOfPayment" (change)="toogleAccountDetails()">
                                 <label class="form-check-label" for="DDR">
                                     DDR
                                 </label>
@@ -371,12 +395,18 @@
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" id="BANKTRANSFER" value="BANK TRANSFER"
-                                    formControlName="modeOfPayment">
+                                    formControlName="modeOfPayment" (change)="toogleAccountDetails()">
                                 <label class="form-check-label" for="BANKTRANSFER">
-                                   BANK TRANSFER
+                                    BANK TRANSFER
                                 </label>
                             </div>
+                            <div class="mb-2 mt-2">
+
+                                <input type="checkbox" formControlName="isActive"> Is Active
+                            </div>
+
                         </div>
+                        }
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -421,7 +451,7 @@
                                     {{rel.relationshipName}}</option>
                             </select>
                         </div>
-         
+
 
                     </form>
                 </div>

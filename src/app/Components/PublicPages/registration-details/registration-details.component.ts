@@ -82,7 +82,10 @@ export class RegistrationDetailsComponent {
       gender: ['', Validators.required],
       dateofBirth: ['', Validators.required],
       phoneH: [''],
-      modeOfPayment: ['']
+      modeOfPayment: [''],
+      bsb: [''],
+      accountNo: [''],
+      isActive: [],
     });
   }
   createEmergencyContactGroup(): FormGroup {
@@ -232,9 +235,22 @@ export class RegistrationDetailsComponent {
       this.toast.error('Please fill all required fields!')
     }
   }
+  showBsbAndAccountNo = true;
+  showPaymentMethodField = true;
   openMemberEditModal(member: any): void {
+    this.showBsbAndAccountNo = true;
+    this.showPaymentMethodField = true;
     this.modalForm.reset();
+    if (member.modeOfPayment == 'DDR') {
+      this.showBsbAndAccountNo = true;
+    } else {
+      this.showBsbAndAccountNo = false;
+    }
 
+    if (member.parentMemberId != 0) {
+      this.showBsbAndAccountNo = false;
+      this.showPaymentMethodField = false;
+    }
     // Convert date to YYYY-MM-DD format before patching
     const formattedDate = this.datePipe.transform(member.dateofBirth, "yyyy-MM-dd");
     this.modalForm.patchValue({
@@ -247,5 +263,29 @@ export class RegistrationDetailsComponent {
     const modal = new bootstrap.Modal(document.getElementById('familyModal')!);
     modal.show();
   }
+  toogleAccountDetails() {
+    var value = this.modalForm.value;
+    if (value.modeOfPayment == 'DDR') {
+      this.showBsbAndAccountNo = true;
+    } else {
+      this.showBsbAndAccountNo = false;
+    }
+  }
+  get validationSummary(): string[] {
+    const errors: string[] = [];
+    const m = this.memberDetails?.primaryMember;
 
+    if (!m?.memberFName) errors.push('Primary member first name is missing');
+    if (!m?.memberLName) errors.push('Primary member last name is missing');
+    if (!m?.phoneH) errors.push('Primary member phone number is missing');
+    if (!m?.email) errors.push('Primary member email is missing');
+    if (!m?.dateofBirth) errors.push('Primary member date of birth is missing');
+    if (m.modeOfPayment == 'DDR') {
+      if (!m?.bsb) errors.push('Primary member BSB is missing');
+      if (!m?.accountNo) errors.push('Primary member AccountNo is missing');
+    }
+
+
+    return errors;
+  }
 }

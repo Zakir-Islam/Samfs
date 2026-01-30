@@ -35,6 +35,10 @@
    background-color: green;
    margin-left: 10px;
   }
+  .badge-danger{
+   background-color: red;
+   margin-left: 10px;
+  }
   .badge-fees{
     background-color: rgb(150, 28, 49);
     margin-left: 10px;
