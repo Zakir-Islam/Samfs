@@ -81,7 +81,7 @@ export class RegistrationDetailsComponent {
       memberLName: ['', Validators.required],
       gender: ['', Validators.required],
       dateofBirth: ['', Validators.required],
-      phoneH: [''],
+      phoneH: ['', Validators.required],
       modeOfPayment: [''],
       bsb: [''],
       accountNo: [''],

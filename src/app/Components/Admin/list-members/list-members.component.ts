@@ -27,7 +27,7 @@ export class ListMembersComponent {
   contactIcon = faContactCard;
   familyIcon = faUserGroup;
   faEditIcon = faEdit
-  membershipTypeId = new FormControl(2);
+  membershipTypeId = new FormControl(0);
   status = new FormControl(true);
   form!: FormGroup;
   members: any[] = [];

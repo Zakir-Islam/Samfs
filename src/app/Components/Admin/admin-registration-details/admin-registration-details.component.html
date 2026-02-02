@@ -58,10 +58,10 @@
                         </ul>
                     </div>
 
-                    <span class="text-danger" *ngIf="memberDetails.emergencyContacts.length < 2">Minimum 2 emergency
+                    <span class="text-danger" *ngIf="memberDetails.emergencyContacts.length < 1">Minimum 1 emergency
                         contacts are required</span>
                     @if(!memberDetails.primaryMember.isCompleted ){
-                    <button *ngIf="memberDetails.emergencyContacts.length >= 2" class="btn btn-primary w-100 mb-2 mt-4"
+                    <button *ngIf="memberDetails.emergencyContacts.length >= 1" class="btn btn-primary w-100 mb-2 mt-4"
                         (click)="saveAndGenerateInvoice()" [disabled]="isInvoiceButtonDisabled"> <i
                             class="spinner-border spinner-border-sm" [hidden]="!isInvoiceButtonDisabled"></i>
                         Save & Complete </button>
@@ -368,7 +368,7 @@
                             <input type="date" class="form-control" formControlName="dateofBirth">
                         </div>
                         <div class="mb-2">
-                            <label>Phone (Optional)</label>
+                            <label>Phone</label>
                             <input type="text" class="form-control" formControlName="phoneH">
                         </div>
                         @if(showBsbAndAccountNo){
