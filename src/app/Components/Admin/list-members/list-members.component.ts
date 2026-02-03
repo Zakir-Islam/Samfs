@@ -28,7 +28,7 @@ export class ListMembersComponent {
   familyIcon = faUserGroup;
   faEditIcon = faEdit
   membershipTypeId = new FormControl(0);
-  status = new FormControl(true);
+  status = new FormControl(0);
   form!: FormGroup;
   members: any[] = [];
   memberDetails: any;

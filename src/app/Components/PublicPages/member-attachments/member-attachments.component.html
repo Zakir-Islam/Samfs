@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <h4>Member Attachments</h4>
+
+  <!-- Upload Form -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <label>Attachment Type</label>
+          <select class="form-control" [(ngModel)]="selectedType">
+            <option value="">-- Select --</option>
+            <option [value]="attachmentType.Driving_License">Driving License</option>
+            <option [value]="attachmentType.Passport">Passport</option>
+            <option [value]="attachmentType.Other">Other</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label>File</label>
+          <input type="file" class="form-control" (change)="onFileChange($event)">
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-primary w-100" (click)="upload()" [disabled]="isSubmitted"> <i
+                            class="spinner-border spinner-border-sm" [hidden]="!isSubmitted"></i> 
+            Upload
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attachment List -->
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Type</th>
+        <th>File Name</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of attachments">
+        <td>{{ getTypeName(a.attachmentType) }}</td>
+        <td><a target="_blank" [href]="bucketUrl+a.s3Key">{{ a.fileName }}</a></td>
+        <td>{{ a.addedDate | date:'dd/MM/yyyy' }}</td>
+      </tr>
+      <tr *ngIf="attachments.length === 0">
+        <td colspan="3" class="text-center">No attachments found</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -8,6 +8,10 @@
                             class="btn btn-warning  btn-sm   float-end">
                             <fa-icon [icon]="faEditIcon"></fa-icon>
                         </button>
+                        <button class="btn btn-warning  btn-sm   float-end"
+                            [routerLink]="['/member-attachments', memberDetails.primaryMember.memberUID]">
+                            <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                        </button>
                     </h4>
                 </div>
                 <div class="card-body">
@@ -18,11 +22,12 @@
                         <span class="badge badge-info" *ngIf="memberDetails.primaryMember.isActive">Active</span>
                         <span class="badge badge-danger" *ngIf="!memberDetails.primaryMember.isActive">In Active</span>
                     </div>
-                    <div><b>Member Name :</b> {{memberDetails.primaryMember.memberFName}}
+                    <div><b>Full Name :</b> {{memberDetails.primaryMember.memberFName}}
                         {{memberDetails.primaryMember.memberMName}} {{memberDetails.primaryMember.memberLName}}</div>
                     <div><b>Phone :</b> {{memberDetails.primaryMember.phoneH}} </div>
                     <div><b>Email :</b> {{memberDetails.primaryMember.email}}</div>
-                    <div><b>DOB :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}</div>
+                    <div><b>Gender :</b> {{memberDetails.primaryMember.gender}}</div>
+                    <div><b>Date Of Birth :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}</div>
                     <div *ngIf="showBsbAndAccountNo"><b>BSB & Account No :</b> {{memberDetails.primaryMember.bsb}}
                         {{memberDetails.primaryMember.accountNo}}</div>
 
@@ -130,6 +135,10 @@
                                         class="btn btn-warning  btn-sm   float-end">
                                         <fa-icon [icon]="faEditIcon"></fa-icon>
                                     </button>
+                                    <button class="btn btn-warning  btn-sm   float-end"
+                                        [routerLink]="['/member-attachments', memberDetails.spouse.memberUID]">
+                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                                    </button>
                                 </div>
 
                             </div>
@@ -171,6 +180,10 @@
                                         class="btn btn-warning  btn-sm   float-end">
                                         <fa-icon [icon]="faEditIcon"></fa-icon>
                                     </button>
+                                        <button class="btn btn-warning  btn-sm   float-end"
+                                        [routerLink]="['/member-attachments',c.memberUID]">
+                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -208,6 +221,10 @@
                                         class="btn btn-warning  btn-sm   float-end">
                                         <fa-icon [icon]="faEditIcon"></fa-icon>
                                     </button>
+                                        <button class="btn btn-warning  btn-sm   float-end"
+                                        [routerLink]="['/member-attachments',c.memberUID]">
+                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -244,6 +261,10 @@
                                     <button (click)="openMemberEditModal(c)"
                                         class="btn btn-warning  btn-sm   float-end">
                                         <fa-icon [icon]="faEditIcon"></fa-icon>
+                                    </button>
+                                        <button class="btn btn-warning  btn-sm   float-end"
+                                        [routerLink]="['/member-attachments',c.memberUID]">
+                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
                                     </button>
                                 </div>
                             </div>
@@ -284,6 +305,10 @@
                                         class="btn btn-warning  btn-sm   float-end">
                                         <fa-icon [icon]="faEditIcon"></fa-icon>
                                     </button>
+                                        <button class="btn btn-warning  btn-sm   float-end"
+                                        [routerLink]="['/member-attachments',c.memberUID]">
+                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                                    </button>
                                 </div>
                             </div>
 
@@ -321,6 +346,7 @@
                                         class="btn btn-warning  btn-sm   float-end">
                                         <fa-icon [icon]="faEditIcon"></fa-icon>
                                     </button>
+                                       
                                 </div>
                             </div>
 
@@ -371,16 +397,6 @@
                             <label>Phone</label>
                             <input type="text" class="form-control" formControlName="phoneH">
                         </div>
-                        @if(showBsbAndAccountNo){
-                        <div class="mb-2">
-                            <label>BSB</label>
-                            <input type="text" class="form-control" formControlName="bsb">
-                        </div>
-                        <div class="mb-2">
-                            <label>Account No</label>
-                            <input type="text" class="form-control" formControlName="accountNo">
-                        </div>
-                        }
                         @if(showPaymentMethodField){
                         <div class="mb-2">
                             <label class="d-block">Payment Method <code>*</code></label>
@@ -389,7 +405,7 @@
                                 <input class="form-check-input" type="radio" id="DDR" value="DDR"
                                     formControlName="modeOfPayment" (change)="toogleAccountDetails()">
                                 <label class="form-check-label" for="DDR">
-                                    DDR
+                                    Direct Debit
                                 </label>
                             </div>
 
@@ -407,6 +423,22 @@
 
                         </div>
                         }
+                        @if(showBsbAndAccountNo){
+                        <div class="col-md-4">
+                            <label>Account Name <code>*</code></label>
+                            <input type="text" class="form-control"
+                                [(ngModel)]="memberDetails.primaryMember.accountName ">
+                        </div>
+                        <div class="mb-2">
+                            <label>BSB</label>
+                            <input type="text" class="form-control" formControlName="bsb">
+                        </div>
+                        <div class="mb-2">
+                            <label>Account No</label>
+                            <input type="text" class="form-control" formControlName="accountNo">
+                        </div>
+                        }
+
                     </form>
                 </div>
                 <div class="modal-footer">

@@ -3,22 +3,23 @@ import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
 import { MemberService } from '../../../Services/member.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AddFamilyMember } from '../../../Models/member-classes';
 import { ToastrService } from 'ngx-toastr';
 import { EmergencyContactDTO } from '../../../Models/emergency-contact-classes';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faContactCard, faEdit, faPlus, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faContactCard, faEdit, faFile, faPlus, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-admin-registration-details',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule, DatePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule,RouterLink, DatePipe],
   providers: [DatePipe],
   templateUrl: './admin-registration-details.component.html',
   styleUrl: './admin-registration-details.component.css'
 })
 export class AdminRegistrationDetailsComponent {
+  faAttachmentIcon=faFile
   addIcon = faPlus;
   trashIcon = faTrash;
   contactIcon = faContactCard;
@@ -34,7 +35,8 @@ export class AdminRegistrationDetailsComponent {
   relationships: any;
   isSubmitDisabled = false;
   isInvoiceButtonDisabled = false;
-  constructor(private fb: FormBuilder, private memberService: MemberService, private activatedRoute: ActivatedRoute, private toast: ToastrService, private router: Router, private datePipe: DatePipe) { }
+  constructor(private fb: FormBuilder, private memberService: MemberService, private activatedRoute: ActivatedRoute, private toast: ToastrService,
+     private router: Router, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((param) => {
@@ -81,10 +83,11 @@ export class AdminRegistrationDetailsComponent {
       memberLName: ['', Validators.required],
       gender: ['', Validators.required],
       dateofBirth: ['', Validators.required],
-      phoneH: ['',Validators.required],
+      phoneH: ['', Validators.required],
       modeOfPayment: [''],
       bsb: [''],
       accountNo: [''],
+      accountName: [''],
       isActive: [],
     });
   }
@@ -112,6 +115,8 @@ export class AdminRegistrationDetailsComponent {
   openModal(type: string): void {
     this.selectedType = type;
     this.modalForm.reset();
+    this.showBsbAndAccountNo = false;
+    this.showPaymentMethodField = false;
     const modal = new bootstrap.Modal(document.getElementById('familyModal')!);
     modal.show();
   }
@@ -282,9 +287,9 @@ export class AdminRegistrationDetailsComponent {
     if (!m?.phoneH) errors.push('Primary member phone number is missing');
     if (!m?.email) errors.push('Primary member email is missing');
     if (!m?.dateofBirth) errors.push('Primary member date of birth is missing');
-    if(m.modeOfPayment=='DDR'){
-    if (!m?.bsb) errors.push('Primary member BSB is missing');
-    if (!m?.accountNo) errors.push('Primary member AccountNo is missing');
+    if (m.modeOfPayment == 'DDR') {
+      if (!m?.bsb) errors.push('Primary member BSB is missing');
+      if (!m?.accountNo) errors.push('Primary member AccountNo is missing');
     }
 
 

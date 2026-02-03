@@ -11,10 +11,12 @@ import { AdminRegistrationDetailsComponent } from './Components/Admin/admin-regi
 import { AddEmailTemplateComponent } from './Components/Admin/add-email-template/add-email-template.component';
 import { ContactListService } from './Services/contact-list.service';
 import { ContactListsComponent } from './Components/Admin/contact-lists/contact-lists.component';
+import { MemberAttachmentsComponent } from './Components/PublicPages/member-attachments/member-attachments.component';
 
 export const routes: Routes = [
     { path: '', component: RegisterMemberComponent },
     { path: 'registration-details/:uid', component: RegistrationDetailsComponent },
+        { path: 'member-attachments/:uid', component: MemberAttachmentsComponent },
     { path: 'admin-registration-details/:uid', component: AdminRegistrationDetailsComponent,canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'list-members', component: ListMembersComponent, canActivate: [AuthGuard], },

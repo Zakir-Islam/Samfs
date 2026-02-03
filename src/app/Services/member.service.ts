@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { baseApiURL } from '../Core/Constants/constant';
 import { EmailTemplate } from '../Models/email-template';
 import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
+import { MemberAttachment } from '../Models/member-attachment';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +44,15 @@ export class MemberService {
   }
   SendReminderEmailTemplate(emailTemplateDTO:any,memberId:any): Observable<any> {
     return this.http.post<any>(`${this.baseURL}/SendReminderEmailTemplate?memberId=${memberId}`,emailTemplateDTO);
+  }
+
+  upload(formData: FormData) {
+    return this.http.post(`${this.baseURL}/upload-member-documents`, formData);
+  }
+
+  getByMember(memberId: number) {
+    return this.http.get<MemberAttachment[]>(
+      `${this.baseURL}/GetAttachmentsByMember?memberUId=${memberId}`
+    );
   }
 }

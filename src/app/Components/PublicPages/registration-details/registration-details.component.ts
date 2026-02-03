@@ -1,29 +1,39 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
 import { MemberService } from '../../../Services/member.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AddFamilyMember } from '../../../Models/member-classes';
 import { ToastrService } from 'ngx-toastr';
 import { EmergencyContactDTO } from '../../../Models/emergency-contact-classes';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faContactCard, faEdit, faPlus, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faContactCard, faEdit, faPlus,faFile, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
+import { data } from 'jquery';
 @Component({
   selector: 'app-registration-details',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule, DatePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule, DatePipe,RouterLink],
   providers: [DatePipe],
   templateUrl: './registration-details.component.html',
   styleUrl: './registration-details.component.css'
 })
 export class RegistrationDetailsComponent {
+  isDateOfBirthFilled: any;
+  isPaymentMethodAdded:any;
+
+  isSposeReq: any;
+  isChildReq: any;
+  isParentReq: any;
+
   addIcon = faPlus;
   trashIcon = faTrash;
   contactIcon = faContactCard;
   familyIcon = faUserGroup;
   faEditIcon = faEdit
+  faAttachmentIcon=faFile
+
   membershipForm!: FormGroup;
   emergencyContactForm!: FormGroup;
   selectedType: string = '';
@@ -34,7 +44,8 @@ export class RegistrationDetailsComponent {
   relationships: any;
   isSubmitDisabled = false;
   isInvoiceButtonDisabled = false;
-  constructor(private fb: FormBuilder, private memberService: MemberService, private activatedRoute: ActivatedRoute, private toast: ToastrService, private router: Router, private datePipe: DatePipe) { }
+  constructor(private fb: FormBuilder, private memberService: MemberService, private activatedRoute: ActivatedRoute, private toast: ToastrService,
+     private router: Router, private datePipe: DatePipe,private cdr:ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((param) => {
@@ -70,7 +81,20 @@ export class RegistrationDetailsComponent {
           this.isSpouseFilled = true;
         else
           this.isSpouseFilled = false;
+        if ((data.primaryMember.modeOfPayment&&data.primaryMember.accountNo&&data.primaryMember.bsb&&data.primaryMember.accountName)||data.primaryMember.modeOfPayment=="BANK TRANSFER") {
+          this.isPaymentMethodAdded = true;
+        }
+        else {
+          this.isPaymentMethodAdded = false;
+        }
+        if (data.primaryMember.dateofBirth && data.primaryMember.gender) {
+          this.isDateOfBirthFilled = true;
+        }
+        else {
+          this.isDateOfBirthFilled = false;
+        }
       }
+
     )
   }
   createMemberGroup(): FormGroup {
@@ -81,11 +105,12 @@ export class RegistrationDetailsComponent {
       memberLName: ['', Validators.required],
       gender: ['', Validators.required],
       dateofBirth: ['', Validators.required],
-      phoneH: ['', Validators.required],
+      phoneH: [''],
       modeOfPayment: [''],
       bsb: [''],
       accountNo: [''],
-      isActive: [],
+       accountName: [''],
+      isActive: [false],
     });
   }
   createEmergencyContactGroup(): FormGroup {
@@ -112,6 +137,8 @@ export class RegistrationDetailsComponent {
   openModal(type: string): void {
     this.selectedType = type;
     this.modalForm.reset();
+    this.showBsbAndAccountNo = false;
+    this.showPaymentMethodField = false;
     const modal = new bootstrap.Modal(document.getElementById('familyModal')!);
     modal.show();
   }
@@ -241,7 +268,7 @@ export class RegistrationDetailsComponent {
     this.showBsbAndAccountNo = true;
     this.showPaymentMethodField = true;
     this.modalForm.reset();
-    if (member.modeOfPayment == 'DDR') {
+    if (member.modeOfPayment != 'DDR') {
       this.showBsbAndAccountNo = true;
     } else {
       this.showBsbAndAccountNo = false;
@@ -263,6 +290,16 @@ export class RegistrationDetailsComponent {
     const modal = new bootstrap.Modal(document.getElementById('familyModal')!);
     modal.show();
   }
+
+  toogleStepAccountDetails(type:any){
+    if (type == 'DDR') {
+      this.showBsbAndAccountNo = true;
+    } else {
+      this.showBsbAndAccountNo = false;
+    }
+    this.cdr.detectChanges();
+  }
+
   toogleAccountDetails() {
     var value = this.modalForm.value;
     if (value.modeOfPayment == 'DDR') {
