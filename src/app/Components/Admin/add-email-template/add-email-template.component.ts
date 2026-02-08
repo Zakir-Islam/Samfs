@@ -7,10 +7,13 @@ import { EditorComponent, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { EmailTemplate } from '../../../Models/EmailTemplate';
 import { EmailTemplateService } from '../../../Services/email-template.service';
 
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+
 @Component({
   selector: 'app-add-email-template',
   standalone: true,
-  imports: [EditorComponent, ReactiveFormsModule, FormsModule],
+  imports: [EditorComponent, ReactiveFormsModule, FormsModule, InputTextModule, ButtonModule],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ],
@@ -20,6 +23,7 @@ import { EmailTemplateService } from '../../../Services/email-template.service';
 export class AddEmailTemplateComponent implements OnInit {
   emailTemplate: EmailTemplate = {};
   updateEmailTemplateForm!: FormGroup;
+  isLoading: boolean = false;
 
   init: any = {
     base_url: '/tinymce',
@@ -63,6 +67,7 @@ export class AddEmailTemplateComponent implements OnInit {
 
   onSubmit(): void {
     if (this.updateEmailTemplateForm.valid) {
+      this.isLoading = true;
       const updatedEmailTemplate: EmailTemplate = this.updateEmailTemplateForm.value;
       updatedEmailTemplate.emailTypeId = this.emailTemplate.emailTypeId || 0;
       updatedEmailTemplate.emailTemplateId = 0;
@@ -70,11 +75,13 @@ export class AddEmailTemplateComponent implements OnInit {
       this.emailTemplateService.AddEmailTemplate(updatedEmailTemplate).subscribe({
         next: (response: any) => {
           this.toaster.success("Saved successfully");
+          this.isLoading = false;
           this.router.navigate(['/email-templates']);
         },
         error: (error: any) => {
           console.error('Error saving email template', error);
           this.toaster.error("Failed to save template");
+          this.isLoading = false;
         }
       });
     }

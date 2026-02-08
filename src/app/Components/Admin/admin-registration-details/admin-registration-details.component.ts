@@ -63,6 +63,7 @@ export class AdminRegistrationDetailsComponent implements OnInit {
 
   isSubmitDisabled = false;
   isInvoiceButtonDisabled = false;
+  isLoading = false;
 
   displayFamilyModal: boolean = false;
   displayEmergencyModal: boolean = false;
@@ -108,12 +109,17 @@ export class AdminRegistrationDetailsComponent implements OnInit {
   }
 
   loadMemberDetails(uid: any): void {
+    this.isLoading = true;
     this.memberService.getMemberDetails(uid).subscribe({
       next: (data: any) => {
         this.memberDetails = data;
         this.isSpouseFilled = !!data.spouse;
+        this.isLoading = false;
       },
-      error: () => this.toast.error("Failed to load member details")
+      error: () => {
+        this.isLoading = false;
+        this.toast.error("Failed to load member details");
+      }
     });
   }
 

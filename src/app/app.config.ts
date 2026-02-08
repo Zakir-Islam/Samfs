@@ -10,18 +10,18 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
-  provideRouter(routes),
   provideHttpClient(),
   importProvidersFrom(FontAwesomeModule),
   provideAnimations(),
   provideToastr({
-    timeOut: 1000, // duration in milliseconds
-    closeButton: true, // show close button
-    progressBar: true, // show progress bar
-    positionClass: 'toast-top-right', // position of toastr notifications
+    timeOut: 1000,
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
     preventDuplicates: true
   }),
   providePrimeNG({
@@ -31,6 +31,7 @@ export const appConfig: ApplicationConfig = {
         darkModeSelector: 'none'
       }
     }
-  })
+  }),
+    MessageService
   ]
 };

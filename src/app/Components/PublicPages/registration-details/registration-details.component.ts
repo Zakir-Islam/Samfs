@@ -66,10 +66,13 @@ export class RegistrationDetailsComponent implements OnInit {
   isSpouseFilled: boolean = false;
   memberDetails: any;
   memberUid: any;
+  isAttachmentUploaded: boolean = false;
+  totalAttachments: number = 0;
   relationships: any[] = [];
 
   isSubmitDisabled = false;
   isInvoiceButtonDisabled = false;
+  isLoading = false;
 
   displayFamilyModal: boolean = false;
   displayEmergencyModal: boolean = false;
@@ -116,6 +119,7 @@ export class RegistrationDetailsComponent implements OnInit {
   }
 
   loadMemberDetails(uid: any): void {
+    this.isLoading = true;
     this.memberService.getMemberDetails(uid).subscribe({
       next: (data: any) => {
         this.memberDetails = data;
@@ -125,9 +129,24 @@ export class RegistrationDetailsComponent implements OnInit {
         this.isPaymentMethodAdded = (m.modeOfPayment && m.accountNo && m.bsb && m.accountName) || m.modeOfPayment === "BANK TRANSFER";
         this.isDateOfBirthFilled = !!(m.dateofBirth && m.gender);
 
-        this.cdr.detectChanges();
+        // Fetch attachments to validate count
+        this.memberService.getByMember(uid).subscribe({
+          next: (attachments: any) => {
+            this.totalAttachments = attachments ? attachments.length : 0;
+            this.isAttachmentUploaded = this.totalAttachments > 0;
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          }
+        });
       },
-      error: () => this.toast.error("Failed to load member details")
+      error: () => {
+        this.isLoading = false;
+        this.toast.error("Failed to load member details");
+      }
     });
   }
 

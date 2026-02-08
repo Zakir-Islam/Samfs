@@ -1,4 +1,12 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 relative min-h-screen">
+  @if (isLoading) {
+    <div class="absolute inset-0 z-50 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm flex items-center justify-center">
+      <div class="flex flex-col items-center gap-3">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <p class="text-zinc-600 dark:text-zinc-400 font-medium animate-pulse">Loading registration profiles...</p>
+      </div>
+    </div>
+  }
   @if (memberDetails?.primaryMember) {
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
@@ -316,22 +324,25 @@
       </div>
 
       <div class="grid grid-cols-2 gap-4">
-        <div class="space-y-1.5">
+        <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Gender <span class="text-red-500">*</span></label>
-          <select formControlName="gender" class="w-full p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-sm focus:ring-2 focus:ring-blue-500/20 transition-all">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
+          <p-select [options]="[{label: 'Male', value: 'Male'}, {label: 'Female', value: 'Female'}, {label: 'Other', value: 'Other'}]"
+                    formControlName="gender" optionLabel="label" optionValue="value"
+                    placeholder="Select Gender" class="w-full"
+                    styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 w-full">
+          </p-select>
         </div>
 
-        <div class="space-y-1.5">
+        <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Date of Birth <span class="text-red-500">*</span></label>
-          <input type="date" formControlName="dateofBirth" class="w-full p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-sm focus:ring-2 focus:ring-blue-500/20 transition-all" />
+          <p-datepicker formControlName="dateofBirth" dateFormat="yy-mm-dd"
+                        [showIcon]="true" appendTo="body"
+                        styleClass="w-full" inputStyleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 font-mono">
+          </p-datepicker>
         </div>
       </div>
 
-      <div class="space-y-1.5">
+      <div class="space-y-1.5 flex flex-col">
         <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Phone</label>
         <input type="text" pInputText formControlName="phoneH" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
       </div>
@@ -358,16 +369,16 @@
 
       @if (showBsbAndAccountNo) {
         <div class="space-y-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-           <div class="space-y-1.5">
+           <div class="space-y-1.5 flex flex-col">
              <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account Name <span class="text-red-500">*</span></label>
              <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.accountName" [ngModelOptions]="{standalone: true}" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
            </div>
            <div class="grid grid-cols-2 gap-4">
-             <div class="space-y-1.5">
+             <div class="space-y-1.5 flex flex-col">
                <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">BSB</label>
                <input type="text" pInputText formControlName="bsb" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
              </div>
-             <div class="space-y-1.5">
+             <div class="space-y-1.5 flex flex-col">
                <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account No</label>
                <input type="text" pInputText formControlName="accountNo" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
              </div>
@@ -391,33 +402,33 @@
           styleClass="p-fluid rounded-2xl overflow-hidden shadow-2xl border-none">
   <ng-template pTemplate="content">
     <form [formGroup]="emergencyContactForm" class="space-y-4 pt-4">
-      <div class="space-y-1.5">
+      <div class="space-y-1.5 flex flex-col">
         <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Full Name <span class="text-red-500">*</span></label>
         <input type="text" pInputText formControlName="fullName" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
       </div>
 
-      <div class="space-y-1.5">
+      <div class="space-y-1.5 flex flex-col">
         <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Phone <span class="text-red-500">*</span></label>
         <input type="text" pInputText formControlName="phone" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
       </div>
 
       <div class="grid grid-cols-2 gap-4">
-        <div class="space-y-1.5">
+        <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Gender <span class="text-red-500">*</span></label>
-          <select formControlName="gender" class="w-full p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-sm focus:ring-2 focus:ring-blue-500/20 transition-all">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
+          <p-select [options]="[{label: 'Male', value: 'Male'}, {label: 'Female', value: 'Female'}, {label: 'Other', value: 'Other'}]"
+                    formControlName="gender" optionLabel="label" optionValue="value"
+                    placeholder="Select Gender" class="w-full"
+                    styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 w-full">
+          </p-select>
         </div>
 
-        <div class="space-y-1.5">
+        <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Relationship <span class="text-red-500">*</span></label>
-          <select formControlName="relationshipId" class="w-full p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-sm focus:ring-2 focus:ring-blue-500/20 transition-all">
-            @for (rel of relationships; track rel) {
-              <option [value]="rel.relationshipId">{{ rel.relationshipName }}</option>
-            }
-          </select>
+          <p-select [options]="relationships" formControlName="relationshipId"
+                    optionLabel="relationshipName" optionValue="relationshipId"
+                    placeholder="Select Relationship" class="w-full"
+                    styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 w-full">
+          </p-select>
         </div>
       </div>
     </form>

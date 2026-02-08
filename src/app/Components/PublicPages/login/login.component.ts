@@ -10,10 +10,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 
+import { MessageService } from 'primeng/api';
+
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, CommonModule],
+  providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -26,6 +29,7 @@ export class LoginComponent {
   password: FormControl = new FormControl('', [Validators.required])
   constructor(private fb: FormBuilder, private authService: AuthService,
     private router: Router,
+    private messageService: MessageService,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isServer = isPlatformServer(platformId);
@@ -43,9 +47,9 @@ export class LoginComponent {
 
   login(): void {
     if (this.loginForm.valid) {
-      this.authService.authUser(this.email.value, this.password.value)
+      this.authService.authUser(this.email.value, this.password.value);
     } else {
-      alert('Please fill in all fields correctly.');
+      this.messageService.add({ severity: 'error', summary: 'Validation Error', detail: 'Please fill in all fields correctly.' });
     }
   }
 
