@@ -5,11 +5,10 @@ import { EmailLog } from '../../../Models/email-log';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-email-log',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './email-log.component.html',
-  styleUrl: './email-log.component.css'
+    selector: 'app-email-log',
+    imports: [CommonModule],
+    templateUrl: './email-log.component.html',
+    styleUrl: './email-log.component.css'
 })
 export class EmailLogComponent {
   recordId: any = 0;

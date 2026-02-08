@@ -6,11 +6,10 @@ import { AuthService } from '../../../Services/auth.service';
 import { User } from '../../../Models/user';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+    selector: 'app-login',
+    imports: [ReactiveFormsModule, CommonModule],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export class LoginComponent {
   isUser = signal(false);

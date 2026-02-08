@@ -13,12 +13,11 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 declare var $: any;
 @Component({
-  selector: 'app-list-members',
-  standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule, FontAwesomeModule],
-  providers: [DatePipe],
-  templateUrl: './list-members.component.html',
-  styleUrl: './list-members.component.css'
+    selector: 'app-list-members',
+    imports: [CommonModule, DatePipe, FormsModule, ReactiveFormsModule, FontAwesomeModule],
+    providers: [DatePipe],
+    templateUrl: './list-members.component.html',
+    styleUrl: './list-members.component.css'
 })
 
 export class ListMembersComponent {

@@ -11,12 +11,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faContactCard, faEdit, faFile, faPlus, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 @Component({
-  selector: 'app-admin-registration-details',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule,RouterLink, DatePipe],
-  providers: [DatePipe],
-  templateUrl: './admin-registration-details.component.html',
-  styleUrl: './admin-registration-details.component.css'
+    selector: 'app-admin-registration-details',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule, RouterLink, DatePipe],
+    providers: [DatePipe],
+    templateUrl: './admin-registration-details.component.html',
+    styleUrl: './admin-registration-details.component.css'
 })
 export class AdminRegistrationDetailsComponent {
   faAttachmentIcon=faFile

@@ -7,11 +7,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-register-member',
-  standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
-  templateUrl: './register-member.component.html',
-  styleUrl: './register-member.component.css'
+    selector: 'app-register-member',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './register-member.component.html',
+    styleUrl: './register-member.component.css'
 })
 export class RegisterMemberComponent {
   membershipForm!: FormGroup;

@@ -6,11 +6,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-contact-lists',
-  standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
-  templateUrl: './contact-lists.component.html',
-  styleUrl: './contact-lists.component.css'
+    selector: 'app-contact-lists',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './contact-lists.component.html',
+    styleUrl: './contact-lists.component.css'
 })
 export class ContactListsComponent {
  contactList: ContactList = { contactListName: '', contactListDescription: '', contacts: [] };

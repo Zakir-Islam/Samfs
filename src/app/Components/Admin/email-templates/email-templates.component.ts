@@ -6,11 +6,10 @@ import { EmailTemplateService } from '../../../Services/email-template.service';
 import { EmailTemplate } from '../../../Models/EmailTemplate';
 
 @Component({
-  selector: 'app-email-templates',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
-  templateUrl: './email-templates.component.html',
-  styleUrl: './email-templates.component.css'
+    selector: 'app-email-templates',
+    imports: [CommonModule, RouterLink, RouterLinkActive],
+    templateUrl: './email-templates.component.html',
+    styleUrl: './email-templates.component.css'
 })
 export class EmailTemplatesComponent implements OnInit {
   emailTemplatesByCategory: { [category: string]: EmailTemplate[] } = {};

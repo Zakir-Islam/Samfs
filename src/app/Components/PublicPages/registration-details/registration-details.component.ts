@@ -12,12 +12,11 @@ import { faContactCard, faEdit, faPlus,faFile, faTrash, faUserGroup } from '@for
 import Swal from 'sweetalert2';
 import { data } from 'jquery';
 @Component({
-  selector: 'app-registration-details',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule, DatePipe,RouterLink],
-  providers: [DatePipe],
-  templateUrl: './registration-details.component.html',
-  styleUrl: './registration-details.component.css'
+    selector: 'app-registration-details',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, FontAwesomeModule, DatePipe, RouterLink],
+    providers: [DatePipe],
+    templateUrl: './registration-details.component.html',
+    styleUrl: './registration-details.component.css'
 })
 export class RegistrationDetailsComponent {
   isDateOfBirthFilled: any;

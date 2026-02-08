@@ -7,11 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { bucketURL } from '../../../Core/Constants/constant';
 
 @Component({
-  selector: 'app-member-attachments',
-  standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
-  templateUrl: './member-attachments.component.html',
-  styleUrl: './member-attachments.component.css'
+    selector: 'app-member-attachments',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './member-attachments.component.html',
+    styleUrl: './member-attachments.component.css'
 })
 export class MemberAttachmentsComponent {
   bucketUrl=bucketURL;

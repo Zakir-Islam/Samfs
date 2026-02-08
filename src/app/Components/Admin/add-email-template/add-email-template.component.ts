@@ -7,14 +7,13 @@ import { EditorComponent, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { EmailTemplate } from '../../../Models/EmailTemplate';
 import { EmailTemplateService } from '../../../Services/email-template.service';
 @Component({
-  selector: 'app-add-email-template',
-  standalone: true,
-  imports: [EditorComponent, CommonModule, ReactiveFormsModule, FormsModule],
-  providers: [
-    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
-  ],
-  templateUrl: './add-email-template.component.html',
-  styleUrl: './add-email-template.component.css'
+    selector: 'app-add-email-template',
+    imports: [EditorComponent, CommonModule, ReactiveFormsModule, FormsModule],
+    providers: [
+        { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
+    ],
+    templateUrl: './add-email-template.component.html',
+    styleUrl: './add-email-template.component.css'
 })
 export class AddEmailTemplateComponent implements OnInit {
   emailTemplate: EmailTemplate = {};
