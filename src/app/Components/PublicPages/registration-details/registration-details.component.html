@@ -1,618 +1,649 @@
 <div class="container mt-4">
-    <div class="row" *ngIf="memberDetails.primaryMember">
-        <div class="col-md-4">
-
-            <div class="card">
-                <div class="card-header card-black">
-                    <h4>Primary Member Details <button *ngIf="!memberDetails.primaryMember.isCompleted"
-                            (click)="openMemberEditModal(memberDetails.primaryMember)"
-                            class="btn btn-warning  btn-sm   float-end">
-                            <fa-icon [icon]="faEditIcon"></fa-icon> Edit
+  @if (memberDetails.primaryMember) {
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header card-black">
+            <h4>Primary Member Details @if (!memberDetails.primaryMember.isCompleted) {
+              <button
+                (click)="openMemberEditModal(memberDetails.primaryMember)"
+                class="btn btn-warning  btn-sm   float-end">
+                <fa-icon [icon]="faEditIcon"></fa-icon> Edit
+              </button>
+            }
+            <button class="btn btn-warning  btn-sm   float-end"
+              [routerLink]="['/member-attachments', memberDetails.primaryMember.memberUID]">
+              <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+            </button>
+          </h4>
+        </div>
+        <div class="card-body">
+          <!-- <div *ngIf="validationSummary.length > 0" class="alert alert-danger mt-1">
+          <h6 class="mb-2">
+            <fa-icon icon="exclamation-triangle"></fa-icon>
+            Please complete the following:
+          </h6>
+          <ul class="mb-0">
+            <li *ngFor="let error of validationSummary">
+              {{ error }}
+            </li>
+          </ul>
+        </div> -->
+        <div><b>Membership Type :</b><span
+      class="badge badge-info">{{(memberDetails.primaryMember.membershipTypeId==2?"Family":"Individual")}}</span>
+    </div>
+    <div><b>Full Name :</b> {{memberDetails.primaryMember.memberFName}}
+  {{memberDetails.primaryMember.memberMName}} {{memberDetails.primaryMember.memberLName}}</div>
+  <div><b>Phone :</b> {{memberDetails.primaryMember.phoneH}} </div>
+  <div><b>Email :</b> {{memberDetails.primaryMember.email}}</div>
+  <div><b>Gender :</b> {{memberDetails.primaryMember.gender}}</div>
+  <div><b>Date Of Birth :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}</div>
+  <!-- <div *ngIf="showBsbAndAccountNo"><b>BSB & Account No :</b> {{memberDetails.primaryMember.bsb}}
+{{memberDetails.primaryMember.accountNo}}</div> -->
+<!-- <div><b>Primary Fees : </b> $
+{{memberDetails.primaryMember.membershipCategory.membershipFees.toFixed(2)}}</div> -->
+<div><b>Total Fees : </b><span class="badge badge-fees">$
+{{memberDetails.totalFees.toFixed(2)}}</span></div>
+@if(memberDetails.primaryMember.membershipTypeId==2 && !memberDetails.primaryMember.isCompleted ){
+  @if (!isSpouseFilled) {
+    <button class="btn btn-spouse w-100 mb-2 mt-2" (click)="openModal('spouse')"
+      ><fa-icon [icon]="addIcon"></fa-icon> Would you like to add a spouse?
+      <fa-icon [icon]="familyIcon"></fa-icon></button>
+    }
+    <button class="btn btn-student w-100 mb-2 mt-2" (click)="openModal('child')"> <fa-icon
+    [icon]="addIcon"></fa-icon> Would you like to add a
+    child? <fa-icon [icon]="familyIcon"></fa-icon></button>
+    <button class="btn btn-parent w-100 mb-2 mt-2" (click)="openModal('parent')"> <fa-icon
+    [icon]="addIcon"></fa-icon> Would you like to add
+    a parent? <fa-icon [icon]="familyIcon"></fa-icon></button>
+  }
+  @if(memberDetails.primaryMember.isCompleted ){
+    <div><a [href]="memberDetails.primaryMember.lastOnlineInvoiceURL" target="_blank"><b>Click here to
+    view Invoice</b></a>
+  </div>
+}
+</div>
+</div>
+@if (!showBsbAndAccountNo) {
+  <div class="card mt-3">
+    <div class="card-header card-black">
+      <h4>Payment Details
+      </h4>
+    </div>
+    <div class="card-body">
+      <b>BANK:</b> Westpac <br />
+      <b>Name:</b> SA Muslim Funeral Services<br />
+      <b>BSB:</b> 035-002<br />
+      <b>Account:</b> 467819
+    </div>
+  </div>
+}
+</div>
+<!-- Left Side Form -->
+<!-- Right Side Display -->
+<div class="col-md-8">
+  @if (!isDateOfBirthFilled) {
+    <div>
+      <h6 class="text-danger">Thank you for registering. Please complete the steps below to finish your
+      application.</h6>
+      <div class="row">
+        <div class="col-md-5">
+          <label>Gender <code>*</code></label>
+          <select class="form-control" [(ngModel)]="memberDetails.primaryMember.gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="col-md-5">
+          <label>Date of Birth <code>*</code></label>
+          <input type="date" class="form-control"
+            [ngModel]="memberDetails.primaryMember.dateofBirth | date:'yyyy-MM-dd'"
+            (ngModelChange)="memberDetails.primaryMember.dateofBirth = $event">
+          </div>
+          <div class="col-md-2 mt-4">
+            <button class="btn btn-primary"
+            (click)="saveFamilyMember(memberDetails.primaryMember)">Save</button>
+          </div>
+        </div>
+      </div>
+    }
+    <div>
+      @if(memberDetails.primaryMember.membershipTypeId==2 &&isDateOfBirthFilled&&
+        !memberDetails.primaryMember.isCompleted ){
+        <div class="row mt-2">
+          @if (!isSpouseFilled) {
+            <div class="col-md-4">
+              <button class="btn btn-spouse w-100 mb-2 mt-2" (click)="openModal('spouse')"><fa-icon
+              [icon]="addIcon"></fa-icon> Would you like to add a spouse?
+              <fa-icon [icon]="familyIcon"></fa-icon></button>
+            </div>
+          }
+          <div class="col-md-4">
+            <button class="btn btn-student w-100 mb-2 mt-2" (click)="openModal('child')"> <fa-icon
+            [icon]="addIcon"></fa-icon> Would you like to add a
+            child? <fa-icon [icon]="familyIcon"></fa-icon></button>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-parent w-100 mb-2 mt-2" (click)="openModal('parent')"> <fa-icon
+            [icon]="addIcon"></fa-icon> Would you like to add
+            a parent? <fa-icon [icon]="familyIcon"></fa-icon></button>
+          </div>
+        </div>
+      }
+    </div>
+    @if (memberDetails.primaryMember.membershipTypeId==2 &&isDateOfBirthFilled) {
+      <div class="card mt-2">
+        <div class="card-header card-black">
+          <h4><fa-icon [icon]="familyIcon"></fa-icon> Family Details</h4>
+        </div>
+        <div class="card-body">
+          @if (memberDetails.spouse) {
+            <div>
+              <strong>Spouse:</strong>
+              <div class="alert alert-info">
+                <div class="member-box row">
+                  <div class="member-field-box col-md-2">
+                    {{ memberDetails.spouse.memberFName }}
+                  </div>
+                  <div class="member-field-box col-md-1">
+                    {{ memberDetails.spouse.memberMName }}
+                  </div>
+                  <div class="member-field-box col-md-1">
+                    {{ memberDetails.spouse.memberLName }}
+                  </div>
+                  <div class="member-field-box col-md-2">
+                    {{ memberDetails.spouse.phoneH }}
+                  </div>
+                  <div class="member-field-box col-md-1">
+                    {{memberDetails.spouse.gender }}
+                  </div>
+                  <div class="member-field-box col-md-2">
+                    {{memberDetails.spouse.dateofBirth | date:'dd/MM/yyyy'}}
+                  </div>
+                  <div class="member-field-box col-md-1">
+                    $ {{memberDetails.spouse.membershipCategory.membershipFees.toFixed(2)}}
+                  </div>
+                  @if (!memberDetails.primaryMember.isCompleted ) {
+                    <div class="member-field-box col-md-2"
+                      >
+                      <button class="btn btn-danger btn-sm float-end"
+                        (click)="removeMember(memberDetails.spouse)"><fa-icon
+                      [icon]="trashIcon"></fa-icon></button>
+                      <button (click)="openMemberEditModal(memberDetails.spouse)"
+                        class="btn btn-warning  btn-sm   float-end">
+                        <fa-icon [icon]="faEditIcon"></fa-icon>
+                      </button>
+                      <button class="btn btn-warning  btn-sm   float-end"
+                        [routerLink]="['/member-attachments', memberDetails.spouse.memberUID]">
+                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+          <!-- Children List -->
+          @if (memberDetails.dependentChild.length > 0) {
+            <div>
+              <strong>Dependent Child:</strong>
+              @for (c of memberDetails.dependentChild; track c) {
+                <div class="alert alert-success">
+                  <div class="member-box row">
+                    <div class="member-field-box col-md-2">
+                      {{ c.memberFName }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberMName }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberLName }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{ c.phoneH }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{c.gender }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                    </div>
+                    @if (!memberDetails.primaryMember.isCompleted ) {
+                      <div class="member-field-box col-md-2"
+                        >
+                        <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
+                        [icon]="trashIcon"></fa-icon></button>
+                        <button (click)="openMemberEditModal(c)"
+                          class="btn btn-warning  btn-sm   float-end">
+                          <fa-icon [icon]="faEditIcon"></fa-icon>
                         </button>
                         <button class="btn btn-warning  btn-sm   float-end"
-                            [routerLink]="['/member-attachments', memberDetails.primaryMember.memberUID]">
-                            <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                          [routerLink]="['/member-attachments', c.memberUID]">
+                          <fa-icon [icon]="faAttachmentIcon"></fa-icon>
                         </button>
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <!-- <div *ngIf="validationSummary.length > 0" class="alert alert-danger mt-1">
-                        <h6 class="mb-2">
-                            <fa-icon icon="exclamation-triangle"></fa-icon>
-                            Please complete the following:
-                        </h6>
-                        <ul class="mb-0">
-                            <li *ngFor="let error of validationSummary">
-                                {{ error }}
-                            </li>
-                        </ul>
-                    </div> -->
-                    <div><b>Membership Type :</b><span
-                            class="badge badge-info">{{(memberDetails.primaryMember.membershipTypeId==2?"Family":"Individual")}}</span>
-                    </div>
-                    <div><b>Full Name :</b> {{memberDetails.primaryMember.memberFName}}
-                        {{memberDetails.primaryMember.memberMName}} {{memberDetails.primaryMember.memberLName}}</div>
-                    <div><b>Phone :</b> {{memberDetails.primaryMember.phoneH}} </div>
-                    <div><b>Email :</b> {{memberDetails.primaryMember.email}}</div>
-                    <div><b>Gender :</b> {{memberDetails.primaryMember.gender}}</div>
-                    <div><b>Date Of Birth :</b> {{memberDetails.primaryMember.dateofBirth | date : 'dd/MM/yyyy'}}</div>
-                    <!-- <div *ngIf="showBsbAndAccountNo"><b>BSB & Account No :</b> {{memberDetails.primaryMember.bsb}}
-                        {{memberDetails.primaryMember.accountNo}}</div> -->
-                    <!-- <div><b>Primary Fees : </b> $
-                        {{memberDetails.primaryMember.membershipCategory.membershipFees.toFixed(2)}}</div> -->
-                    <div><b>Total Fees : </b><span class="badge badge-fees">$
-                            {{memberDetails.totalFees.toFixed(2)}}</span></div>
-                    @if(memberDetails.primaryMember.membershipTypeId==2 && !memberDetails.primaryMember.isCompleted ){
-                    <button class="btn btn-spouse w-100 mb-2 mt-2" (click)="openModal('spouse')"
-                        *ngIf="!isSpouseFilled"><fa-icon [icon]="addIcon"></fa-icon> Would you like to add a spouse?
-                        <fa-icon [icon]="familyIcon"></fa-icon></button>
-                    <button class="btn btn-student w-100 mb-2 mt-2" (click)="openModal('child')"> <fa-icon
-                            [icon]="addIcon"></fa-icon> Would you like to add a
-                        child? <fa-icon [icon]="familyIcon"></fa-icon></button>
-                    <button class="btn btn-parent w-100 mb-2 mt-2" (click)="openModal('parent')"> <fa-icon
-                            [icon]="addIcon"></fa-icon> Would you like to add
-                        a parent? <fa-icon [icon]="familyIcon"></fa-icon></button>
+                      </div>
                     }
-
-                    @if(memberDetails.primaryMember.isCompleted ){
-                    <div><a [href]="memberDetails.primaryMember.lastOnlineInvoiceURL" target="_blank"><b>Click here to
-                                view Invoice</b></a>
-                    </div>
-                    }
-
+                  </div>
                 </div>
+              }
             </div>
-
-            <div class="card mt-3" *ngIf="!showBsbAndAccountNo">
-                <div class="card-header card-black">
-                    <h4>Payment Details
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <b>BANK:</b> Westpac <br />
-                    <b>Name:</b> SA Muslim Funeral Services<br />
-                    <b>BSB:</b> 035-002<br />
-                    <b>Account:</b> 467819
-                </div>
-            </div>
-        </div>
-        <!-- Left Side Form -->
-
-
-        <!-- Right Side Display -->
-        <div class="col-md-8">
-
-            <div *ngIf="!isDateOfBirthFilled">
-                <h6 class="text-danger">Thank you for registering. Please complete the steps below to finish your
-                    application.</h6>
-                <div class="row">
-                    <div class="col-md-5">
-                        <label>Gender <code>*</code></label>
-                        <select class="form-control" [(ngModel)]="memberDetails.primaryMember.gender">
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="col-md-5">
-                        <label>Date of Birth <code>*</code></label>
-                        <input type="date" class="form-control"
-                            [ngModel]="memberDetails.primaryMember.dateofBirth | date:'yyyy-MM-dd'"
-                            (ngModelChange)="memberDetails.primaryMember.dateofBirth = $event">
-                    </div>
-                    <div class="col-md-2 mt-4">
-                        <button class="btn btn-primary"
-                            (click)="saveFamilyMember(memberDetails.primaryMember)">Save</button>
-                    </div>
-                </div>
-
-            </div>
+          }
+          @if (memberDetails.additionalDependentChild.length > 0) {
             <div>
-                @if(memberDetails.primaryMember.membershipTypeId==2 &&isDateOfBirthFilled&&
-                !memberDetails.primaryMember.isCompleted ){
-                <div class="row mt-2">
-                    <div class="col-md-4" *ngIf="!isSpouseFilled">
-                        <button class="btn btn-spouse w-100 mb-2 mt-2" (click)="openModal('spouse')"><fa-icon
-                                [icon]="addIcon"></fa-icon> Would you like to add a spouse?
-                            <fa-icon [icon]="familyIcon"></fa-icon></button>
-
-
+              <strong>Additional Dependent Child:</strong>
+              @for (c of memberDetails.additionalDependentChild; track c) {
+                <div
+                  class="alert alert-additional-child">
+                  <div class="member-box row">
+                    <div class="member-field-box col-md-2">
+                      {{ c.memberFName }}
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-student w-100 mb-2 mt-2" (click)="openModal('child')"> <fa-icon
-                                [icon]="addIcon"></fa-icon> Would you like to add a
-                            child? <fa-icon [icon]="familyIcon"></fa-icon></button>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberMName }}
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-parent w-100 mb-2 mt-2" (click)="openModal('parent')"> <fa-icon
-                                [icon]="addIcon"></fa-icon> Would you like to add
-                            a parent? <fa-icon [icon]="familyIcon"></fa-icon></button>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberLName }}
                     </div>
+                    <div class="member-field-box col-md-2">
+                      {{ c.phoneH }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{c.gender }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                    </div>
+                    @if (!memberDetails.primaryMember.isCompleted ) {
+                      <div class="member-field-box col-md-2"
+                        >
+                        <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
+                        [icon]="trashIcon"></fa-icon></button>
+                        <button (click)="openMemberEditModal(c)"
+                          class="btn btn-warning  btn-sm   float-end">
+                          <fa-icon [icon]="faEditIcon"></fa-icon>
+                        </button>
+                        <button class="btn btn-warning  btn-sm   float-end"
+                          [routerLink]="['/member-attachments',  c.memberUID]">
+                          <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
                 </div>
-
-                }
+              }
             </div>
-            <div class="card mt-2" *ngIf="memberDetails.primaryMember.membershipTypeId==2 &&isDateOfBirthFilled">
-                <div class="card-header card-black">
-                    <h4><fa-icon [icon]="familyIcon"></fa-icon> Family Details</h4>
+          }
+          @if (memberDetails.additionalIndependentChild.length > 0) {
+            <div>
+              <strong>Additional Independent Child:</strong>(Over 18s are treated as individual members within
+              a family membership)
+              @for (c of memberDetails.additionalIndependentChild; track c) {
+                <div class="alert alert-secondary">
+                  <div class="member-box row">
+                    <div class="member-field-box col-md-2">
+                      {{ c.memberFName }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberMName }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberLName }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{ c.phoneH }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{c.gender }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                    </div>
+                    @if (!memberDetails.primaryMember.isCompleted ) {
+                      <div class="member-field-box col-md-2"
+                        >
+                        <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
+                        [icon]="trashIcon"></fa-icon></button>
+                        <button (click)="openMemberEditModal(c)"
+                          class="btn btn-warning  btn-sm   float-end">
+                          <fa-icon [icon]="faEditIcon"></fa-icon>
+                        </button>
+                        <button class="btn btn-warning  btn-sm   float-end"
+                          [routerLink]="['/member-attachments',  c.memberUID]">
+                          <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
                 </div>
-                <div class="card-body">
-
-                    <div *ngIf="memberDetails.spouse">
-                        <strong>Spouse:</strong>
-                        <div class="alert alert-info">
-                            <div class="member-box row">
-                                <div class="member-field-box col-md-2">
-                                    {{ memberDetails.spouse.memberFName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ memberDetails.spouse.memberMName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ memberDetails.spouse.memberLName }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{ memberDetails.spouse.phoneH }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{memberDetails.spouse.gender }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{memberDetails.spouse.dateofBirth | date:'dd/MM/yyyy'}}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    $ {{memberDetails.spouse.membershipCategory.membershipFees.toFixed(2)}}
-                                </div>
-                                <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
-                                    <button class="btn btn-danger btn-sm float-end"
-                                        (click)="removeMember(memberDetails.spouse)"><fa-icon
-                                            [icon]="trashIcon"></fa-icon></button>
-                                    <button (click)="openMemberEditModal(memberDetails.spouse)"
-                                        class="btn btn-warning  btn-sm   float-end">
-                                        <fa-icon [icon]="faEditIcon"></fa-icon>
-                                    </button>
-                                    <button class="btn btn-warning  btn-sm   float-end"
-                                        [routerLink]="['/member-attachments', memberDetails.spouse.memberUID]">
-                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                                    </button>
-
-
-                                </div>
-
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <!-- Children List -->
-                    <div *ngIf="memberDetails.dependentChild.length > 0">
-                        <strong>Dependent Child:</strong>
-                        <div *ngFor="let c of memberDetails.dependentChild;" class="alert alert-success">
-                            <div class="member-box row">
-                                <div class="member-field-box col-md-2">
-                                    {{ c.memberFName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberMName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberLName }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{ c.phoneH }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{c.gender }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{c.dateofBirth | date:'dd/MM/yyyy'}}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    $ {{c.membershipCategory.membershipFees.toFixed(2)}}
-                                </div>
-                                <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
-                                    <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
-                                            [icon]="trashIcon"></fa-icon></button>
-                                    <button (click)="openMemberEditModal(c)"
-                                        class="btn btn-warning  btn-sm   float-end">
-                                        <fa-icon [icon]="faEditIcon"></fa-icon>
-                                    </button>
-                                    <button class="btn btn-warning  btn-sm   float-end"
-                                        [routerLink]="['/member-attachments', c.memberUID]">
-                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="memberDetails.additionalDependentChild.length > 0">
-                        <strong>Additional Dependent Child:</strong>
-                        <div *ngFor="let c of memberDetails.additionalDependentChild;"
-                            class="alert alert-additional-child">
-                            <div class="member-box row">
-                                <div class="member-field-box col-md-2">
-                                    {{ c.memberFName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberMName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberLName }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{ c.phoneH }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{c.gender }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{c.dateofBirth | date:'dd/MM/yyyy'}}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    $ {{c.membershipCategory.membershipFees.toFixed(2)}}
-                                </div>
-                                <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
-                                    <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
-                                            [icon]="trashIcon"></fa-icon></button>
-                                    <button (click)="openMemberEditModal(c)"
-                                        class="btn btn-warning  btn-sm   float-end">
-                                        <fa-icon [icon]="faEditIcon"></fa-icon>
-                                    </button>
-                                    <button class="btn btn-warning  btn-sm   float-end"
-                                        [routerLink]="['/member-attachments',  c.memberUID]">
-                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="memberDetails.additionalIndependentChild.length > 0">
-                        <strong>Additional Independent Child:</strong>(Over 18s are treated as individual members within
-                        a family membership)
-                        <div *ngFor="let c of memberDetails.additionalIndependentChild;" class="alert alert-secondary">
-                            <div class="member-box row">
-                                <div class="member-field-box col-md-2">
-                                    {{ c.memberFName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberMName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberLName }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{ c.phoneH }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{c.gender }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{c.dateofBirth | date:'dd/MM/yyyy'}}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    $ {{c.membershipCategory.membershipFees.toFixed(2)}}
-                                </div>
-                                <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
-                                    <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
-                                            [icon]="trashIcon"></fa-icon></button>
-                                    <button (click)="openMemberEditModal(c)"
-                                        class="btn btn-warning  btn-sm   float-end">
-                                        <fa-icon [icon]="faEditIcon"></fa-icon>
-                                    </button>
-                                    <button class="btn btn-warning  btn-sm   float-end"
-                                        [routerLink]="['/member-attachments',  c.memberUID]">
-                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Parents List -->
-                    <div *ngIf="memberDetails.dependentParents.length > 0 ">
-                        <strong>Parents:</strong>
-                        <div *ngFor="let c of memberDetails.dependentParents; let i = index"
-                            class="alert alert-warning">
-                            <div class="member-box row">
-                                <div class="member-field-box col-md-2">
-                                    {{ c.memberFName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberMName }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{ c.memberLName }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{ c.phoneH }}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    {{c.gender }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{c.dateofBirth | date:'dd/MM/yyyy'}}
-                                </div>
-                                <div class="member-field-box col-md-1">
-                                    $ {{c.membershipCategory.membershipFees.toFixed(2)}}
-                                </div>
-
-                                <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
-                                    <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
-                                            [icon]="trashIcon"></fa-icon></button>
-                                    <button (click)="openMemberEditModal(c)"
-                                        class="btn btn-warning  btn-sm   float-end">
-                                        <fa-icon [icon]="faEditIcon"></fa-icon>
-                                    </button>
-                                    <button class="btn btn-warning  btn-sm   float-end"
-                                        [routerLink]="['/member-attachments',  c.memberUID]">
-                                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+              }
             </div>
-            @if(!memberDetails.primaryMember.isCompleted &&isDateOfBirthFilled ){
-            <div class="row">
-                <div class="col-md-12 mt-2">
-
-                    <h6 class="text-danger" *ngIf="memberDetails.emergencyContacts.length < 1">Step 2- Minimum 1
-                        emergency
-                        contacts are required</h6>
+          }
+          <!-- Parents List -->
+          @if (memberDetails.dependentParents.length > 0 ) {
+            <div>
+              <strong>Parents:</strong>
+              @for (c of memberDetails.dependentParents; track c; let i = $index) {
+                <div
+                  class="alert alert-warning">
+                  <div class="member-box row">
+                    <div class="member-field-box col-md-2">
+                      {{ c.memberFName }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberMName }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{ c.memberLName }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{ c.phoneH }}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      {{c.gender }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{c.dateofBirth | date:'dd/MM/yyyy'}}
+                    </div>
+                    <div class="member-field-box col-md-1">
+                      $ {{c.membershipCategory.membershipFees.toFixed(2)}}
+                    </div>
+                    @if (!memberDetails.primaryMember.isCompleted ) {
+                      <div class="member-field-box col-md-2"
+                        >
+                        <button class="btn btn-danger btn-sm float-end" (click)="removeMember(c)"><fa-icon
+                        [icon]="trashIcon"></fa-icon></button>
+                        <button (click)="openMemberEditModal(c)"
+                          class="btn btn-warning  btn-sm   float-end">
+                          <fa-icon [icon]="faEditIcon"></fa-icon>
+                        </button>
+                        <button class="btn btn-warning  btn-sm   float-end"
+                          [routerLink]="['/member-attachments',  c.memberUID]">
+                          <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
                 </div>
-
+              }
             </div>
-
+          }
+        </div>
+      </div>
+    }
+    @if(!memberDetails.primaryMember.isCompleted &&isDateOfBirthFilled ){
+      <div class="row">
+        <div class="col-md-12 mt-2">
+          @if (memberDetails.emergencyContacts.length < 1) {
+            <h6 class="text-danger">Step 2- Minimum 1
+              emergency
+            contacts are required</h6>
+          }
+        </div>
+      </div>
+    }
+    @if (isDateOfBirthFilled) {
+      <div class="card  mt-2">
+        <div class="card-header card-grey d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <fa-icon [icon]="contactIcon"></fa-icon>
+            Emergency Contacts
+          </h4>
+          @if (!memberDetails.primaryMember.isCompleted) {
+            <button class="btn btn-sm btn-primary"
+              (click)="openEmergencyContactModal()">
+              <fa-icon [icon]="contactIcon"></fa-icon>
+              Add
+            </button>
+          }
+        </div>
+        <div class="card-body">
+          @if (memberDetails.emergencyContacts.length > 0 ) {
+            <div>
+              @for (c of memberDetails.emergencyContacts; track c; let i = $index) {
+                <div class="alert">
+                  <div class="member-box row">
+                    <div class="member-field-box col-md-3">
+                      {{ c.fullName }}
+                    </div>
+                    <div class="member-field-box col-md-3">
+                      {{ c.phone }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{ c.gender }}
+                    </div>
+                    <div class="member-field-box col-md-2">
+                      {{ c.relationship.relationshipName }}
+                    </div>
+                    @if (!memberDetails.primaryMember.isCompleted ) {
+                      <div class="member-field-box col-md-2"
+                        >
+                        <button class="btn btn-danger btn-sm float-end"
+                          (click)="removeEmergencyCotnact(c)"><fa-icon
+                        [icon]="trashIcon"></fa-icon></button>
+                        <button (click)="openEmergencyContactModal(c)"
+                          class="btn btn-warning  btn-sm   float-end">
+                          <fa-icon [icon]="faEditIcon"></fa-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    @if (memberDetails.emergencyContacts.length > 0 && !isPaymentMethodAdded) {
+      <div class="mt-3">
+        <h6 class="text-danger">Step 3- How would you like to pay?</h6>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="d-block">Payment Method <code>*</code></label>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" id="DDR" value="DDR"
+                [(ngModel)]="memberDetails.primaryMember.modeOfPayment"
+                (change)="toogleStepAccountDetails('DDR')">
+                <label class="form-check-label" for="DDR">
+                  Direct Debit
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="BANKTRANSFER" value="BANK TRANSFER"
+                  [(ngModel)]="memberDetails.primaryMember.modeOfPayment"
+                  (change)="toogleStepAccountDetails('BANK TRANSFER')">
+                  <label class="form-check-label" for="BANKTRANSFER">
+                    BANK TRANSFER
+                  </label>
+                </div>
+              </div>
+            </div>
+            @if (showBsbAndAccountNo) {
+              <div class="row">
+                <div class="col-md-4">
+                  <label>Account Name <code>*</code></label>
+                  <input type="text" class="form-control" [(ngModel)]="memberDetails.primaryMember.accountName ">
+                </div>
+                <div class="col-md-4">
+                  <label>Bsb <code>*</code></label>
+                  <input type="text" class="form-control" [(ngModel)]="memberDetails.primaryMember.bsb ">
+                </div>
+                <div class="col-md-4">
+                  <label>Account No <code>*</code></label>
+                  <input type="text" class="form-control" [(ngModel)]="memberDetails.primaryMember.accountNo">
+                </div>
+              </div>
             }
-            <div class="card  mt-2" *ngIf="isDateOfBirthFilled">
-                <div class="card-header card-grey d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">
-                        <fa-icon [icon]="contactIcon"></fa-icon>
-                        Emergency Contacts
-                    </h4>
-
-                    <button class="btn btn-sm btn-primary" *ngIf="!memberDetails.primaryMember.isCompleted"
-                        (click)="openEmergencyContactModal()">
-                        <fa-icon [icon]="contactIcon"></fa-icon>
-                        Add
-                    </button>
-                </div>
-
-                <div class="card-body">
-                    <div *ngIf="memberDetails.emergencyContacts.length > 0 ">
-                        <div *ngFor="let c of memberDetails.emergencyContacts; let i = index" class="alert">
-                            <div class="member-box row">
-                                <div class="member-field-box col-md-3">
-                                    {{ c.fullName }}
-                                </div>
-                                <div class="member-field-box col-md-3">
-                                    {{ c.phone }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{ c.gender }}
-                                </div>
-                                <div class="member-field-box col-md-2">
-                                    {{ c.relationship.relationshipName }}
-                                </div>
-
-
-                                <div class="member-field-box col-md-2"
-                                    *ngIf="!memberDetails.primaryMember.isCompleted ">
-                                    <button class="btn btn-danger btn-sm float-end"
-                                        (click)="removeEmergencyCotnact(c)"><fa-icon
-                                            [icon]="trashIcon"></fa-icon></button>
-                                    <button (click)="openEmergencyContactModal(c)"
-                                        class="btn btn-warning  btn-sm   float-end">
-                                        <fa-icon [icon]="faEditIcon"></fa-icon>
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-3" *ngIf="memberDetails.emergencyContacts.length > 0 && !isPaymentMethodAdded">
-                <h6 class="text-danger">Step 3- How would you like to pay?</h6>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label class="d-block">Payment Method <code>*</code></label>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="DDR" value="DDR"
-                                [(ngModel)]="memberDetails.primaryMember.modeOfPayment"
-                                (change)="toogleStepAccountDetails('DDR')">
-                            <label class="form-check-label" for="DDR">
-                                Direct Debit
-                            </label>
-                        </div>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="BANKTRANSFER" value="BANK TRANSFER"
-                                [(ngModel)]="memberDetails.primaryMember.modeOfPayment"
-                                (change)="toogleStepAccountDetails('BANK TRANSFER')">
-                            <label class="form-check-label" for="BANKTRANSFER">
-                                BANK TRANSFER
-                            </label>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row" *ngIf="showBsbAndAccountNo">
-                    <div class="col-md-4">
-                        <label>Account Name <code>*</code></label>
-                        <input type="text" class="form-control" [(ngModel)]="memberDetails.primaryMember.accountName ">
-                    </div>
-                    <div class="col-md-4">
-                        <label>Bsb <code>*</code></label>
-                        <input type="text" class="form-control" [(ngModel)]="memberDetails.primaryMember.bsb ">
-                    </div>
-                    <div class="col-md-4">
-                        <label>Account No <code>*</code></label>
-                        <input type="text" class="form-control" [(ngModel)]="memberDetails.primaryMember.accountNo">
-                    </div>
-                </div>
-                <div *ngIf="!showBsbAndAccountNo">
-                    <b>BANK:</b> Westpac <br />
-                    <b>Name:</b> SA Muslim Funeral Services<br />
-                    <b>BSB:</b> 035-002<br />
-                    <b>Account:</b> 467819
-                </div>
-                <div>
-                    <div class="col-md-2 mt-2">
-                        <button class="btn btn-primary"
-                            (click)="saveFamilyMember(memberDetails.primaryMember)">Save</button>
-                    </div>
-                </div>
-            </div>
-            @if(!memberDetails.primaryMember.isCompleted && isPaymentMethodAdded){
-            <h6 class="text-danger mt-4">Step 4- Thank you for completing your application details. Please proceed to
-                complete the final steps to finish your application.</h6>
-            <button class="btn btn-primary w-100 mb-2 mt-2" (click)="saveAndGenerateInvoice()"
-                [disabled]="isInvoiceButtonDisabled"> <i class="spinner-border spinner-border-sm"
-                    [hidden]="!isInvoiceButtonDisabled"></i>
-                Save & Complete </button>
+            @if (!showBsbAndAccountNo) {
+              <div>
+                <b>BANK:</b> Westpac <br />
+                <b>Name:</b> SA Muslim Funeral Services<br />
+                <b>BSB:</b> 035-002<br />
+                <b>Account:</b> 467819
+              </div>
             }
-        </div>
-    </div>
-
-    <!-- Bootstrap Modal -->
-    <div class="modal fade" id="familyModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add {{ selectedType | titlecase }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form [formGroup]="modalForm">
-                        <input hidden formControlName="memberId">
-                        <div class="mb-2">
-                            <label>First Name <code>*</code></label>
-                            <input type="text" class="form-control" formControlName="memberFName">
-                        </div>
-                        <div class="mb-2">
-                            <label>Middle Name (Optional)</label>
-                            <input type="text" class="form-control" formControlName="memberMName">
-                        </div>
-                        <div class="mb-2">
-                            <label>Last Name <code>*</code></label>
-                            <input type="text" class="form-control" formControlName="memberLName">
-                        </div>
-                        <div class="mb-2">
-                            <label>Gender <code>*</code></label>
-                            <select class="form-control" formControlName="gender">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-2">
-                            <label>Date of Birth <code>*</code></label>
-                            <input type="date" class="form-control" formControlName="dateofBirth">
-                        </div>
-                        <div class="mb-2">
-                            <label>Phone</label>
-                            <input type="text" class="form-control" formControlName="phoneH">
-                        </div>
-                        @if(showPaymentMethodField){
-                        <div class="mb-2">
-                            <label class="d-block">Payment Method <code>*</code></label>
-
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="DDR" value="DDR"
-                                    formControlName="modeOfPayment" (change)="toogleAccountDetails()">
-                                <label class="form-check-label" for="DDR">
-                                    Direct Debit
-                                </label>
-                            </div>
-
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="BANKTRANSFER" value="BANK TRANSFER"
-                                    formControlName="modeOfPayment" (change)="toogleAccountDetails()">
-                                <label class="form-check-label" for="BANKTRANSFER">
-                                    BANK TRANSFER
-                                </label>
-                            </div>
-
-
-                        </div>
-                        }
-                        @if(showBsbAndAccountNo){
-                        <div class="mb-2">
-                            <label>Account Name</label>
-                            <input type="text" class="form-control" formControlName="accountName">
-                        </div>
-                        <div class="mb-2">
-                            <label>BSB</label>
-                            <input type="text" class="form-control" formControlName="bsb">
-                        </div>
-                        <div class="mb-2">
-                            <label>Account No</label>
-                            <input type="text" class="form-control" formControlName="accountNo">
-                        </div>
-                        }
-
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="closeModal" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" (click)="addMember()" [disabled]="isSubmitDisabled">
-                        <i class="spinner-border spinner-border-sm" [hidden]="!isSubmitDisabled"></i> Save</button>
-                </div>
+            <div>
+              <div class="col-md-2 mt-2">
+                <button class="btn btn-primary"
+                (click)="saveFamilyMember(memberDetails.primaryMember)">Save</button>
+              </div>
             </div>
-        </div>
+          </div>
+        }
+        @if(!memberDetails.primaryMember.isCompleted && isPaymentMethodAdded){
+          <h6 class="text-danger mt-4">Step 4- Thank you for completing your application details. Please proceed to
+          complete the final steps to finish your application.</h6>
+          <button class="btn btn-primary w-100 mb-2 mt-2" (click)="saveAndGenerateInvoice()"
+            [disabled]="isInvoiceButtonDisabled"> <i class="spinner-border spinner-border-sm"
+          [hidden]="!isInvoiceButtonDisabled"></i>
+        Save & Complete </button>
+      }
     </div>
-    <div class="modal fade" id="emergencyContactModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Emergency Contact</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+}
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="familyModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add {{ selectedType | titlecase }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="modalForm">
+          <input hidden formControlName="memberId">
+          <div class="mb-2">
+            <label>First Name <code>*</code></label>
+            <input type="text" class="form-control" formControlName="memberFName">
+          </div>
+          <div class="mb-2">
+            <label>Middle Name (Optional)</label>
+            <input type="text" class="form-control" formControlName="memberMName">
+          </div>
+          <div class="mb-2">
+            <label>Last Name <code>*</code></label>
+            <input type="text" class="form-control" formControlName="memberLName">
+          </div>
+          <div class="mb-2">
+            <label>Gender <code>*</code></label>
+            <select class="form-control" formControlName="gender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label>Date of Birth <code>*</code></label>
+            <input type="date" class="form-control" formControlName="dateofBirth">
+          </div>
+          <div class="mb-2">
+            <label>Phone</label>
+            <input type="text" class="form-control" formControlName="phoneH">
+          </div>
+          @if(showPaymentMethodField){
+            <div class="mb-2">
+              <label class="d-block">Payment Method <code>*</code></label>
+
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="DDR" value="DDR"
+                  formControlName="modeOfPayment" (change)="toogleAccountDetails()">
+                  <label class="form-check-label" for="DDR">
+                    Direct Debit
+                  </label>
                 </div>
-                <div class="modal-body">
-                    <form [formGroup]="emergencyContactForm">
-                        <input hidden formControlName="contactId">
-                        <div class="mb-2">
-                            <label>Full Name <code>*</code></label>
-                            <input type="text" class="form-control" formControlName="fullName">
-                        </div>
-                        <div class="mb-2">
-                            <label>Phone <code>*</code></label>
-                            <input type="text" class="form-control" formControlName="phone">
-                        </div>
-                        <div class="mb-2">
-                            <label>Gender <code>*</code></label>
-                            <select class="form-control" formControlName="gender">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-2">
-                            <label>Relationship <code>*</code></label>
-                            <select class="form-control" formControlName="relationshipId">
-                                <option *ngFor="let rel of relationships" [value]="rel.relationshipId">
-                                    {{rel.relationshipName}}</option>
-                            </select>
-                        </div>
-                    </form>
+
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="BANKTRANSFER" value="BANK TRANSFER"
+                    formControlName="modeOfPayment" (change)="toogleAccountDetails()">
+                    <label class="form-check-label" for="BANKTRANSFER">
+                      BANK TRANSFER
+                    </label>
+                  </div>
+
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id="closeEmergencyCotnactModal" class="btn btn-secondary"
-                        data-bs-dismiss="modal" [disabled]="isSubmitDisabled"> <i
-                            class="spinner-border spinner-border-sm" [hidden]="!isSubmitDisabled"></i> Cancel</button>
-                    <button type="button" class="btn btn-primary" (click)="addEmergencyContact()">Save</button>
+              }
+              @if(showBsbAndAccountNo){
+                <div class="mb-2">
+                  <label>Account Name</label>
+                  <input type="text" class="form-control" formControlName="accountName">
                 </div>
+                <div class="mb-2">
+                  <label>BSB</label>
+                  <input type="text" class="form-control" formControlName="bsb">
+                </div>
+                <div class="mb-2">
+                  <label>Account No</label>
+                  <input type="text" class="form-control" formControlName="accountNo">
+                </div>
+              }
+
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="closeModal" class="btn btn-secondary"
+            data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addMember()" [disabled]="isSubmitDisabled">
+              <i class="spinner-border spinner-border-sm" [hidden]="!isSubmitDisabled"></i> Save</button>
             </div>
+          </div>
         </div>
+      </div>
+      <div class="modal fade" id="emergencyContactModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Emergency Contact</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="emergencyContactForm">
+                <input hidden formControlName="contactId">
+                <div class="mb-2">
+                  <label>Full Name <code>*</code></label>
+                  <input type="text" class="form-control" formControlName="fullName">
+                </div>
+                <div class="mb-2">
+                  <label>Phone <code>*</code></label>
+                  <input type="text" class="form-control" formControlName="phone">
+                </div>
+                <div class="mb-2">
+                  <label>Gender <code>*</code></label>
+                  <select class="form-control" formControlName="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <label>Relationship <code>*</code></label>
+                  <select class="form-control" formControlName="relationshipId">
+                    @for (rel of relationships; track rel) {
+                      <option [value]="rel.relationshipId">
+                      {{rel.relationshipName}}</option>
+                    }
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="closeEmergencyCotnactModal" class="btn btn-secondary"
+                data-bs-dismiss="modal" [disabled]="isSubmitDisabled"> <i
+              class="spinner-border spinner-border-sm" [hidden]="!isSubmitDisabled"></i> Cancel</button>
+              <button type="button" class="btn btn-primary" (click)="addEmergencyContact()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>

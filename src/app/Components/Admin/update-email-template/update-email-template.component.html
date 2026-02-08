@@ -34,13 +34,15 @@
     </div>
 
     <!-- <div class="form-group">
-        <label for="body">Category</label>
-        <input id="body" formControlName="category" class="form-control" />
-      </div> -->
+    <label for="body">Category</label>
+    <input id="body" formControlName="category" class="form-control" />
+  </div> -->
 
-    <button type="button" (click)="onSubmit(false)" class="btn btn-primary mt-2 mb-2" style="margin-right: 10px;"
-      [disabled]="updateEmailTemplateForm.invalid">Update</button>
-    <button type="button"  *ngIf="emailTemplate.category=='Customize'"(click)="onSubmit(true)" class="btn btn-primary mt-2 mb-2"
-      [disabled]="updateEmailTemplateForm.invalid">Update & Send</button>
-  </form>
+  <button type="button" (click)="onSubmit(false)" class="btn btn-primary mt-2 mb-2" style="margin-right: 10px;"
+  [disabled]="updateEmailTemplateForm.invalid">Update</button>
+  @if (emailTemplate.category=='Customize') {
+    <button type="button" (click)="onSubmit(true)" class="btn btn-primary mt-2 mb-2"
+    [disabled]="updateEmailTemplateForm.invalid">Update & Send</button>
+  }
+</form>
 </div>

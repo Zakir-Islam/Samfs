@@ -1,89 +1,93 @@
 <div class="page-header d-print-none ms-2 mt-2">
-    <div class="container-fluid pb-2">
-        <div class="row g-2 align-items-center">
-            <div class="col">
-                <h2 class="page-title">Contact Lists</h2>
-            </div>
-        </div>
+  <div class="container-fluid pb-2">
+    <div class="row g-2 align-items-center">
+      <div class="col">
+        <h2 class="page-title">Contact Lists</h2>
+      </div>
     </div>
+  </div>
 </div>
 <div class="container-fluid ms-2 mt-1">
-    <div class="card">
-        <div class="card-body">
-            <!-- Contact List Info -->
-            <div class="mb-3">
-                <input type="text" class="form-control mb-2" placeholder="List Name"
-                    [(ngModel)]="contactList.contactListName">
-                <textarea class="form-control mb-2" placeholder="Description"
-                    [(ngModel)]="contactList.contactListDescription"></textarea>
+  <div class="card">
+    <div class="card-body">
+      <!-- Contact List Info -->
+      <div class="mb-3">
+        <input type="text" class="form-control mb-2" placeholder="List Name"
+          [(ngModel)]="contactList.contactListName">
+          <textarea class="form-control mb-2" placeholder="Description"
+          [(ngModel)]="contactList.contactListDescription"></textarea>
+        </div>
+
+        <!-- Add Contact -->
+        <h5>Contacts</h5>
+        <div class="row mb-2">
+          <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Name" [(ngModel)]="newContact.contactName">
+          </div>
+          <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Phone" [(ngModel)]="newContact.contactPhone">
+          </div>
+          <div class="col-md-4">
+            <input type="email" class="form-control" placeholder="Email" [(ngModel)]="newContact.contactEmail">
+          </div>
+          <div class="col-md-1">
+            <button class="btn btn-primary" (click)="addContact()">Add</button>
+          </div>
+        </div>
+        <hr>
+          <div class="row mb-2">
+
+            <div class="col-md-2">
+              <input type="text" class="form-control" placeholder="Search contacts..." [(ngModel)]="searchTerm">
+
             </div>
+          </div>
 
-            <!-- Add Contact -->
-            <h5>Contacts</h5>
-            <div class="row mb-2">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Name" [(ngModel)]="newContact.contactName">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" placeholder="Phone" [(ngModel)]="newContact.contactPhone">
-                </div>
-                <div class="col-md-4">
-                    <input type="email" class="form-control" placeholder="Email" [(ngModel)]="newContact.contactEmail">
-                </div>
-                <div class="col-md-1">
-                    <button class="btn btn-primary" (click)="addContact()">Add</button>
-                </div>
-            </div>
-            <hr>
-            <div class="row mb-2">
+          <!-- Scrollable Table -->
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-striped table-sm mb-0">
+              <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th style="width: 80px;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (c of filteredContacts; track c; let i = $index) {
+                  <tr>
+                    <td>{{ c.contactName }}</td>
+                    <td>{{ c.contactPhone }}</td>
+                    <td>{{ c.contactEmail }}</td>
+                    <td><button class="btn btn-danger btn-sm" (click)="removeContact(i)">Remove</button></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
 
-                <div class="col-md-2">
-                    <input type="text" class="form-control" placeholder="Search contacts..." [(ngModel)]="searchTerm">
+          <!-- Save Button -->
+          <button class="btn btn-success mt-2" (click)="saveContactList()">
+            {{ editing ? 'Update Contact List' : 'Save Contact List' }}
+          </button>
 
-                </div>
-            </div>
-
-            <!-- Scrollable Table -->
-            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                <table class="table table-bordered table-striped table-sm mb-0">
-                    <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
-                        <tr>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th style="width: 80px;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let c of filteredContacts; let i = index">
-                            <td>{{ c.contactName }}</td>
-                            <td>{{ c.contactPhone }}</td>
-                            <td>{{ c.contactEmail }}</td>
-                            <td><button class="btn btn-danger btn-sm" (click)="removeContact(i)">Remove</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Save Button -->
-            <button class="btn btn-success mt-2" (click)="saveContactList()">
-                {{ editing ? 'Update Contact List' : 'Save Contact List' }}
-            </button>
-
-            <hr>
+          <hr>
 
             <!-- Existing Lists -->
             <h5>Existing Contact Lists</h5>
             <ul class="list-group">
+              @for (list of contactLists; track list) {
                 <li class="list-group-item d-flex justify-content-between align-items-center"
-                    *ngFor="let list of contactLists">
-                    <div>
-                        <strong>{{ list.contactListName }}</strong> ({{ list.contacts?.length || 0 }} contacts)
-                    </div>
-                    <button class="btn btn-sm btn-info" (click)="editContactList(list.contactListId||0)">Edit</button>
+                  >
+                  <div>
+                    <strong>{{ list.contactListName }}</strong> ({{ list.contacts?.length || 0 }} contacts)
+                  </div>
+                  <button class="btn btn-sm btn-info" (click)="editContactList(list.contactListId||0)">Edit</button>
                 </li>
+              }
             </ul>
-        </div>
+          </div>
 
-    </div>
-</div>
+        </div>
+      </div>

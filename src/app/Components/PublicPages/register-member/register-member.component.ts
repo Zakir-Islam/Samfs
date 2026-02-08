@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterMember } from '../../../Models/member-classes';
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-register-member',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    imports: [FormsModule, ReactiveFormsModule],
     templateUrl: './register-member.component.html',
     styleUrl: './register-member.component.css'
 })

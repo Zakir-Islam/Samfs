@@ -22,32 +22,36 @@
 
         <div class="col-md-4 d-flex align-items-end">
           <button class="btn btn-primary w-100" (click)="upload()" [disabled]="isSubmitted"> <i
-                            class="spinner-border spinner-border-sm" [hidden]="!isSubmitted"></i> 
-            Upload
-          </button>
-        </div>
+          class="spinner-border spinner-border-sm" [hidden]="!isSubmitted"></i>
+          Upload
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Attachment List -->
-  <table class="table table-bordered table-striped">
-    <thead class="thead-dark">
+<!-- Attachment List -->
+<table class="table table-bordered table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>Type</th>
+      <th>File Name</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (a of attachments; track a) {
       <tr>
-        <th>Type</th>
-        <th>File Name</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let a of attachments">
         <td>{{ getTypeName(a.attachmentType) }}</td>
         <td><a target="_blank" [href]="bucketUrl+a.s3Key">{{ a.fileName }}</a></td>
         <td>{{ a.addedDate | date:'dd/MM/yyyy' }}</td>
       </tr>
-      <tr *ngIf="attachments.length === 0">
+    }
+    @if (attachments.length === 0) {
+      <tr>
         <td colspan="3" class="text-center">No attachments found</td>
       </tr>
-    </tbody>
-  </table>
+    }
+  </tbody>
+</table>
 </div>

@@ -2,31 +2,35 @@
   <div>
     <h2 class="section-header">Email Templates</h2>
     <div class="row">
-      <div class="col-md-4" *ngFor="let category of emailTemplatesByCategory | keyvalue">
-        <div class="card">
-          <div class="card-header">
-            <span *ngIf="category.key!='Customize'">
-              {{category.key}}
-            </span>
-
-
-            <button class="btn btn-primary " *ngIf="category.key=='Customize'"
-              [routerLink]="['/add-email-template']">Add New Template</button>
-
-          </div>
-          <div class="card-body">
-            <div *ngFor="let emailTemplate of category.value">
+      @for (category of emailTemplatesByCategory | keyvalue; track category) {
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header">
+              @if (category.key!='Customize') {
+                <span>
+                  {{category.key}}
+                </span>
+              }
+              @if (category.key=='Customize') {
+                <button class="btn btn-primary "
+                [routerLink]="['/add-email-template']">Add New Template</button>
+              }
+            </div>
+            <div class="card-body">
+              @for (emailTemplate of category.value; track emailTemplate) {
+                <div>
               <a [routerLink]="[
                 '/update-email-template',
                 emailTemplate.emailTemplateId
               ]">
-                {{ emailTemplate.emailTemplateName }}
-              </a>
+                    {{ emailTemplate.emailTemplateName }}
+                  </a>
+                </div>
+              }
             </div>
-
           </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 </div>

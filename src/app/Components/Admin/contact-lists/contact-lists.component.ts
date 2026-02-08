@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { ContactListService } from '../../../Services/contact-list.service';
 import { Contact, ContactList } from '../../../Models/contacts';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-contact-lists',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    imports: [FormsModule, ReactiveFormsModule],
     templateUrl: './contact-lists.component.html',
     styleUrl: './contact-lists.component.css'
 })

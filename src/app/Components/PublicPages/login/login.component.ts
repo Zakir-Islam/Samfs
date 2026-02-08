@@ -1,13 +1,13 @@
 import { Component, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, isPlatformServer } from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../Services/auth.service';
 import { User } from '../../../Models/user';
 
 @Component({
     selector: 'app-login',
-    imports: [ReactiveFormsModule, CommonModule],
+    imports: [ReactiveFormsModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })

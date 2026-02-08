@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { ToastrService } from 'ngx-toastr';
 import { EditorComponent, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { EmailTemplate } from '../../../Models/EmailTemplate';
 import { EmailTemplateService } from '../../../Services/email-template.service';
 @Component({
     selector: 'app-update-email-template',
-    imports: [EditorComponent, CommonModule, ReactiveFormsModule, FormsModule],
+    imports: [EditorComponent, ReactiveFormsModule, FormsModule],
     providers: [
         { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
     ],
