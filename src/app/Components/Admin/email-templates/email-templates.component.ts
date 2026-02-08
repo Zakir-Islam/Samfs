@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { EmailTemplateService } from '../../../Services/email-template.service';
 import { EmailTemplate } from '../../../Models/EmailTemplate';
 
 @Component({
-    selector: 'app-email-templates',
-    imports: [CommonModule, RouterLink, RouterLinkActive],
-    templateUrl: './email-templates.component.html',
-    styleUrl: './email-templates.component.css'
+  selector: 'app-email-templates',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  templateUrl: './email-templates.component.html',
+  styleUrl: './email-templates.component.css'
 })
 export class EmailTemplatesComponent implements OnInit {
   emailTemplatesByCategory: { [category: string]: EmailTemplate[] } = {};
 
-  constructor(private emailTemplateService: EmailTemplateService) {}
+  constructor(private emailTemplateService: EmailTemplateService) { }
 
   ngOnInit(): void {
     this.loadEmailTemplates();
@@ -24,7 +24,6 @@ export class EmailTemplatesComponent implements OnInit {
     this.emailTemplateService.getAllEmailTemplates().subscribe(
       (data: EmailTemplate[]) => {
         this.emailTemplatesByCategory = this.groupByCategory(data);
-    
       }
     );
   }
@@ -39,6 +38,4 @@ export class EmailTemplatesComponent implements OnInit {
       return acc;
     }, {} as { [category: string]: EmailTemplate[] });
   }
-
-
 }

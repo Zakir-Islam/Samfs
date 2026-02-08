@@ -1,35 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ContactListService } from '../../../Services/contact-list.service';
 import { Contact, ContactList } from '../../../Models/contacts';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-    selector: 'app-contact-lists',
-    imports: [FormsModule, ReactiveFormsModule],
-    templateUrl: './contact-lists.component.html',
-    styleUrl: './contact-lists.component.css'
+  selector: 'app-contact-lists',
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  templateUrl: './contact-lists.component.html',
+  styleUrl: './contact-lists.component.css'
 })
-export class ContactListsComponent {
- contactList: ContactList = { contactListName: '', contactListDescription: '', contacts: [] };
+export class ContactListsComponent implements OnInit {
+  contactList: ContactList = { contactListName: '', contactListDescription: '', contacts: [] };
   newContact: Contact = { contactName: '', contactPhone: '', contactEmail: '' };
   contactLists: ContactList[] = [];
   editing = false;
   searchTerm = '';
-  constructor(private contactListService: ContactListService,private toastr:ToastrService) {}
+
+  constructor(private contactListService: ContactListService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.loadContactLists();
   }
 
   loadContactLists() {
-    this.contactListService.GetContactList().subscribe(res => this.contactLists = res);
+    this.contactListService.GetContactList().subscribe((res: any) => this.contactLists = res);
   }
 
   editContactList(listId: number) {
-      this.contactList = this.contactLists.find(x=>x.contactListId==listId)||{ contactListName: '', contactListDescription: '', contacts: [] };
-      this.editing = true;
+    this.contactList = this.contactLists.find(x => x.contactListId == listId) || { contactListName: '', contactListDescription: '', contacts: [] };
+    this.editing = true;
   }
 
   addContact() {
@@ -49,13 +51,13 @@ export class ContactListsComponent {
     }
 
     if (this.editing) {
-      this.contactListService.UpdateContactList(this.contactList).subscribe(res => {
+      this.contactListService.UpdateContactList(this.contactList).subscribe((res: any) => {
         this.toastr.success('Contact List updated!');
         this.resetForm();
       });
     } else {
-      this.contactListService.AddContactList(this.contactList).subscribe(res => {
-         this.toastr.success('Contact List saved!');
+      this.contactListService.AddContactList(this.contactList).subscribe((res: any) => {
+        this.toastr.success('Contact List saved!');
         this.resetForm();
       });
     }
@@ -64,9 +66,10 @@ export class ContactListsComponent {
   resetForm() {
     this.contactList = { contactListName: '', contactListDescription: '', contacts: [] };
     this.editing = false;
-      this.searchTerm = '';
+    this.searchTerm = '';
     this.loadContactLists();
   }
+
   get filteredContacts() {
     if (!this.searchTerm) return this.contactList.contacts;
     return this.contactList.contacts!.filter(c =>

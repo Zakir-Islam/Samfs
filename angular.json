@@ -26,18 +26,11 @@
                     { "glob": "**/*", "input": "node_modules/tinymce", "output": "/tinymce/" }
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-toastr/toastr.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.css",
               "src/styles.css"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "node_modules/datatables.net/js/dataTables.js",
-              "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

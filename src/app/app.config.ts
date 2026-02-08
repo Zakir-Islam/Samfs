@@ -8,18 +8,29 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideToastr } from 'ngx-toastr';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
   provideRouter(routes),
   provideHttpClient(),
-  importProvidersFrom(FontAwesomeModule) ,
+  importProvidersFrom(FontAwesomeModule),
   provideAnimations(),
-    provideToastr({
-      timeOut: 1000, // duration in milliseconds
-      closeButton: true, // show close button
-      progressBar: true, // show progress bar
-      positionClass: 'toast-top-right', // position of toastr notifications
-      preventDuplicates: true
-    })
-]
+  provideToastr({
+    timeOut: 1000, // duration in milliseconds
+    closeButton: true, // show close button
+    progressBar: true, // show progress bar
+    positionClass: 'toast-top-right', // position of toastr notifications
+    preventDuplicates: true
+  }),
+  providePrimeNG({
+    theme: {
+      preset: Aura,
+      options: {
+        darkModeSelector: 'none'
+      }
+    }
+  })
+  ]
 };

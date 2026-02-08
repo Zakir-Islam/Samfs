@@ -1,60 +1,65 @@
-@if (!this.isUser() && !isServer){
-    <div class="d-flex justify-content-center align-items-center min-vh-100">
-      <div class="card shadow-lg p-4" style="max-width: 400px; width: 100%">
-        <div class="card-header text-center bg-transparent border-0">
-          <img
-            src="../../../assets/images/logo-dark.png"
-            class="mb-3"
-            style=" width: 150px"
-            alt="Logo"
-          />
-          <h3 class="font-weight-bold">Login</h3>
-        </div>
-        <div class="card-body">
-          <form [formGroup]="loginForm">
-            <div class="form-group mb-3">
-              <label for="email" class="form-label">Email address</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                [formControl]="email"
-                placeholder="Enter your email"
-              />
-              <small class="text-danger" [hidden]="email.valid || email.untouched"
-                >Please enter a valid email</small
-              >
+@if (!this.isUser() && !isServer) {
+<div class="min-vh-100 flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4 py-12 sm:px-6 lg:px-8 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100/50 via-zinc-50 to-zinc-50 dark:from-blue-900/20 dark:via-zinc-950 dark:to-zinc-950">
+    <div class="max-w-md w-full space-y-8 relative group">
+        <!-- Glass Backdrop -->
+        <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+        
+        <div class="relative bg-white dark:bg-zinc-900/80 p-8 sm:p-10 rounded-2xl shadow-2xl border border-white/20 dark:border-zinc-800 backdrop-blur-xl transition-all">
+            
+            <div class="text-center mb-10">
+                <img src="../../../assets/images/logo-dark.png" class="mx-auto h-16 w-auto drop-shadow-md" alt="Logo" />
+                <h2 class="mt-6 text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
+                    Welcome back
+                </h2>
+                <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+                    Samfs Membership Portal
+                </p>
             </div>
-            <div class="form-group mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                [formControl]="password"
-                placeholder="Enter your password"
-              />
+
+            <form [formGroup]="loginForm" class="space-y-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
+                        Email address
+                    </label>
+                    <div class="relative">
+                        <input id="email" type="email" pInputText [formControl]="email"
+                               class="w-full !rounded-lg !border-zinc-200 dark:!border-zinc-800 !bg-zinc-50 dark:!bg-zinc-800/50 focus:!ring-2 focus:!ring-blue-500/20 transition-all font-medium py-3"
+                               placeholder="name@company.com" />
+                    </div>
+                    @if (email.invalid && (email.dirty || email.touched)) {
+                        <p class="mt-1.5 text-xs text-red-500 font-medium flex items-center">
+                            <i class="pi pi-exclamation-circle mr-1"></i>
+                            Please enter a valid email address
+                        </p>
+                    }
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
+                        Password
+                    </label>
+                    <p-password id="password" [formControl]="password" [toggleMask]="true" [feedback]="false"
+                                styleClass="w-full" inputStyleClass="w-full !rounded-lg !border-zinc-200 dark:!border-zinc-800 !bg-zinc-50 dark:!bg-zinc-800/50 focus:!ring-2 focus:!ring-blue-500/20 transition-all font-medium py-3"
+                                placeholder="••••••••"></p-password>
+                </div>
+
+                <div class="pt-2 space-y-3">
+                    <p-button label="Sign In" (onClick)="login()" [disabled]="loginForm.invalid"
+                              styleClass="w-full p-button-lg !rounded-xl !py-3.5 !bg-blue-600 !border-none hover:!bg-blue-700 !shadow-lg !shadow-blue-500/20 transition-all active:!scale-[0.98]"></p-button>
+                    
+                    <p-button label="Reset" (onClick)="reset()"
+                              styleClass="w-full p-button-lg p-button-text !text-zinc-500 hover:!text-zinc-700 hover:!bg-zinc-100/50 !rounded-xl"></p-button>
+                </div>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-800 text-center">
+                <p class="text-xs text-zinc-400 dark:text-zinc-500 italic">
+                    © 2026 Bilal Samfs. All rights reserved.
+                </p>
             </div>
-            <button
-              type="button"
-              (click)="login()"
-              class="btn btn-primary btn-block w-100 mt-4"
-              [disabled]="loginForm.invalid"
-            >
-              Login
-            </button>
-            <button
-              type="button"
-              (click)="reset()"
-              class="btn btn-primary btn-block w-100 mt-2"
-              style="background-color: #6c757d; border-color: #6c757d"
-            >
-              Reset
-            </button>
-          </form>
         </div>
-      </div>
     </div>
-  }
+</div>
+}
   
   

@@ -1,12 +1,15 @@
+@import "tailwindcss";
+
+/* Force light mode by changing dark variant selector to class-based and not using the class */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* You can add global styles to this file, and also import other style files */
-.table thead th {
-    background-color: #0d6efd9c !important;
-    color: white;
-    font-weight: bold;
-  }
-  .badge-completed{
-    background-color: #198754 !important;
-  }
-  .badge-incomplete{
-    background-color: red  !important;
-  }
+
+/* Global overrides */
+:root {
+  --primary-color: #0d6efd;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
