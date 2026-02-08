@@ -203,15 +203,15 @@ export class ListMembersComponent {
             data: 'memberFName', render: (data: any, type: any, row: any) => {
               if (row.modeOfPayment == 'BANK TRANSFER') {
                 var html = `<a href='javascript:void(0);' class='14days-reminder' data-bs-toggle="modal"
-  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 14 days reminder' data-mid='${row.memberId}' >send 14 days reminder</a> | `
                 html += `<a href='javascript:void(0);' class='30days-reminder' data-bs-toggle="modal"
-  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send Bank Transfer 30 days reminder'  data-mid='${row.memberId}' >send 30 days reminder</a>`
                 return html
               } else {
                 var html = `<a href='javascript:void(0);' class='14days-reminder' data-bs-toggle="modal"
-  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send DDR 14 days reminder' data-mid='${row.memberId}' >send 30 days reminder</a> | `
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send DDR 14 days reminder' data-mid='${row.memberId}' >send 14 days reminder</a> | `
                 html += `<a href='javascript:void(0);' class='30days-reminder' data-bs-toggle="modal"
-  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send DDR 30 days reminder'  data-mid='${row.memberId}' >send 14 days reminder</a>`
+  data-bs-target="#reminderEmailTemplate" data-id='${row.memberUID}' data-emtemp='Send DDR 30 days reminder'  data-mid='${row.memberId}' >send 30 days reminder</a>`
                 return html
               }
 
