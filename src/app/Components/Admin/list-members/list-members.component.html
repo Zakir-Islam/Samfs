@@ -5,150 +5,176 @@
 </div>
 
 <div class="px-4 sm:px-6">
-  <div class="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+  <div
+    class="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
     @if (isLoading) {
-      <div class="p-12 flex flex-col items-center justify-center space-y-4">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        <div class="text-lg font-semibold text-zinc-700 dark:text-zinc-300">Processing...</div>
-      </div>
+    <div class="p-12 flex flex-col items-center justify-center space-y-4">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div class="text-lg font-semibold text-zinc-700 dark:text-zinc-300">Processing...</div>
+    </div>
     }
 
     @if (!isLoading) {
-      <div class="p-6 border-b border-zinc-200 dark:border-zinc-800">
-        <form [formGroup]="form" class="space-y-4">
-          <div class="flex flex-wrap gap-6 items-center">
+    <div class="p-6 border-b border-zinc-200 dark:border-zinc-800">
+      <form [formGroup]="form" class="space-y-4">
+        <div class="flex flex-wrap gap-6 items-center">
+          <div class="flex items-center space-x-4">
+            <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Type:</span>
             <div class="flex items-center space-x-4">
-              <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Type:</span>
-              <div class="flex items-center space-x-4">
-                <div class="flex items-center">
-                  <p-radioButton formControlName="membershipTypeId" [value]="0" inputId="typeAll" (onClick)="loadAllMembers()"></p-radioButton>
-                  <label for="typeAll" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">All</label>
-                </div>
-                <div class="flex items-center">
-                  <p-radioButton formControlName="membershipTypeId" [value]="2" inputId="typeFamily" (onClick)="loadAllMembers()"></p-radioButton>
-                  <label for="typeFamily" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Family</label>
-                </div>
-                <div class="flex items-center">
-                  <p-radioButton formControlName="membershipTypeId" [value]="1" inputId="typeInd" (onClick)="loadAllMembers()"></p-radioButton>
-                  <label for="typeInd" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Independent</label>
-                </div>
+              <div class="flex items-center">
+                <p-radioButton formControlName="membershipTypeId" [value]="0" inputId="typeAll"
+                  (onClick)="loadAllMembers()"></p-radioButton>
+                <label for="typeAll" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">All</label>
               </div>
-            </div>
-
-            <div class="flex items-center space-x-4">
-              <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Status:</span>
-              <div class="flex items-center space-x-4">
-                <div class="flex items-center">
-                  <p-radioButton formControlName="status" [value]="0" inputId="statusAll" (onClick)="loadAllMembers()"></p-radioButton>
-                  <label for="statusAll" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">All</label>
-                </div>
-                <div class="flex items-center">
-                  <p-radioButton formControlName="status" [value]="1" inputId="statusActive" (onClick)="loadAllMembers()"></p-radioButton>
-                  <label for="statusActive" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Active</label>
-                </div>
-                <div class="flex items-center">
-                  <p-radioButton formControlName="status" [value]="2" inputId="statusInactive" (onClick)="loadAllMembers()"></p-radioButton>
-                  <label for="statusInactive" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Inactive</label>
-                </div>
+              <div class="flex items-center">
+                <p-radioButton formControlName="membershipTypeId" [value]="2" inputId="typeFamily"
+                  (onClick)="loadAllMembers()"></p-radioButton>
+                <label for="typeFamily" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Family</label>
+              </div>
+              <div class="flex items-center">
+                <p-radioButton formControlName="membershipTypeId" [value]="1" inputId="typeInd"
+                  (onClick)="loadAllMembers()"></p-radioButton>
+                <label for="typeInd" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Independent</label>
               </div>
             </div>
           </div>
-        </form>
-      </div>
 
-      <div class="p-0">
-        <p-table [value]="members" [paginator]="true" [rows]="50" [rowsPerPageOptions]="[25, 50, 100, 200]"
-                 styleClass="p-datatable-striped" [tableStyle]="{'min-width': '60rem'}" responsiveLayout="scroll">
-          <ng-template pTemplate="header">
-            <tr class="bg-zinc-50 dark:bg-zinc-800/50">
-              <th pSortableColumn="membershipNo">Membership No <p-sortIcon field="membershipNo"></p-sortIcon></th>
-              <th>Type</th>
-              <th pSortableColumn="memberFName">Name <p-sortIcon field="memberFName"></p-sortIcon></th>
-              <th>Email</th>
-              <th>Renewal Date</th>
-              <th>Days</th>
-              <th>Invoice</th>
-              <th>BSB / Account</th>
-              <th>Payment</th>
-              <th>Reminder</th>
-              <th>Gender</th>
-              <th>Status</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-row>
-            <tr class="border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-              <td>
-                <a href="javascript:void(0)" (click)="viewMember(row.memberUID)" class="text-blue-600 hover:underline font-medium">
-                  {{row.membershipNo}}
+          <div class="flex items-center space-x-4">
+            <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Status:</span>
+            <div class="flex items-center space-x-4">
+              <div class="flex items-center">
+                <p-radioButton formControlName="status" [value]="0" inputId="statusAll"
+                  (onClick)="loadAllMembers()"></p-radioButton>
+                <label for="statusAll" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">All</label>
+              </div>
+              <div class="flex items-center">
+                <p-radioButton formControlName="status" [value]="1" inputId="statusActive"
+                  (onClick)="loadAllMembers()"></p-radioButton>
+                <label for="statusActive" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Active</label>
+              </div>
+              <div class="flex items-center">
+                <p-radioButton formControlName="status" [value]="2" inputId="statusInactive"
+                  (onClick)="loadAllMembers()"></p-radioButton>
+                <label for="statusInactive" class="ml-2 text-sm text-zinc-600 dark:text-zinc-400">Inactive</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="p-0">
+      <p-table [value]="members" [paginator]="true" [rows]="50" [rowsPerPageOptions]="[25, 50, 100, 200]"
+        styleClass="p-datatable-striped" [tableStyle]="{'min-width': '60rem'}" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr class="bg-zinc-50 dark:bg-zinc-800/50">
+            <th pSortableColumn="membershipNo">Membership No <p-sortIcon field="membershipNo"></p-sortIcon></th>
+            <th>Type</th>
+            <th pSortableColumn="memberFName">Name <p-sortIcon field="memberFName"></p-sortIcon></th>
+            <th>Email</th>
+            <th>Renewal Date</th>
+            <th>Days</th>
+            <th>Invoice</th>
+            <th>BSB / Account</th>
+            <th>Payment</th>
+            <th>Reminder</th>
+            <th>Gender</th>
+            <th>Status</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr
+            class="border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+            <td>
+              <a href="javascript:void(0)" (click)="viewMember(row.memberUID)"
+                class="text-blue-600 hover:underline font-medium">
+                {{row.membershipNo}}
+              </a>
+            </td>
+            <td>
+              <span
+                [class]="row.membershipTypeId == 2 ? 'px-2 py-0.5 rounded text-xs font-semibold bg-orange-100 text-orange-700' : 'px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700'">
+                {{row.membershipTypeId == 2 ? 'Family' : 'Independent'}}
+              </span>
+            </td>
+            <td>
+              <a href="javascript:void(0)" (click)="viewEmailLogs(row.memberId)"
+                class="text-zinc-900 dark:text-zinc-100 hover:underline font-medium">
+                {{row.memberFName}} {{row.memberMName}} {{row.memberLName}}
+              </a>
+            </td>
+            <td class="text-sm truncate max-w-[150px]">{{row.email}}</td>
+            <td class="text-sm">
+              {{row.validUpto | date:'dd/MM/yyyy'}}
+              <button (click)="openUpdateValidUptoModal(row.memberId, row.validUpto)"
+                class="block text-xs text-blue-500 hover:underline">Update</button>
+            </td>
+            <td>
+              <span
+                [class]="row.daysRemaining < 30 ? 'px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700' : 'px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700'">
+                {{row.daysRemaining}} days
+              </span>
+            </td>
+            <td>
+              <div class="flex items-center space-x-2">
+                @if (row.lastOnlineInvoiceURL) {
+                <a [href]="row.lastOnlineInvoiceURL" target="_blank" class="text-red-500 hover:text-red-600">
+                  <i class="fa fa-file-pdf"></i>
                 </a>
-              </td>
-              <td>
-                <span [class]="row.membershipTypeId == 2 ? 'px-2 py-0.5 rounded text-xs font-semibold bg-orange-100 text-orange-700' : 'px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700'">
-                  {{row.membershipTypeId == 2 ? 'Family' : 'Independent'}}
-                </span>
-              </td>
-              <td>
-                <a href="javascript:void(0)" (click)="viewEmailLogs(row.memberId)" class="text-zinc-900 dark:text-zinc-100 hover:underline font-medium">
-                  {{row.memberFName}} {{row.memberMName}} {{row.memberLName}}
-                </a>
-              </td>
-              <td class="text-sm truncate max-w-[150px]">{{row.email}}</td>
-              <td class="text-sm">
-                {{row.validUpto | date:'dd/MM/yyyy'}}
-                <button (click)="openUpdateValidUptoModal(row.memberId, row.validUpto)" class="block text-xs text-blue-500 hover:underline">Update</button>
-              </td>
-              <td>
-                <span [class]="row.daysRemaining < 30 ? 'px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700' : 'px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700'">
-                  {{row.daysRemaining}} days
-                </span>
-              </td>
-              <td>
-                <div class="flex items-center space-x-2">
-                  @if (row.lastOnlineInvoiceURL) {
-                    <a [href]="row.lastOnlineInvoiceURL" target="_blank" class="text-red-500 hover:text-red-600">
-                      <i class="fa fa-file-pdf"></i>
-                    </a>
-                  }
-                  <button (click)="saveAndGenerateInvoice(row.memberUID)" title="Generate New Invoice" class="text-blue-500 hover:text-blue-600">
-                    <i class="fa fa-plus-circle"></i>
-                  </button>
-                </div>
-              </td>
-              <td class="text-xs text-zinc-500">{{row.bsb}} {{row.accountNo}}</td>
-              <td class="text-xs">{{row.modeOfPayment}}</td>
-              <td>
-                <div class="flex flex-col space-y-1">
-                  <button (click)="loadEmailTemplate(row.memberUID, row.memberId, row.modeOfPayment == 'BANK TRANSFER' ? 'Send Bank Transfer 14 days reminder' : 'Send DDR 14 days reminder')"
-                          class="text-[10px] text-blue-600 hover:underline whitespace-nowrap">
-                    14 days reminder
-                  </button>
-                  <button (click)="loadEmailTemplate(row.memberUID, row.memberId, row.modeOfPayment == 'BANK TRANSFER' ? 'Send Bank Transfer 30 days reminder' : 'Send DDR 30 days reminder')"
-                          class="text-[10px] text-blue-600 hover:underline whitespace-nowrap">
-                    30 days reminder
-                  </button>
-                </div>
-              </td>
-              <td class="text-sm">{{row.gender}}</td>
-              <td>
-                <span [class]="row.isCompleted ? 'px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700' : 'px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-700'">
-                  {{row.isCompleted ? 'Completed' : 'Incompleted'}}
-                </span>
-              </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="12" class="p-8 text-center text-zinc-500">No members found.</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
+                }
+                <button (click)="saveAndGenerateInvoice(row.memberUID)" title="Generate New Invoice"
+                  class="text-blue-500 hover:text-blue-600">
+                  <i class="fa fa-plus-circle"></i>
+                </button>
+              </div>
+            </td>
+            <td class="text-xs text-zinc-500">{{row.bsb}} {{row.accountNo}}</td>
+            <td class="text-xs">{{row.modeOfPayment}}</td>
+            <td>
+              <div class="flex flex-col space-y-1">
+                <button
+                  (click)="loadEmailTemplate(row.memberUID, row.memberId, row.modeOfPayment == 'BANK TRANSFER' ? 'Send Bank Transfer 14 days reminder' : 'Send DDR 14 days reminder')"
+                  class="text-[10px] text-blue-600 hover:underline whitespace-nowrap">
+                  14 days reminder
+                </button>
+                <button
+                  (click)="loadEmailTemplate(row.memberUID, row.memberId, row.modeOfPayment == 'BANK TRANSFER' ? 'Send Bank Transfer 30 days reminder' : 'Send DDR 30 days reminder')"
+                  class="text-[10px] text-blue-600 hover:underline whitespace-nowrap">
+                  30 days reminder
+                </button>
+              </div>
+            </td>
+            <td class="text-sm">{{row.gender}}</td>
+            <td>
+
+              <span *ngIf="row.status=='New'" class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">
+                {{row.status}}
+              </span>
+              <span   *ngIf="row.status=='Paid'"  class="px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">
+                {{row.status}}
+              </span>
+              <span *ngIf="row.status=='Awaiting For Payment'"  class="px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-700">
+                {{row.status}}
+              </span>
+
+
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="12" class="p-8 text-center text-zinc-500">No members found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
     }
   </div>
 </div>
 
 <!-- Update Valid Upto Modal -->
-<p-dialog header="Update Valid Upto" [(visible)]="displayUpdateValidUpto" [modal]="true" [style]="{width: '30vw'}" [draggable]="false" [resizable]="false">
+<p-dialog header="Update Valid Upto" [(visible)]="displayUpdateValidUpto" [modal]="true" [style]="{width: '30vw'}"
+  [draggable]="false" [resizable]="false">
   <div class="p-4">
     <form [formGroup]="updateForm" class="space-y-4">
       <div>
@@ -158,33 +184,37 @@
     </form>
   </div>
   <ng-template pTemplate="footer">
-    <p-button label="Cancel" icon="pi pi-times" (onClick)="displayUpdateValidUpto = false" styleClass="p-button-text p-button-secondary"></p-button>
+    <p-button label="Cancel" icon="pi pi-times" (onClick)="displayUpdateValidUpto = false"
+      styleClass="p-button-text p-button-secondary"></p-button>
     <p-button label="Update" icon="pi pi-check" (onClick)="updateValidUpto()" styleClass="p-button-primary"></p-button>
   </ng-template>
 </p-dialog>
 
 <!-- Email Template Modal -->
-<p-dialog header="Reminder Email Template" [(visible)]="displayReminder" [modal]="true" [style]="{width: '70vw'}" [maximizable]="true">
+<p-dialog header="Reminder Email Template" [(visible)]="displayReminder" [modal]="true" [style]="{width: '70vw'}"
+  [maximizable]="true">
   @if (emailTemplate) {
-    <div class="space-y-4 p-4 text-zinc-800 dark:text-zinc-200">
-      <div class="grid grid-cols-1 gap-2">
-        <div><span class="font-bold">Subject:</span> {{emailTemplate.subject}}</div>
-        <div><span class="font-bold">Email:</span> {{emailTemplate.email}}</div>
-        <div><span class="font-bold">CC:</span> {{emailTemplate.cc}}</div>
-        <div><span class="font-bold">BCC:</span> {{emailTemplate.bcc}}</div>
-      </div>
-      <div class="mt-4 border-t pt-4">
-        <div class="font-bold mb-2 text-zinc-900 dark:text-white">Body:</div>
-        <div class="prose dark:prose-invert max-w-none bg-zinc-50 dark:bg-zinc-800 p-4 rounded-lg border dark:border-zinc-700"
-             [innerHTML]="emailTemplate.body"></div>
-      </div>
+  <div class="space-y-4 p-4 text-zinc-800 dark:text-zinc-200">
+    <div class="grid grid-cols-1 gap-2">
+      <div><span class="font-bold">Subject:</span> {{emailTemplate.subject}}</div>
+      <div><span class="font-bold">Email:</span> {{emailTemplate.email}}</div>
+      <div><span class="font-bold">CC:</span> {{emailTemplate.cc}}</div>
+      <div><span class="font-bold">BCC:</span> {{emailTemplate.bcc}}</div>
     </div>
+    <div class="mt-4 border-t pt-4">
+      <div class="font-bold mb-2 text-zinc-900 dark:text-white">Body:</div>
+      <div
+        class="prose dark:prose-invert max-w-none bg-zinc-50 dark:bg-zinc-800 p-4 rounded-lg border dark:border-zinc-700"
+        [innerHTML]="emailTemplate.body"></div>
+    </div>
+  </div>
   }
   <ng-template pTemplate="footer">
     <div class="flex justify-end items-center space-x-3 mt-4">
-        <p-button label="Cancel" (onClick)="displayReminder = false" styleClass="p-button-text p-button-secondary"></p-button>
-        <p-button [label]="isDisabled ? 'Sending...' : 'Send Email'" icon="pi pi-send" (onClick)="sendEmail()"
-                 [disabled]="isDisabled" [loading]="isDisabled" styleClass="p-button-primary"></p-button>
+      <p-button label="Cancel" (onClick)="displayReminder = false"
+        styleClass="p-button-text p-button-secondary"></p-button>
+      <p-button [label]="isDisabled ? 'Sending...' : 'Send Email'" icon="pi pi-send" (onClick)="sendEmail()"
+        [disabled]="isDisabled" [loading]="isDisabled" styleClass="p-button-primary"></p-button>
     </div>
   </ng-template>
 </p-dialog>
