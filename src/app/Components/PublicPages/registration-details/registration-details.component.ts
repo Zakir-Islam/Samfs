@@ -110,7 +110,7 @@ export class RegistrationDetailsComponent {
       bsb: [''],
       accountNo: [''],
        accountName: [''],
-      isActive: [false],
+      isActive: [true],
     });
   }
   createEmergencyContactGroup(): FormGroup {
