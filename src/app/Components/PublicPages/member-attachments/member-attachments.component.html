@@ -9,7 +9,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
       <div class="space-y-2 flex flex-col">
         <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Attachment Type</label>
-        <p-select [options]="attachmentTypes" [(ngModel)]="selectedType" optionLabel="label" optionValue="value"
+        <p-select appendTo="body" [options]="attachmentTypes" [(ngModel)]="selectedType" optionLabel="label" optionValue="value"
                   placeholder="Select Type" class="w-full"
                   styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20">
         </p-select>

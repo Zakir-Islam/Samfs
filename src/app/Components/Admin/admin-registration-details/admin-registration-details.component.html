@@ -326,7 +326,7 @@
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Gender <span class="text-red-500">*</span></label>
-          <p-select [options]="[{label: 'Male', value: 'Male'}, {label: 'Female', value: 'Female'}, {label: 'Other', value: 'Other'}]"
+          <p-select appendTo="body" [options]="[{label: 'Male', value: 'Male'}, {label: 'Female', value: 'Female'}, {label: 'Other', value: 'Other'}]"
                     formControlName="gender" optionLabel="label" optionValue="value"
                     placeholder="Select Gender" class="w-full"
                     styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 w-full">
@@ -415,7 +415,7 @@
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Gender <span class="text-red-500">*</span></label>
-          <p-select [options]="[{label: 'Male', value: 'Male'}, {label: 'Female', value: 'Female'}, {label: 'Other', value: 'Other'}]"
+          <p-select appendTo="body" [options]="[{label: 'Male', value: 'Male'}, {label: 'Female', value: 'Female'}, {label: 'Other', value: 'Other'}]"
                     formControlName="gender" optionLabel="label" optionValue="value"
                     placeholder="Select Gender" class="w-full"
                     styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 w-full">
@@ -424,7 +424,7 @@
 
         <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Relationship <span class="text-red-500">*</span></label>
-          <p-select [options]="relationships" formControlName="relationshipId"
+          <p-select appendTo="body" [options]="relationships" formControlName="relationshipId"
                     optionLabel="relationshipName" optionValue="relationshipId"
                     placeholder="Select Relationship" class="w-full"
                     styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 w-full">
