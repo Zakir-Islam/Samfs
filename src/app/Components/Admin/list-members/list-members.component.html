@@ -1,9 +1,3 @@
-<div class="p-4 sm:p-6 mb-6 print:hidden">
-  <div class="flex flex-wrap gap-2 items-center justify-between">
-    <h2 class="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">List Members</h2>
-  </div>
-</div>
-
 <div class="px-4 sm:px-6">
   <div
     class="bg-white dark:bg-zinc-900 shadow-sm rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
@@ -63,9 +57,30 @@
       </form>
     </div>
 
-    <div class="p-0">
-      <p-table [value]="members" [paginator]="true" [rows]="50" [rowsPerPageOptions]="[25, 50, 100, 200]"
-        styleClass="p-datatable-striped" [tableStyle]="{'min-width': '60rem'}" responsiveLayout="scroll">
+    <div class="p-4">
+      <div class="flex   justify-end">
+        <span class="p-input-icon-left w-full md:w-80">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="onGlobalFilter($event, dt)"
+            placeholder="Search member, email, membership no..." class="w-full" />
+
+        </span>
+      </div>
+
+      <p-table #dt [value]="members" [paginator]="true" [rows]="50" [rowsPerPageOptions]="[25, 50, 100, 200]"
+        styleClass="p-datatable-striped" [tableStyle]="{'min-width': '60rem'}" responsiveLayout="scroll"
+        [globalFilterFields]="[
+    'membershipNo',
+    'memberFName',
+    'memberMName',
+    'memberLName',
+    'email',
+    'bsb',
+    'accountNo',
+    'modeOfPayment',
+    'gender',
+    'status'
+  ]">
         <ng-template pTemplate="header">
           <tr class="bg-zinc-50 dark:bg-zinc-800/50">
             <th pSortableColumn="membershipNo">Membership No <p-sortIcon field="membershipNo"></p-sortIcon></th>
@@ -147,13 +162,16 @@
             <td class="text-sm">{{row.gender}}</td>
             <td>
 
-              <span *ngIf="row.status=='New'" class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">
+              <span *ngIf="row.status=='New'"
+                class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">
                 {{row.status}}
               </span>
-              <span   *ngIf="row.status=='Paid'"  class="px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">
+              <span *ngIf="row.status=='Paid'"
+                class="px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">
                 {{row.status}}
               </span>
-              <span *ngIf="row.status=='Awaiting For Payment'"  class="px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-700">
+              <span *ngIf="row.status=='Awaiting For Payment'"
+                class="px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-700">
                 {{row.status}}
               </span>
 

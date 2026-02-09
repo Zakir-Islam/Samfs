@@ -85,6 +85,10 @@ export class ListMembersComponent {
 
     this.loadAllMembers();
   }
+onGlobalFilter(event: Event, table: any) {
+  const input = event.target as HTMLInputElement;
+  table.filterGlobal(input.value, 'contains');
+}
 
   loadAllMembers() {
     this.isLoading = true;
