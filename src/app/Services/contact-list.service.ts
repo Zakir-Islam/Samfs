@@ -22,8 +22,12 @@ export class ContactListService {
 
     return this.http.post<any>(`${this.baseURL}AddContactList`, cotnactList);
   }
-    UpdateContactList(contactList: ContactList): Observable<any> {
+  UpdateContactList(contactList: ContactList): Observable<any> {
     return this.http.put(`${this.baseURL}UpdateContactList`, contactList);
+  }
+
+  DeleteContactList(id: number): Observable<any> {
+    return this.http.delete(`${this.baseURL}DeleteContactList?id=${id}`);
   }
 
 }

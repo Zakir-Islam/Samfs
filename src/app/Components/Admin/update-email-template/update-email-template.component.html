@@ -1,46 +1,82 @@
-<!-- update-email-template.component.html -->
-<div class="container-fluid mt-2 ms-2">
-  <h2>{{emailTemplate.emailTemplateName}}</h2>
-  <form [formGroup]="updateEmailTemplateForm">
-    <div class="form-group" [hidden]="emailTemplate.category!='Customize'">
-      <label for="emailTemplateName">Email Template Name</label>
-      <input id="emailTemplateName" formControlName="emailTemplateName" class="form-control" />
+<div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+  @if (isLoading && !emailTemplate.emailTemplateId) {
+    <div class="flex flex-col items-center justify-center p-12 space-y-4">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <p class="text-zinc-500 font-medium">Loading template...</p>
+    </div>
+  } @else {
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">{{emailTemplate.emailTemplateName}}</h2>
+      <p class="text-zinc-500 dark:text-zinc-400 mt-1">Update existing template configuration.</p>
     </div>
 
-    <div class="form-group">
-      <label for="emailTo">Email To</label>
-      <input id="emailTo" formControlName="emailTo" class="form-control" />
-    </div>
+    <form [formGroup]="updateEmailTemplateForm" class="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" [hidden]="emailTemplate.category!='Customize'">
+        <div class="space-y-2">
+          <label for="emailTemplateName" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email Template Name</label>
+          <input id="emailTemplateName" formControlName="emailTemplateName" 
+                 class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm" />
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label for="emailCc">Email CC</label>
-      <input id="emailCc" formControlName="emailCc" class="form-control" />
-    </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label for="emailTo" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email To</label>
+          <input id="emailTo" formControlName="emailTo" 
+                 class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm" />
+        </div>
 
-    <div class="form-group">
-      <label for="emailBCc">Email BCC</label>
-      <input id="emailBCc" formControlName="emailBCc" class="form-control" />
-    </div>
+        <div class="space-y-2">
+          <label for="emailCc" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email CC</label>
+          <input id="emailCc" formControlName="emailCc" 
+                 class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm" />
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label for="subject">Subject</label>
-      <input id="subject" formControlName="subject" class="form-control" />
-    </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label for="emailBCc" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email BCC</label>
+          <input id="emailBCc" formControlName="emailBCc" 
+                 class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm" />
+        </div>
 
-    <div class="form-group">
-      <label for="body">Body</label>
-      <editor id="body" formControlName="body" class="form-control" [init]="init" />
+        <div class="space-y-2">
+          <label for="subject" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Subject</label>
+          <input id="subject" formControlName="subject" 
+                 class="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-sm" />
+        </div>
+      </div>
 
-    </div>
+      <div class="space-y-2">
+        <label for="body" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Body</label>
+        <div class="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+          <editor id="body" formControlName="body" [init]="init" />
+        </div>
+      </div>
 
-    <!-- <div class="form-group">
-        <label for="body">Category</label>
-        <input id="body" formControlName="category" class="form-control" />
-      </div> -->
+      <div class="pt-6 flex flex-wrap gap-4 justify-end">
+        <button type="button" (click)="onSubmit(false)" 
+                [disabled]="updateEmailTemplateForm.invalid || isLoading"
+                class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-400 text-white rounded-xl font-bold shadow-lg shadow-blue-500/20 transition-all active:scale-[0.98]">
+          @if (isLoading) {
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          } @else {
+            Update
+          }
+        </button>
 
-    <button type="button" (click)="onSubmit(false)" class="btn btn-primary mt-2 mb-2" style="margin-right: 10px;"
-      [disabled]="updateEmailTemplateForm.invalid">Update</button>
-    <button type="button"  *ngIf="emailTemplate.category=='Customize'"(click)="onSubmit(true)" class="btn btn-primary mt-2 mb-2"
-      [disabled]="updateEmailTemplateForm.invalid">Update & Send</button>
-  </form>
+        @if (emailTemplate.category=='Customize') {
+          <button type="button" (click)="onSubmit(true)" 
+                  [disabled]="updateEmailTemplateForm.invalid || isLoading"
+                  class="inline-flex items-center px-8 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-zinc-400 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98]">
+            Update & Send
+          </button>
+        }
+      </div>
+    </form>
+  }
 </div>

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './Components/Shared/header/header.component';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet,RouterOutlet,HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, Toast],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

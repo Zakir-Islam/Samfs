@@ -1,46 +1,58 @@
-<!-- update-email-template.component.html -->
-<div class="container-fluid mt-2 ms-2">
-    <h2>{{emailTemplate.emailTemplateName}}</h2>
-    <form [formGroup]="updateEmailTemplateForm" (ngSubmit)="onSubmit()">
-      <div class="form-group" >
-        <label for="emailTemplateName">Email Template Name</label>
-        <input id="emailTemplateName" formControlName="emailTemplateName" class="form-control" />
-      </div>
-
-      <div class="form-group">
-        <label for="emailTo">Email To</label>
-        <input id="emailTo" formControlName="emailTo" class="form-control" />
-      </div>
-
-      <div class="form-group">
-        <label for="emailCc">Email CC</label>
-        <input id="emailCc" formControlName="emailCc" class="form-control" />
-      </div>
-
-      <div class="form-group">
-        <label for="emailBCc">Email BCC</label>
-        <input id="emailBCc" formControlName="emailBCc" class="form-control" />
-      </div>
-
-      <div class="form-group">
-        <label for="subject">Subject</label>
-        <input id="subject" formControlName="subject" class="form-control" />
-      </div>
-
-      <div class="form-group">
-        <label for="body">Body</label>
-        <editor
-        id="body" formControlName="body" class="form-control"
-        [init]="init"
-      />
-
-      </div>
-
-      <!-- <div class="form-group">
-        <label for="body">Category</label>
-        <input id="body" formControlName="category" class="form-control" />
-      </div> -->
-
-      <button type="submit" class="btn btn-primary mt-2 mb-2" [disabled]="updateEmailTemplateForm.invalid">Add</button>
-    </form>
+<div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">{{emailTemplate.emailTemplateName || 'New Email Template'}}</h2>
+    <p class="text-zinc-500 dark:text-zinc-400 mt-1">Configure your email template details below.</p>
   </div>
+
+  <form [formGroup]="updateEmailTemplateForm" (ngSubmit)="onSubmit()" class="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-2 flex flex-col">
+        <label for="emailTemplateName" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email Template Name</label>
+        <input pInputText id="emailTemplateName" formControlName="emailTemplateName" 
+               class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+      </div>
+
+      <div class="space-y-2 flex flex-col">
+        <label for="emailTo" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email To</label>
+        <input pInputText id="emailTo" formControlName="emailTo" 
+               class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-2 flex flex-col">
+        <label for="emailCc" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email CC</label>
+        <input pInputText id="emailCc" formControlName="emailCc" 
+               class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+      </div>
+
+      <div class="space-y-2 flex flex-col">
+        <label for="emailBCc" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Email BCC</label>
+        <input pInputText id="emailBCc" formControlName="emailBCc" 
+               class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+      </div>
+    </div>
+
+    <div class="space-y-2 flex flex-col">
+      <label for="subject" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Subject</label>
+      <input pInputText id="subject" formControlName="subject" 
+             class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+    </div>
+
+    <div class="space-y-2">
+      <label for="body" class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Body</label>
+      <div class="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+        <editor id="body" formControlName="body" [init]="init" />
+      </div>
+    </div>
+
+    <div class="pt-6 flex justify-end">
+      <p-button type="submit" 
+                [disabled]="updateEmailTemplateForm.invalid || isLoading"
+                [loading]="isLoading"
+                label="Add Template"
+                styleClass="!px-10 !py-3.5 !bg-blue-600 !border-none !rounded-xl !font-bold !shadow-lg !shadow-blue-500/20 transition-all active:scale-[0.98]">
+      </p-button>
+    </div>
+  </form>
+</div>

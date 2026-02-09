@@ -1,33 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { EmailTemplateService } from '../../../Services/email-template.service';
 import { EmailTemplate } from '../../../Models/EmailTemplate';
+
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-email-templates',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, ButtonModule],
   templateUrl: './email-templates.component.html',
   styleUrl: './email-templates.component.css'
 })
 export class EmailTemplatesComponent implements OnInit {
-  emailTemplatesByCategory: { [category: string]: EmailTemplate[] } = {};
+  emailTemplates: { [key: string]: EmailTemplate[] } = {};
+  isLoading: boolean = false;
 
-  constructor(private emailTemplateService: EmailTemplateService) {}
+  constructor(private emailTemplateService: EmailTemplateService) { }
 
   ngOnInit(): void {
-    this.loadEmailTemplates();
+    this.getAllEmailTemplates();
   }
 
-  loadEmailTemplates() {
-    this.emailTemplateService.getAllEmailTemplates().subscribe(
-      (data: EmailTemplate[]) => {
-        this.emailTemplatesByCategory = this.groupByCategory(data);
-    
+  getAllEmailTemplates(): void {
+    this.isLoading = true;
+    this.emailTemplateService.getAllEmailTemplates().subscribe({
+      next: (data: EmailTemplate[]) => {
+        this.isLoading = false;
+        this.emailTemplates = this.groupByCategory(data);
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        console.error('Error fetching email templates', error);
       }
-    );
+    });
   }
 
   groupByCategory(emailTemplates: EmailTemplate[]): { [category: string]: EmailTemplate[] } {
@@ -40,6 +47,4 @@ export class EmailTemplatesComponent implements OnInit {
       return acc;
     }, {} as { [category: string]: EmailTemplate[] });
   }
-
-
 }

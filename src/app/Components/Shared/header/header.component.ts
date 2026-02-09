@@ -8,11 +8,10 @@ import { Role } from '../../../Models/roles';
 // import url('https://rsms.me/inter/inter.css');
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [FontAwesomeModule,RouterLink],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
+    selector: 'app-header',
+    imports: [FontAwesomeModule, RouterLink],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.css'
 })
 export class HeaderComponent {
   faBell = faBell;

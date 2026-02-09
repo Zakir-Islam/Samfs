@@ -1,89 +1,124 @@
-<div class="page-header d-print-none ms-2 mt-2">
-    <div class="container-fluid pb-2">
-        <div class="row g-2 align-items-center">
-            <div class="col">
-                <h2 class="page-title">Contact Lists</h2>
+<div class="p-4 sm:p-6 lg:p-8">
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold text-zinc-900 dark:text-white">Contact Mailing Lists</h2>
+    <p class="text-zinc-500 dark:text-zinc-400 mt-1">Manage lists for system notification emails.</p>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+    <!-- Configuration Panel -->
+    <div class="xl:col-span-5 space-y-6">
+      <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+        <h3 class="text-lg font-bold text-zinc-900 dark:text-white mb-6">
+          {{ editing ? 'Edit Mailing List' : 'Create New Mailing List' }}
+        </h3>
+        
+        <div class="space-y-4">
+          <div class="space-y-2 flex flex-col">
+            <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">List Name</label>
+            <input pInputText type="text" [(ngModel)]="contactList.contactListName" placeholder="e.g. Monthly Newsletter"
+                   class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+          </div>
+
+          <div class="space-y-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+            <h4 class="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Add Contact</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <input pInputText type="text" [(ngModel)]="newContact.contactName" placeholder="Full Name"
+                     class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+              <input pInputText type="email" [(ngModel)]="newContact.contactEmail" placeholder="Email Address"
+                     class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none" />
+              <input pInputText type="text" [(ngModel)]="newContact.contactPhone" placeholder="Phone (Optional)"
+                     class="p-inputtext-sm !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20 transition-all outline-none sm:col-span-2" />
             </div>
+            <p-button (onClick)="addContact()" label="Add to Temporary List" icon="pi pi-plus"
+                    styleClass="w-full !py-3 !bg-zinc-900 dark:!bg-white dark:!text-zinc-900 !text-white !rounded-xl !font-bold hover:!bg-zinc-800 dark:hover:!bg-zinc-100 transition-all active:scale-[0.98]">
+            </p-button>
+          </div>
+
+          <div class="flex gap-3 pt-6">
+            <p-button (onClick)="saveContactList()" [disabled]="!contactList.contactListName || contactList.contacts?.length === 0 || isLoading"
+                    [loading]="isLoading"
+                    [label]="editing ? 'Update Mailing List' : 'Save Final Mailing List'"
+                    styleClass="flex-grow !py-3.5 !bg-blue-600 !border-none !text-white !rounded-xl !font-bold !shadow-lg !shadow-blue-500/20 transition-all active:scale-[0.98]">
+            </p-button>
+            @if (editing) {
+              <p-button (onClick)="resetForm()" label="Cancel" severity="secondary"
+                        styleClass="!px-6 !py-3.5 !bg-zinc-100 dark:!bg-zinc-800 !text-zinc-700 dark:!text-zinc-300 !rounded-xl !font-bold !border-none hover:!bg-zinc-200 dark:hover:!bg-zinc-700 transition-colors">
+              </p-button>
+            }
+          </div>
         </div>
+      </div>
+
+      <!-- Temporary Contact List Table -->
+      @if (contactList.contacts && contactList.contacts.length > 0) {
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
+            <h4 class="text-sm font-bold text-zinc-900 dark:text-white">Contacts in current list</h4>
+            <span class="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 text-xs font-bold rounded-full">
+              {{ contactList.contacts.length }}
+            </span>
+          </div>
+          <p-table [value]="contactList.contacts" [scrollable]="true" scrollHeight="240px" styleClass="p-datatable-sm">
+            <ng-template pTemplate="body" let-c let-rowIndex="rowIndex">
+              <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                <td class="!px-4 !py-3 !border-none">
+                  <div class="font-medium text-zinc-900 dark:text-white">{{ c.contactName }}</div>
+                  <div class="text-xs text-zinc-500">{{ c.contactEmail }}</div>
+                </td>
+                <td class="!px-4 !py-3 !text-right !border-none">
+                  <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" 
+                            (onClick)="removeContact(rowIndex)" styleClass="!p-1 hover:!bg-red-50 dark:hover:!bg-red-900/20">
+                  </p-button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      }
     </div>
-</div>
-<div class="container-fluid ms-2 mt-1">
-    <div class="card">
-        <div class="card-body">
-            <!-- Contact List Info -->
-            <div class="mb-3">
-                <input type="text" class="form-control mb-2" placeholder="List Name"
-                    [(ngModel)]="contactList.contactListName">
-                <textarea class="form-control mb-2" placeholder="Description"
-                    [(ngModel)]="contactList.contactListDescription"></textarea>
-            </div>
 
-            <!-- Add Contact -->
-            <h5>Contacts</h5>
-            <div class="row mb-2">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Name" [(ngModel)]="newContact.contactName">
-                </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" placeholder="Phone" [(ngModel)]="newContact.contactPhone">
-                </div>
-                <div class="col-md-4">
-                    <input type="email" class="form-control" placeholder="Email" [(ngModel)]="newContact.contactEmail">
-                </div>
-                <div class="col-md-1">
-                    <button class="btn btn-primary" (click)="addContact()">Add</button>
-                </div>
-            </div>
-            <hr>
-            <div class="row mb-2">
-
-                <div class="col-md-2">
-                    <input type="text" class="form-control" placeholder="Search contacts..." [(ngModel)]="searchTerm">
-
-                </div>
-            </div>
-
-            <!-- Scrollable Table -->
-            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                <table class="table table-bordered table-striped table-sm mb-0">
-                    <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
-                        <tr>
-                            <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th style="width: 80px;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let c of filteredContacts; let i = index">
-                            <td>{{ c.contactName }}</td>
-                            <td>{{ c.contactPhone }}</td>
-                            <td>{{ c.contactEmail }}</td>
-                            <td><button class="btn btn-danger btn-sm" (click)="removeContact(i)">Remove</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Save Button -->
-            <button class="btn btn-success mt-2" (click)="saveContactList()">
-                {{ editing ? 'Update Contact List' : 'Save Contact List' }}
-            </button>
-
-            <hr>
-
-            <!-- Existing Lists -->
-            <h5>Existing Contact Lists</h5>
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center"
-                    *ngFor="let list of contactLists">
-                    <div>
-                        <strong>{{ list.contactListName }}</strong> ({{ list.contacts?.length || 0 }} contacts)
-                    </div>
-                    <button class="btn btn-sm btn-info" (click)="editContactList(list.contactListId||0)">Edit</button>
-                </li>
-            </ul>
+    <!-- Existing Lists Sidebar -->
+    <div class="xl:col-span-7 space-y-6">
+      <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Existing Mailing Lists</h3>
+          @if (isLoading) {
+            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+          }
         </div>
 
+        <p-table [value]="contactLists" [paginator]="true" [rows]="10" dataKey="contactListId" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr class="bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
+              <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider">Mailing List Details</th>
+              <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider text-right">Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-list>
+            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+              <td class="px-6 py-4">
+                <span class="text-sm font-bold text-zinc-900 dark:text-white block">{{ list.contactListName }}</span>
+                <span class="text-xs text-zinc-500 mt-1 block">{{ list.contacts?.length || 0 }} Contacts</span>
+              </td>
+              <td class="px-6 py-4 text-right space-x-2">
+                <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="editContactList(list)"
+                          styleClass="!p-2 hover:!bg-blue-50 dark:hover:!bg-blue-900/20 !text-blue-600">
+                </p-button>
+                <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="deleteContactList(list.contactListId)"
+                          styleClass="!p-2 hover:!bg-red-50 dark:hover:!bg-red-900/20">
+                </p-button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="2" class="px-6 py-12 text-center text-zinc-500">
+                No mailing lists found.
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
+  </div>
 </div>

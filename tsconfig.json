@@ -13,15 +13,18 @@
     "sourceMap": true,
     "declaration": false,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "baseUrl": "./",
+    "paths": {
+      "tslib": ["node_modules/tslib/tslib.d.ts"],
+      "rxjs": ["node_modules/rxjs/dist/types/index.d.ts"],
+      "rxjs/*": ["node_modules/rxjs/dist/types/*"],
+      "sweetalert2": ["node_modules/sweetalert2/sweetalert2.d.ts"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

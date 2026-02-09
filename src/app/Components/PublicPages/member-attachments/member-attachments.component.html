@@ -1,53 +1,88 @@
-<div class="container mt-4">
-  <h4>Member Attachments</h4>
+<div class="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto">
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">Member Attachments</h2>
+    <p class="text-zinc-500 dark:text-zinc-400 mt-1">Upload and manage member-related documents.</p>
+  </div>
 
   <!-- Upload Form -->
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-4">
-          <label>Attachment Type</label>
-          <select class="form-control" [(ngModel)]="selectedType">
-            <option value="">-- Select --</option>
-            <option [value]="attachmentType.Driving_License">Driving License</option>
-            <option [value]="attachmentType.Passport">Passport</option>
-            <option [value]="attachmentType.Other">Other</option>
-          </select>
-        </div>
-
-        <div class="col-md-4">
-          <label>File</label>
-          <input type="file" class="form-control" (change)="onFileChange($event)">
-        </div>
-
-        <div class="col-md-4 d-flex align-items-end">
-          <button class="btn btn-primary w-100" (click)="upload()" [disabled]="isSubmitted"> <i
-                            class="spinner-border spinner-border-sm" [hidden]="!isSubmitted"></i> 
-            Upload
-          </button>
-        </div>
+  <div class="bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+      <div class="space-y-2 flex flex-col">
+        <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">Attachment Type</label>
+        <p-select [options]="attachmentTypes" [(ngModel)]="selectedType" optionLabel="label" optionValue="value"
+                  placeholder="Select Type" class="w-full"
+                  styleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-950 focus:!ring-2 focus:!ring-blue-500/20">
+        </p-select>
       </div>
+
+      <div class="space-y-2 flex flex-col">
+        <label class="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">File</label>
+        <input type="file" (change)="onFileChange($event)"
+               class="w-full px-4 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500/20 outline-none text-sm file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-600 hover:file:bg-blue-100" />
+      </div>
+
+      <p-button (onClick)="upload()" [disabled]="isSubmitted || !selectedFile || !selectedType"
+              [loading]="isSubmitted" label="Upload Document" icon="pi pi-upload"
+              styleClass="w-full !py-3 !bg-blue-600 !border-none !text-white !rounded-xl !font-bold !shadow-lg !shadow-blue-500/20 transition-all active:scale-[0.98]">
+      </p-button>
     </div>
   </div>
 
   <!-- Attachment List -->
-  <table class="table table-bordered table-striped">
-    <thead class="thead-dark">
-      <tr>
-        <th>Type</th>
-        <th>File Name</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let a of attachments">
-        <td>{{ getTypeName(a.attachmentType) }}</td>
-        <td><a target="_blank" [href]="bucketUrl+a.s3Key">{{ a.fileName }}</a></td>
-        <td>{{ a.addedDate | date:'dd/MM/yyyy' }}</td>
-      </tr>
-      <tr *ngIf="attachments.length === 0">
-        <td colspan="3" class="text-center">No attachments found</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[400px]">
+    <div class="p-6 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
+      <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Document History</h3>
+      @if (attachments.length > 0) {
+        <span class="px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs font-bold rounded-full">
+          {{ attachments.length }} total records
+        </span>
+      }
+    </div>
+    
+    <p-table [value]="attachments" [paginator]="true" [rows]="10" styleClass="p-datatable-sm" responsiveLayout="scroll">
+      <ng-template pTemplate="header">
+        <tr class="bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
+          <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider">Type</th>
+          <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider">File Name</th>
+          <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider">Date Added</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-a>
+        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/30">
+              {{ getTypeName(a.attachmentType) }}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <a target="_blank" [href]="bucketUrl+a.s3Key" class="text-sm font-bold text-zinc-900 dark:text-white hover:text-blue-600 transition-colors flex items-center gap-2 group">
+              <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-600 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+              </div>
+              {{ a.fileName }}
+            </a>
+          </td>
+          <td class="px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400">
+            {{ a.addedDate | date:'dd/MM/yyyy' }}
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3" class="px-6 py-20 text-center">
+            <div class="flex flex-col items-center space-y-3">
+              <div class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-2xl">
+                <svg class="w-10 h-10 text-zinc-300 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+              </div>
+              <p class="text-zinc-500 font-medium">No documents uploaded yet.</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>

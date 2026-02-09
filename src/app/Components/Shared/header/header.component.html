@@ -1,57 +1,45 @@
 @if (!isLoginPage && isAuthenticated) {
-
-<header class="navbar navbar-expand-md navbar-light bg-white d-print-none border-bottom shadow-sm">
-  <div class="container-fluid">
-
-    <!-- Mobile Toggle -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbar-menu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Logo -->
-    <a class="navbar-brand d-flex align-items-center me-4">
-      <img src="../../../assets/images/logo-dark.png" height="45" alt="Logo" class="me-2" />
-      <span class="fw-semibold text-dark">Membership Portal</span>
-    </a>
-
-    <!-- Menu -->
-    <div class="collapse navbar-collapse" id="navbar-menu">
-      <ul class="navbar-nav me-auto mb-2 mb-md-0">
-
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/list-members" routerLinkActive="active">
+<header class="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md d-print-none">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      
+      <!-- Logo and Nav -->
+      <div class="flex items-center space-x-8">
+        <a routerLink="/" class="flex items-center space-x-3 shrink-0">
+          <img src="../../../assets/images/logo-dark.png" class="h-10 w-auto" alt="Logo" />
+          <span class="text-xl font-bold text-zinc-900 dark:text-white hidden sm:block">Membership Portal</span>
+        </a>
+        
+        <nav class="hidden md:flex items-center space-x-1">
+          <a routerLink="/list-members" routerLinkActive="bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white" 
+             class="px-3 py-2 rounded-md text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
             Members
           </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/email-templates" routerLinkActive="active">
+          <a routerLink="/email-templates" routerLinkActive="bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white"
+             class="px-3 py-2 rounded-md text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
             Email Templates
           </a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link" routerLink="/contact-lists" routerLinkActive="active">
+          <a routerLink="/contact-lists" routerLinkActive="bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white"
+             class="px-3 py-2 rounded-md text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
             Contact Lists
           </a>
-        </li>
-
-      </ul>
+        </nav>
+      </div>
 
       <!-- Right Side -->
-      <div class="d-flex align-items-center gap-3">
-
-        <span class="text-muted small">
-          Welcome, {{ userName }}
+      <div class="flex items-center space-x-4">
+        <span class="text-sm font-medium text-zinc-500 dark:text-zinc-400 hidden lg:block">
+          Welcome, <span class="text-zinc-900 dark:text-white">{{ userName }}</span>
         </span>
-
-        <button class="btn btn-outline-danger btn-sm" (click)="Logout()">
+        
+        <button (click)="Logout()" 
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all shadow-sm">
           Logout
         </button>
-
+        
+        <!-- Mobile Menu Button (Optional, can be added if needed) -->
       </div>
     </div>
   </div>
 </header>
-
 }
