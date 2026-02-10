@@ -103,8 +103,11 @@
             <td>
               <a href="javascript:void(0)" (click)="viewMember(row.memberUID)"
                 class="text-blue-600 hover:underline font-medium">
-                {{row.membershipNo}}
+                {{row.membershipNo}} 
               </a>
+              <button pButton class="p-button-danger p-button-sm "
+                  (click)="deleteMember(row.memberId)">   <i class="fa fa-trash"></i>
+                </button>
             </td>
             <td>
               <span

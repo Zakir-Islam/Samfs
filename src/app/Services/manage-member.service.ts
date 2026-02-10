@@ -25,4 +25,7 @@ export class ManageMemberService {
     GetMemberById(memberId: any): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/GetMemberById?memberId=${memberId}`);
   }
+  DeleteMembership(memberId: any): Observable<any> {
+    return this.http.delete<any>(`${this.baseURL}/DeleteMembership?memberId=${memberId}`);
+  }
 }

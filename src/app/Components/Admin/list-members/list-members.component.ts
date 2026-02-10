@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ManageMemberService } from '../../../Services/manage-member.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MemberService } from '../../../Services/member.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faContactCard, faEdit, faPlus, faTrash, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faContactCard, faEdit, faPlus, faTrash, faUserGroup,faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EmailTemplate } from '../../../Models/email-template';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-list-members',
   standalone: true,
@@ -70,7 +70,8 @@ export class ListMembersComponent {
     private datePipe: DatePipe,
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private cdr:ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -204,4 +205,35 @@ onGlobalFilter(event: Event, table: any) {
       error: () => this.toastr.error("Failed to update date")
     });
   }
+
+  deleteMember(id: number) {
+
+  Swal.fire({
+    title: 'Delete Member?',
+    text: 'This member will be permanently removed.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Delete',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      this.manageMemberService.DeleteMembership(id).subscribe(() => {
+        debugger;
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'Member deleted successfully',
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+      this.members= this.members.filter(x => x.memberId !== id);
+      this.cdr.detectChanges();
+      });
+
+    }
+  });
+}
 }
