@@ -1,3 +1,8 @@
+<app-page-header 
+  title="Registration Details" 
+  subtitle="Manage family registration and emergency contacts">
+</app-page-header>
+
 <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 relative min-h-screen">
   @if (isLoading) {
     <div class="absolute inset-0 z-50 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm flex items-center justify-center">
@@ -164,147 +169,222 @@
         <!-- Family Details Card -->
         @if (memberDetails.primaryMember.membershipTypeId == 2) {
           <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-            <div class="bg-zinc-100 dark:bg-zinc-800 p-4 border-b border-zinc-200 dark:border-zinc-700 flex items-center">
-              <fa-icon [icon]="familyIcon" class="text-zinc-500 mr-2"></fa-icon>
-              <h4 class="font-semibold text-zinc-900 dark:text-white">Family Details</h4>
-            </div>
-            
-            <div class="p-6 space-y-6">
-              <!-- Spouse -->
-              @if (memberDetails.spouse) {
-                <div class="space-y-2">
-                  <h5 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Spouse</h5>
-                  <div class="group relative bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 p-4 rounded-xl flex items-center justify-between transition-all hover:shadow-md hover:border-blue-200">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
-                      <div>
-                        <p class="text-[10px] text-blue-600 dark:text-blue-400 uppercase font-bold">Name</p>
-                        <p class="font-medium text-zinc-900 dark:text-white">{{ memberDetails.spouse.memberFName }} {{ memberDetails.spouse.memberLName }}</p>
+            <button (click)="isFamilyExpanded = !isFamilyExpanded"
+                    class="w-full p-6 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-800/30 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50 transition-all duration-300 group outline-none">
+              <div class="flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                  <fa-icon [icon]="familyIcon" class="text-blue-600 dark:text-blue-400"></fa-icon>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-zinc-900 dark:text-white leading-tight">Family Details</h3>
+                  <p class="text-xs text-zinc-500 font-medium">Manage registered family profiles</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="px-2 py-0.5 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold text-zinc-600 dark:text-zinc-400">
+                  {{ (memberDetails.spouse ? 1 : 0) + memberDetails.dependentChild.length + memberDetails.dependentParents.length }} Members
+                </span>
+                <fa-icon [icon]="faChevronDown" class="text-zinc-400 transition-transform duration-500 ease-in-out" 
+                         [class.rotate-180]="isFamilyExpanded"></fa-icon>
+              </div>
+            </button>
+
+            <div class="grid transition-[grid-template-rows] duration-500 ease-in-out overflow-hidden"
+                 [class.grid-rows-[0fr]]="!isFamilyExpanded"
+                 [class.grid-rows-[1fr]]="isFamilyExpanded">
+              <div class="min-h-0">
+                <div class="p-0 border-t border-zinc-50 dark:border-zinc-800/50">
+                  <!-- Spouse -->
+                  @if (memberDetails.spouse) {
+                    <div class="p-6 border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-blue-500">Spouse</span>
+                        <div class="flex space-x-1">
+                          <button [routerLink]="['/member-attachments', memberDetails.spouse.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                            <fa-icon [icon]="faAttachmentIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="openMemberEditModal(memberDetails.spouse)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                            <fa-icon [icon]="faEditIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="removeMember(memberDetails.spouse)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                            <fa-icon [icon]="trashIcon" class="text-sm"></fa-icon>
+                          </button>
+                        </div>
                       </div>
-                      <div>
-                        <p class="text-[10px] text-blue-600 dark:text-blue-400 uppercase font-bold">Phone</p>
-                        <p class="font-medium truncate">{{ memberDetails.spouse.phoneH }}</p>
-                      </div>
-                      <div>
-                        <p class="text-[10px] text-blue-600 dark:text-blue-400 uppercase font-bold">DOB</p>
-                        <p class="font-medium">{{ memberDetails.spouse.dateofBirth | date:'dd/MM/yyyy' }}</p>
-                      </div>
-                      <div>
-                        <p class="text-[10px] text-blue-600 dark:text-blue-400 uppercase font-bold">Fee</p>
-                        <p class="font-bold text-blue-700 dark:text-blue-400">${{ memberDetails.spouse.membershipCategory.membershipFees.toFixed(2) }}</p>
+                      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Name</p>
+                          <p class="text-sm font-bold text-zinc-900 dark:text-white">{{ memberDetails.spouse.memberFName }} {{ memberDetails.spouse.memberLName }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Phone</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ memberDetails.spouse.phoneH }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">DOB</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ memberDetails.spouse.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Fee</p>
+                          <p class="text-sm font-black text-blue-600 dark:text-blue-400">${{ memberDetails.spouse.membershipCategory.membershipFees.toFixed(2) }}</p>
+                        </div>
                       </div>
                     </div>
-                    <div class="flex space-x-2 ml-4">
-                      <button [routerLink]="['/member-attachments', memberDetails.spouse.memberUID]" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Manage Attachments">
-                        <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                      </button>
-                      <button (click)="openMemberEditModal(memberDetails.spouse)" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"><fa-icon [icon]="faEditIcon"></fa-icon></button>
-                      <button (click)="removeMember(memberDetails.spouse)" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><fa-icon [icon]="trashIcon"></fa-icon></button>
+                  }
+
+                  <!-- Children -->
+                  @for (c of memberDetails.dependentChild; track c) {
+                    <div class="p-6 border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Dependent Child</span>
+                        <div class="flex space-x-1">
+                          <button [routerLink]="['/member-attachments', c.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                            <fa-icon [icon]="faAttachmentIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="openMemberEditModal(c)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                            <fa-icon [icon]="faEditIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="removeMember(c)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                            <fa-icon [icon]="trashIcon" class="text-sm"></fa-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Name</p>
+                          <p class="text-sm font-bold text-zinc-900 dark:text-white">{{ c.memberFName }} {{ c.memberLName }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Phone</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ c.phoneH || 'N/A' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">DOB</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400 font-mono">{{ c.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Fee</p>
+                          <p class="text-sm font-black text-emerald-600 dark:text-emerald-400">${{ c.membershipCategory.membershipFees.toFixed(2) }}</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              }
+                  }
 
-              <!-- Dependent Children -->
-              @if (memberDetails.dependentChild.length > 0) {
-                <div class="space-y-3">
-                  <h5 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Dependent Children</h5>
-                  <div class="grid gap-3">
-                    @for (c of memberDetails.dependentChild; track c) {
-                      <div class="group relative bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 p-4 rounded-xl flex items-center justify-between transition-all hover:shadow-md hover:border-emerald-200">
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
-                          <p class="font-medium text-zinc-900 dark:text-white">{{ c.memberFName }} {{ c.memberLName }}</p>
-                          <p class="text-zinc-500 truncate">{{ c.phoneH }}</p>
-                          <p class="text-zinc-500">{{ c.dateofBirth | date:'dd/MM/yyyy' }}</p>
-                          <p class="font-bold text-emerald-700 dark:text-emerald-400">${{ c.membershipCategory.membershipFees.toFixed(2) }}</p>
-                        </div>
-                        <div class="flex space-x-2 ml-4">
-                          <button [routerLink]="['/member-attachments', c.memberUID]" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Manage Attachments">
-                            <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                  <!-- Parents -->
+                  @for (p of memberDetails.dependentParents; track p) {
+                    <div class="p-6 border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-amber-500">Parent</span>
+                        <div class="flex space-x-1">
+                          <button [routerLink]="['/member-attachments', p.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                            <fa-icon [icon]="faAttachmentIcon" class="text-sm"></fa-icon>
                           </button>
-                          <button (click)="openMemberEditModal(c)" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"><fa-icon [icon]="faEditIcon"></fa-icon></button>
-                          <button (click)="removeMember(c)" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><fa-icon [icon]="trashIcon"></fa-icon></button>
+                          <button (click)="openMemberEditModal(p)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                            <fa-icon [icon]="faEditIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="removeMember(p)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                            <fa-icon [icon]="trashIcon" class="text-sm"></fa-icon>
+                          </button>
                         </div>
                       </div>
-                    }
-                  </div>
-                </div>
-              }
-
-              <!-- Parents -->
-              @if (memberDetails.dependentParents.length > 0) {
-                <div class="space-y-3">
-                  <h5 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Dependent Parents</h5>
-                  <div class="grid gap-3">
-                    @for (c of memberDetails.dependentParents; track c) {
-                      <div class="group relative bg-amber-50/50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/30 p-4 rounded-xl flex items-center justify-between transition-all hover:shadow-md hover:border-amber-200">
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
-                          <p class="font-medium text-zinc-900 dark:text-white">{{ c.memberFName }} {{ c.memberLName }}</p>
-                          <p class="text-zinc-500 truncate">{{ c.phoneH }}</p>
-                          <p class="text-zinc-500">{{ c.dateofBirth | date:'dd/MM/yyyy' }}</p>
-                          <p class="font-bold text-amber-700 dark:text-amber-400">${{ c.membershipCategory.membershipFees.toFixed(2) }}</p>
+                      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Name</p>
+                          <p class="text-sm font-bold text-zinc-900 dark:text-white">{{ p.memberFName }} {{ p.memberLName }}</p>
                         </div>
-                        <div class="flex space-x-2 ml-4">
-                          <button [routerLink]="['/member-attachments', c.memberUID]" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Manage Attachments">
-                            <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                          </button>
-                          <button (click)="openMemberEditModal(c)" class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"><fa-icon [icon]="faEditIcon"></fa-icon></button>
-                          <button (click)="removeMember(c)" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><fa-icon [icon]="trashIcon"></fa-icon></button>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Phone</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ p.phoneH }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">DOB</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400 font-mono">{{ p.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Fee</p>
+                          <p class="text-sm font-black text-amber-600 dark:text-amber-400">${{ p.membershipCategory.membershipFees.toFixed(2) }}</p>
                         </div>
                       </div>
-                    }
-                  </div>
+                    </div>
+                  }
+
+                  @if (!memberDetails.spouse && memberDetails.dependentChild.length === 0 && memberDetails.dependentParents.length === 0) {
+                    <div class="text-center py-16">
+                      <div class="w-16 h-16 bg-zinc-50 dark:bg-zinc-800 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                        <fa-icon [icon]="familyIcon" class="text-zinc-300 text-2xl"></fa-icon>
+                      </div>
+                      <p class="text-zinc-500 text-sm font-medium">No family members registered.</p>
+                    </div>
+                  }
                 </div>
-              }
+              </div>
             </div>
           </div>
         }
 
         <!-- Emergency Contacts Card -->
         <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-          <div class="bg-zinc-100 dark:bg-zinc-800 p-4 border-b border-zinc-200 dark:border-zinc-700 flex items-center">
-            <fa-icon [icon]="contactIcon" class="text-zinc-500 mr-2"></fa-icon>
-            <h4 class="font-semibold text-zinc-900 dark:text-white">Emergency Contacts</h4>
-          </div>
-          <div class="p-6">
-            @if (memberDetails.emergencyContacts.length > 0) {
-              <div class="grid gap-4">
-                @for (c of memberDetails.emergencyContacts; track c) {
-                  <div class="p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 flex items-center justify-between">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1 items-center">
-                      <div>
-                        <p class="text-[10px] text-zinc-400 uppercase font-bold">Contact Name</p>
-                        <p class="font-medium">{{ c.fullName }}</p>
+          <button (click)="isEmergencyExpanded = !isEmergencyExpanded"
+                  class="w-full p-6 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-800/30 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50 transition-all duration-300 group outline-none">
+            <div class="flex items-center">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                <fa-icon [icon]="contactIcon" class="text-emerald-600 dark:text-emerald-400"></fa-icon>
+              </div>
+              <div class="text-left">
+                <h3 class="font-bold text-zinc-900 dark:text-white leading-tight">Emergency Contacts</h3>
+                <p class="text-xs text-zinc-500 font-medium">Keep emergency contacts updated</p>
+              </div>
+            </div>
+            <fa-icon [icon]="faChevronDown" class="text-zinc-400 transition-transform duration-500 ease-in-out" 
+                     [class.rotate-180]="isEmergencyExpanded"></fa-icon>
+          </button>
+
+          <div class="grid transition-[grid-template-rows] duration-500 ease-in-out overflow-hidden"
+               [class.grid-rows-[0fr]]="!isEmergencyExpanded"
+               [class.grid-rows-[1fr]]="isEmergencyExpanded">
+            <div class="min-h-0">
+              <div class="p-6 border-t border-zinc-50 dark:border-zinc-800/50">
+                @if (memberDetails.emergencyContacts.length > 0) {
+                  <div class="grid gap-4">
+                    @for (c of memberDetails.emergencyContacts; track c) {
+                      <div class="p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 flex items-center justify-between group/contact hover:border-emerald-200 dark:hover:border-emerald-900/50 transition-all">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1 items-center">
+                          <div>
+                            <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Contact Name</p>
+                            <p class="text-sm font-bold text-zinc-900 dark:text-white">{{ c.fullName }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Phone</p>
+                            <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ c.phone }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Relationship</p>
+                            <span class="px-2 py-0.5 inline-block rounded-md bg-zinc-100 dark:bg-zinc-800 text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                              {{ c.relationship?.relationshipName }}
+                            </span>
+                          </div>
+                          <div>
+                            <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Gender</p>
+                            <p class="text-sm text-zinc-500 font-medium">{{ c.gender }}</p>
+                          </div>
+                        </div>
+                        <div class="flex space-x-1 ml-4">
+                          <button (click)="openEmergencyContactModal(c)" class="p-2 text-zinc-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-all"><fa-icon [icon]="faEditIcon" class="text-sm"></fa-icon></button>
+                          <button (click)="removeEmergencyCotnact(c)" class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"><fa-icon [icon]="trashIcon" class="text-sm"></fa-icon></button>
+                        </div>
                       </div>
-                      <div>
-                        <p class="text-[10px] text-zinc-400 uppercase font-bold">Phone</p>
-                        <p class="font-medium">{{ c.phone }}</p>
-                      </div>
-                      <div>
-                        <p class="text-[10px] text-zinc-400 uppercase font-bold">Relationship</p>
-                        <p class="px-2 py-0.5 inline-block rounded-md bg-zinc-200 dark:bg-zinc-700 text-[10px] font-bold">
-                          {{ c.relationship?.relationshipName }}
-                        </p>
-                      </div>
-                      <div>
-                        <p class="text-[10px] text-zinc-400 uppercase font-bold">Gender</p>
-                        <p class="text-zinc-500 text-sm">{{ c.gender }}</p>
-                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="text-center py-16 bg-zinc-50 dark:bg-zinc-950/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800">
+                    <div class="w-16 h-16 bg-white dark:bg-zinc-900 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                      <fa-icon [icon]="contactIcon" class="text-zinc-300 text-2xl"></fa-icon>
                     </div>
-                    <div class="flex space-x-2 ml-4">
-                      <button (click)="openEmergencyContactModal(c)" class="p-1.5 text-zinc-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all"><fa-icon [icon]="faEditIcon"></fa-icon></button>
-                      <button (click)="removeEmergencyCotnact(c)" class="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><fa-icon [icon]="trashIcon"></fa-icon></button>
-                    </div>
+                    <p class="text-zinc-500 text-sm font-medium">No emergency contacts added yet.</p>
                   </div>
                 }
               </div>
-            } @else {
-              <div class="text-center py-8">
-                <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <fa-icon [icon]="contactIcon" class="text-zinc-400"></fa-icon>
-                </div>
-                <p class="text-zinc-500 text-sm italic">No emergency contacts added yet.</p>
-              </div>
-            }
+            </div>
           </div>
         </div>
       </div> <!-- lg:col-span-8 -->
@@ -344,7 +424,7 @@
 
         <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Date of Birth <span class="text-red-500">*</span></label>
-          <p-datepicker formControlName="dateofBirth" dateFormat="yy-mm-dd"
+          <p-datepicker dateFormat="dd/mm/yy" formControlName="dateofBirth"
                         [showIcon]="true" appendTo="body"
                         styleClass="w-full" inputStyleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 font-mono">
           </p-datepicker>
@@ -356,44 +436,9 @@
         <input type="text" pInputText formControlName="phoneH" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
       </div>
 
-      @if (showPaymentMethodField) {
-        <div class="space-y-3 pt-2">
-          <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300 block">Payment Method <span class="text-red-500">*</span></label>
-          <div class="flex space-x-6">
-            <div class="flex items-center space-x-2">
-              <p-radioButton id="DDR" value="DDR" formControlName="modeOfPayment" (onChange)="toogleAccountDetails()"></p-radioButton>
-              <label for="DDR" class="text-sm">Direct Debit</label>
-            </div>
-            <div class="flex items-center space-x-2">
-              <p-radioButton id="BANKTRANSFER" value="BANK TRANSFER" formControlName="modeOfPayment" (onChange)="toogleAccountDetails()"></p-radioButton>
-              <label for="BANKTRANSFER" class="text-sm">Bank Transfer</label>
-            </div>
-          </div>
-          <div class="flex items-center space-x-2 mt-2">
-            <input type="checkbox" formControlName="isActive" class="w-4 h-4 rounded text-blue-600 border-zinc-300 focus:ring-blue-500" />
-            <label class="text-sm font-medium">Is Active</label>
-          </div>
-        </div>
-      }
 
-      @if (showBsbAndAccountNo) {
-        <div class="space-y-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-           <div class="space-y-1.5 flex flex-col">
-             <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account Name <span class="text-red-500">*</span></label>
-             <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.accountName" [ngModelOptions]="{standalone: true}" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
-           </div>
-           <div class="grid grid-cols-2 gap-4">
-             <div class="space-y-1.5 flex flex-col">
-               <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">BSB</label>
-               <input type="text" pInputText formControlName="bsb" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
-             </div>
-             <div class="space-y-1.5 flex flex-col">
-               <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account No</label>
-               <input type="text" pInputText formControlName="accountNo" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
-             </div>
-           </div>
-        </div>
-      }
+
+
     </form>
   </ng-template>
 

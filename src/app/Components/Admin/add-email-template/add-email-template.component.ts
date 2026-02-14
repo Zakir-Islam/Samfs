@@ -9,11 +9,12 @@ import { EmailTemplateService } from '../../../Services/email-template.service';
 
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-add-email-template',
   standalone: true,
-  imports: [EditorComponent, ReactiveFormsModule, FormsModule, InputTextModule, ButtonModule],
+  imports: [EditorComponent, ReactiveFormsModule, FormsModule, InputTextModule, ButtonModule, PageHeaderComponent],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ],

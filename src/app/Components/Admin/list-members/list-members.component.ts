@@ -4,7 +4,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MemberService } from '../../../Services/member.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faContactCard, faEdit, faPlus, faTrash, faUserGroup,faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faContactCard, faEdit, faPlus, faTrash, faUserGroup, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EmailTemplate } from '../../../Models/email-template';
 import { ToastrService } from 'ngx-toastr';
@@ -18,6 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import Swal from 'sweetalert2';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 @Component({
   selector: 'app-list-members',
   standalone: true,
@@ -33,7 +34,8 @@ import Swal from 'sweetalert2';
     RadioButtonModule,
     InputTextModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    PageHeaderComponent
   ],
   providers: [DatePipe],
   templateUrl: './list-members.component.html',
@@ -71,7 +73,7 @@ export class ListMembersComponent {
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private cdr:ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -86,10 +88,10 @@ export class ListMembersComponent {
 
     this.loadAllMembers();
   }
-onGlobalFilter(event: Event, table: any) {
-  const input = event.target as HTMLInputElement;
-  table.filterGlobal(input.value, 'contains');
-}
+  onGlobalFilter(event: Event, table: any) {
+    const input = event.target as HTMLInputElement;
+    table.filterGlobal(input.value, 'contains');
+  }
 
   loadAllMembers() {
     this.isLoading = true;
@@ -208,32 +210,32 @@ onGlobalFilter(event: Event, table: any) {
 
   deleteMember(id: number) {
 
-  Swal.fire({
-    title: 'Delete Member?',
-    text: 'This member will be permanently removed.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, Delete',
-    cancelButtonText: 'Cancel'
-  }).then((result) => {
+    Swal.fire({
+      title: 'Delete Member?',
+      text: 'This member will be permanently removed.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
 
-    if (result.isConfirmed) {
+      if (result.isConfirmed) {
 
-      this.manageMemberService.DeleteMembership(id).subscribe(() => {
-        debugger;
-        Swal.fire({
-          icon: 'success',
-          title: 'Deleted!',
-          text: 'Member deleted successfully',
-          timer: 1500,
-          showConfirmButton: false
+        this.manageMemberService.DeleteMembership(id).subscribe(() => {
+          debugger;
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Member deleted successfully',
+            timer: 1500,
+            showConfirmButton: false
+          });
+
+          this.members = this.members.filter(x => x.memberId !== id);
+          this.cdr.detectChanges();
         });
 
-      this.members= this.members.filter(x => x.memberId !== id);
-      this.cdr.detectChanges();
-      });
-
-    }
-  });
-}
+      }
+    });
+  }
 }

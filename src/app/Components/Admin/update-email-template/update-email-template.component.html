@@ -1,3 +1,8 @@
+<app-page-header 
+  title="Update Email Template" 
+  subtitle="Modify existing template configuration">
+</app-page-header>
+
 <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
   @if (isLoading && !emailTemplate.emailTemplateId) {
     <div class="flex flex-col items-center justify-center p-12 space-y-4">
@@ -5,10 +10,6 @@
       <p class="text-zinc-500 font-medium">Loading template...</p>
     </div>
   } @else {
-    <div class="mb-8">
-      <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">{{emailTemplate.emailTemplateName}}</h2>
-      <p class="text-zinc-500 dark:text-zinc-400 mt-1">Update existing template configuration.</p>
-    </div>
 
     <form [formGroup]="updateEmailTemplateForm" class="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6" [hidden]="emailTemplate.category!='Customize'">

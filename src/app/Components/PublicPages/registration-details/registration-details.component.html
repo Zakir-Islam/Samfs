@@ -1,3 +1,8 @@
+<app-page-header 
+  title="Complete Your Registration" 
+  subtitle="Add family members and emergency contacts">
+</app-page-header>
+
 <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 relative min-h-screen">
   @if (isLoading) {
     <div class="absolute inset-0 z-50 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm flex items-center justify-center">
@@ -26,10 +31,12 @@
                   <fa-icon [icon]="faEditIcon"></fa-icon>
                 </button>
               }
-              <button class="p-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg transition-colors shadow-sm"
-                      [routerLink]="['/member-attachments', memberDetails.primaryMember.memberUID]">
-                <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-              </button>
+              @if (memberDetails.primaryMember.isCompleted) {
+                <button class="p-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg transition-colors shadow-sm"
+                        [routerLink]="['/member-attachments', memberDetails.primaryMember.memberUID]">
+                  <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                </button>
+              }
             </div>
           </div>
           
@@ -113,33 +120,7 @@
           </div>
         </div>
 
-        <!-- Static Bank Details -->
-        @if (!showBsbAndAccountNo) {
-          <div class="bg-zinc-900 text-white rounded-2xl p-6 shadow-xl relative overflow-hidden">
-            <div class="absolute -right-8 -top-8 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-            <h4 class="text-zinc-400 text-xs font-bold uppercase tracking-widest mb-4">Bank Transfer Info</h4>
-            <div class="space-y-4">
-              <div>
-                <p class="text-zinc-500 text-xs mb-0.5">Bank Name</p>
-                <p class="font-semibold">Westpac</p>
-              </div>
-              <div>
-                <p class="text-zinc-500 text-xs mb-0.5">Account Name</p>
-                <p class="font-semibold">SA Muslim Funeral Services</p>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <p class="text-zinc-500 text-xs mb-0.5">BSB</p>
-                  <p class="font-bold tracking-wider">035-002</p>
-                </div>
-                <div>
-                  <p class="text-zinc-500 text-xs mb-0.5">Account No</p>
-                  <p class="font-bold tracking-wider">467819</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
+
       </div>
 
       <!-- Right Column: Form Steps and Family List -->
@@ -169,7 +150,7 @@
               </div>
               <div class="space-y-1.5 flex flex-col">
                 <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Date of Birth <span class="text-red-500">*</span></label>
-                <p-datepicker appendTo="body" [(ngModel)]="memberDetails.primaryMember.dateofBirth" dateFormat="yy-mm-dd"
+                <p-datepicker dateFormat="dd/mm/yy" appendTo="body" [(ngModel)]="memberDetails.primaryMember.dateofBirth"
                             [showIcon]="true" inputId="dob"
                             styleClass="w-full" inputStyleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 font-mono">
                 </p-datepicker>
@@ -185,7 +166,7 @@
         }
 
         <!-- Attachment Warning -->
-        @if (isDateOfBirthFilled && !isAttachmentUploaded) {
+        @if (isDateOfBirthFilled && !isAttachmentUploaded && memberDetails.primaryMember.isCompleted) {
             <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 rounded-2xl p-6">
               <div class="flex items-start space-x-3 mb-4">
                 <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-full flex items-center justify-center flex-shrink-0">
@@ -209,242 +190,361 @@
         <!-- Family Details List -->
         @if (memberDetails.primaryMember.membershipTypeId == 2 && isDateOfBirthFilled) {
           <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-            <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-800/30">
-              <h3 class="font-bold flex items-center text-zinc-900 dark:text-white">
-                <fa-icon [icon]="familyIcon" class="mr-3 text-zinc-400"></fa-icon>
-                Family Members
-              </h3>
-            </div>
-            <div class="p-0">
-              <!-- Spouse -->
-              @if (memberDetails.spouse) {
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
-                  <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Spouse</span>
-                      <div class="flex space-x-2">
-                        <button [routerLink]="['/member-attachments', memberDetails.spouse.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
-                             <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                        </button>
-                        @if (!memberDetails.primaryMember.isCompleted) {
-                          <button (click)="openMemberEditModal(memberDetails.spouse)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
-                            <fa-icon [icon]="faEditIcon"></fa-icon>
-                          </button>
-                          <button (click)="removeMember(memberDetails.spouse)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
-                            <fa-icon [icon]="trashIcon"></fa-icon>
-                          </button>
-                        }
-                      </div>
-                  </div>
-                  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Name</p>
-                      <p class="font-semibold">{{ memberDetails.spouse.memberFName }} {{ memberDetails.spouse.memberLName }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Phone</p>
-                      <p class="font-medium">{{ memberDetails.spouse.phoneH }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">DOB</p>
-                      <p class="font-medium">{{ memberDetails.spouse.dateofBirth | date:'dd/MM/yyyy' }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Fees</p>
-                      <p class="font-bold text-zinc-900 dark:text-white">${{ memberDetails.spouse.membershipCategory.membershipFees.toFixed(2) }}</p>
-                    </div>
-                  </div>
+            <button (click)="isFamilyExpanded = !isFamilyExpanded"
+                    class="w-full p-6 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-800/30 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50 transition-all duration-300 group outline-none">
+              <div class="flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                  <fa-icon [icon]="familyIcon" class="text-blue-600 dark:text-blue-400"></fa-icon>
                 </div>
-              }
+                <div class="text-left">
+                  <h3 class="font-bold text-zinc-900 dark:text-white leading-tight">Family Members</h3>
+                  <p class="text-xs text-zinc-500 font-medium">Manage your registered family profiles</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="px-2 py-0.5 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold text-zinc-600 dark:text-zinc-400">
+                  {{ (memberDetails.spouse ? 1 : 0) + memberDetails.dependentChild.length + memberDetails.dependentParents.length }} Members
+                </span>
+                <fa-icon [icon]="faChevronDown" class="text-zinc-400 transition-transform duration-500 ease-in-out" 
+                         [class.rotate-180]="isFamilyExpanded"></fa-icon>
+              </div>
+            </button>
 
-              <!-- Children -->
-              @for (c of memberDetails.dependentChild; track c) {
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
-                  <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-500">Dependent Child</span>
-                      <div class="flex space-x-2">
-                         <button [routerLink]="['/member-attachments', c.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
-                           <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                         </button>
-                         @if (!memberDetails.primaryMember.isCompleted) {
-                           <button (click)="openMemberEditModal(c)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
-                             <fa-icon [icon]="faEditIcon"></fa-icon>
-                           </button>
-                           <button (click)="removeMember(c)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
-                             <fa-icon [icon]="trashIcon"></fa-icon>
-                           </button>
-                         }
+            <div class="grid transition-[grid-template-rows] duration-500 ease-in-out overflow-hidden"
+                 [class.grid-rows-[0fr]]="!isFamilyExpanded"
+                 [class.grid-rows-[1fr]]="isFamilyExpanded">
+              <div class="min-h-0">
+                <div class="p-0 border-t border-zinc-100 dark:border-zinc-800">
+                  <!-- Spouse -->
+                  @if (memberDetails.spouse) {
+                    <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Spouse</span>
+                          <div class="flex space-x-2">
+                            @if (memberDetails.primaryMember.isCompleted) {
+                              <button [routerLink]="['/member-attachments', memberDetails.spouse.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                                   <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                              </button>
+                            }
+                            @if (!memberDetails.primaryMember.isCompleted) {
+                              <button (click)="openMemberEditModal(memberDetails.spouse)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                                <fa-icon [icon]="faEditIcon"></fa-icon>
+                              </button>
+                              <button (click)="removeMember(memberDetails.spouse)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                                <fa-icon [icon]="trashIcon"></fa-icon>
+                              </button>
+                            }
+                          </div>
                       </div>
-                  </div>
-                  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Name</p>
-                      <p class="font-semibold">{{ c.memberFName }} {{ c.memberLName }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Phone</p>
-                      <p class="font-medium">{{ c.phoneH || 'N/A' }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">DOB</p>
-                      <p class="font-medium font-mono text-xs">{{ c.dateofBirth | date:'dd/MM/yyyy' }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Fees</p>
-                      <p class="font-bold text-zinc-900 dark:text-white">${{ c.membershipCategory.membershipFees.toFixed(2) }}</p>
-                    </div>
-                  </div>
-                </div>
-              }
-
-              <!-- Parents -->
-              @for (p of memberDetails.dependentParents; track p) {
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
-                  <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider text-amber-500">Parent</span>
-                      <div class="flex space-x-2">
-                        <button [routerLink]="['/member-attachments', p.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
-                           <fa-icon [icon]="faAttachmentIcon"></fa-icon>
-                        </button>
-                        @if (!memberDetails.primaryMember.isCompleted) {
-                          <button (click)="openMemberEditModal(p)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
-                            <fa-icon [icon]="faEditIcon"></fa-icon>
-                          </button>
-                          <button (click)="removeMember(p)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
-                            <fa-icon [icon]="trashIcon"></fa-icon>
-                          </button>
-                        }
+                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Name</p>
+                          <p class="font-semibold">{{ memberDetails.spouse.memberFName }} {{ memberDetails.spouse.memberLName }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Phone</p>
+                          <p class="font-medium">{{ memberDetails.spouse.phoneH }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">DOB</p>
+                          <p class="font-medium">{{ memberDetails.spouse.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Fees</p>
+                          <p class="font-bold text-zinc-900 dark:text-white">${{ memberDetails.spouse.membershipCategory.membershipFees.toFixed(2) }}</p>
+                        </div>
                       </div>
-                  </div>
-                  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Name</p>
-                      <p class="font-semibold">{{ p.memberFName }} {{ p.memberLName }}</p>
                     </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Phone</p>
-                      <p class="font-medium">{{ p.phoneH }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">DOB</p>
-                      <p class="font-medium font-mono text-xs">{{ p.dateofBirth | date:'dd/MM/yyyy' }}</p>
-                    </div>
-                    <div>
-                      <p class="text-zinc-500 text-xs mb-0.5">Fees</p>
-                      <p class="font-bold text-zinc-900 dark:text-white">${{ p.membershipCategory.membershipFees.toFixed(2) }}</p>
-                    </div>
-                  </div>
-                </div>
-              }
+                  }
 
-              @if (!memberDetails.spouse && memberDetails.dependentChild.length === 0 && memberDetails.dependentParents.length === 0) {
-                <div class="text-center py-12">
-                  <div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <fa-icon [icon]="familyIcon" class="text-zinc-300 text-2xl"></fa-icon>
-                  </div>
-                  <p class="text-zinc-500">No family members registered.</p>
+                  <!-- Children -->
+                  @for (c of memberDetails.dependentChild; track c) {
+                    <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-500">Dependent Child</span>
+                          <div class="flex space-x-2">
+                             @if (memberDetails.primaryMember.isCompleted) {
+                               <button [routerLink]="['/member-attachments', c.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                                 <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                               </button>
+                             }
+                             @if (!memberDetails.primaryMember.isCompleted) {
+                               <button (click)="openMemberEditModal(c)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                                 <fa-icon [icon]="faEditIcon"></fa-icon>
+                               </button>
+                               <button (click)="removeMember(c)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                                 <fa-icon [icon]="trashIcon"></fa-icon>
+                               </button>
+                             }
+                          </div>
+                      </div>
+                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Name</p>
+                          <p class="font-semibold">{{ c.memberFName }} {{ c.memberLName }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Phone</p>
+                          <p class="font-medium">{{ c.phoneH || 'N/A' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">DOB</p>
+                          <p class="font-medium font-mono text-xs">{{ c.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Fees</p>
+                          <p class="font-bold text-zinc-900 dark:text-white">${{ c.membershipCategory.membershipFees.toFixed(2) }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Parents -->
+                  @for (p of memberDetails.dependentParents; track p) {
+                    <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-500">Parent</span>
+                          <div class="flex space-x-2">
+                            @if (memberDetails.primaryMember.isCompleted) {
+                              <button [routerLink]="['/member-attachments', p.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                                 <fa-icon [icon]="faAttachmentIcon"></fa-icon>
+                              </button>
+                            }
+                            @if (!memberDetails.primaryMember.isCompleted) {
+                              <button (click)="openMemberEditModal(p)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                                <fa-icon [icon]="faEditIcon"></fa-icon>
+                              </button>
+                              <button (click)="removeMember(p)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                                <fa-icon [icon]="trashIcon"></fa-icon>
+                              </button>
+                            }
+                          </div>
+                      </div>
+                      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Name</p>
+                          <p class="font-semibold">{{ p.memberFName }} {{ p.memberLName }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Phone</p>
+                          <p class="font-medium">{{ p.phoneH }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">DOB</p>
+                          <p class="font-medium font-mono text-xs">{{ p.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-zinc-500 text-xs mb-0.5">Fees</p>
+                          <p class="font-bold text-zinc-900 dark:text-white">${{ p.membershipCategory.membershipFees.toFixed(2) }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  }
+
+                  @if (!memberDetails.spouse && memberDetails.dependentChild.length === 0 && memberDetails.dependentParents.length === 0) {
+                    <div class="text-center py-12">
+                      <div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <fa-icon [icon]="familyIcon" class="text-zinc-300 text-2xl"></fa-icon>
+                      </div>
+                      <p class="text-zinc-500">No family members registered.</p>
+                    </div>
+                  }
                 </div>
-              }
+              </div>
             </div>
           </div>
         }
 
         <!-- Emergency Contacts Section -->
         @if (isDateOfBirthFilled) {
-          <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-            <div class="p-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-              <h3 class="font-bold flex items-center text-zinc-900 dark:text-white">
-                <fa-icon [icon]="contactIcon" class="mr-3 text-zinc-400"></fa-icon>
-                Emergency Contacts
-              </h3>
-              @if (!memberDetails.primaryMember.isCompleted) {
-                <button (click)="openEmergencyContactModal()"
-                        class="px-4 py-2 bg-zinc-900 dark:bg-zinc-800 text-white dark:text-zinc-300 rounded-xl text-sm font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-700 transition-all flex items-center shadow-lg shadow-zinc-500/10">
-                  <fa-icon [icon]="addIcon" class="mr-2"></fa-icon>
-                  Add Contact
-                </button>
-              }
-            </div>
+          <div class="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden text-sm">
+            <button (click)="isEmergencyExpanded = !isEmergencyExpanded"
+                    class="w-full p-6 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-800/30 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50 transition-all duration-300 group outline-none">
+              <div class="flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                  <fa-icon [icon]="contactIcon" class="text-emerald-600 dark:text-emerald-400"></fa-icon>
+                </div>
+                <div class="text-left">
+                  <h3 class="font-bold text-zinc-900 dark:text-white leading-tight">Emergency Contacts</h3>
+                  <p class="text-xs text-zinc-500 font-medium">Keep your emergency contacts updated</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span class="px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
+                  Step 2
+                </span>
+                <fa-icon [icon]="faChevronDown" class="text-zinc-400 transition-transform duration-500 ease-in-out" 
+                         [class.rotate-180]="isEmergencyExpanded"></fa-icon>
+              </div>
+            </button>
             
-            <div class="p-6 space-y-4">
-              @if (memberDetails.emergencyContacts.length > 0) {
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  @for (c of memberDetails.emergencyContacts; track c) {
-                    <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 relative group">
-                      <div class="flex items-center justify-between mb-3">
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">{{ c.relationship?.relationshipName }}</span>
-                        @if (!memberDetails.primaryMember.isCompleted) {
-                          <div class="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button (click)="openEmergencyContactModal(c)" class="p-1.5 text-zinc-400 hover:text-amber-500">
-                              <fa-icon [icon]="faEditIcon" class="text-xs"></fa-icon>
-                            </button>
-                            <button (click)="removeEmergencyCotnact(c)" class="p-1.5 text-zinc-400 hover:text-red-500">
-                              <fa-icon [icon]="trashIcon" class="text-xs"></fa-icon>
-                            </button>
+            <div class="grid transition-[grid-template-rows] duration-500 ease-in-out overflow-hidden"
+                 [class.grid-rows-[0fr]]="!isEmergencyExpanded"
+                 [class.grid-rows-[1fr]]="isEmergencyExpanded">
+              <div class="min-h-0">
+                <div class="p-6 border-t border-zinc-50 dark:border-zinc-800/50">
+                  <div class="flex items-center justify-between mb-6">
+                    <p class="text-xs text-zinc-500 font-medium italic">At least one contact is required to proceed.</p>
+                    @if (!memberDetails.primaryMember.isCompleted) {
+                      <button (click)="openEmergencyContactModal()"
+                              class="px-4 py-2 bg-zinc-900 dark:bg-zinc-800 text-white rounded-xl text-xs font-bold hover:bg-zinc-800 transition-all flex items-center gap-2 shadow-sm">
+                        <fa-icon [icon]="addIcon"></fa-icon>
+                        Add Contact
+                      </button>
+                    }
+                  </div>
+
+                  @if (memberDetails.emergencyContacts.length > 0) {
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      @for (c of memberDetails.emergencyContacts; track c) {
+                        <div class="p-4 bg-white dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 relative group/contact hover:border-emerald-200 dark:hover:border-emerald-900/50 transition-all">
+                          <div class="flex items-center justify-between mb-3">
+                            <span class="px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-[10px] font-black uppercase tracking-widest text-zinc-500">{{ c.relationship?.relationshipName }}</span>
+                            @if (!memberDetails.primaryMember.isCompleted) {
+                              <div class="flex space-x-1 opacity-0 group-hover/contact:opacity-100 transition-opacity">
+                                <button (click)="openEmergencyContactModal(c)" class="p-1.5 text-zinc-400 hover:text-amber-500">
+                                  <fa-icon [icon]="faEditIcon" class="text-[10px]"></fa-icon>
+                                </button>
+                                <button (click)="removeEmergencyCotnact(c)" class="p-1.5 text-zinc-400 hover:text-red-500">
+                                  <fa-icon [icon]="trashIcon" class="text-[10px]"></fa-icon>
+                                </button>
+                              </div>
+                            }
                           </div>
-                        }
+                          <p class="font-bold text-zinc-900 dark:text-white mb-1">{{ c.fullName }}</p>
+                          <p class="text-xs text-zinc-500 font-medium">{{ c.phone }}</p>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <div class="text-center py-10 bg-zinc-50 dark:bg-zinc-950/20 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800">
+                      <div class="w-12 h-12 bg-white dark:bg-zinc-900 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">
+                        <fa-icon [icon]="contactIcon" class="text-zinc-300"></fa-icon>
                       </div>
-                      <p class="font-bold text-zinc-900 dark:text-white mb-1">{{ c.fullName }}</p>
-                      <p class="text-sm text-zinc-500">{{ c.phone }}</p>
+                      <p class="text-zinc-500 text-xs font-medium">No emergency contacts added yet.</p>
                     </div>
                   }
                 </div>
-              } @else {
-                <div class="text-center py-8">
-                  <div class="w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <fa-icon [icon]="contactIcon" class="text-zinc-400"></fa-icon>
-                  </div>
-                  <p class="text-zinc-500 text-sm italic">Step 2: Please add at least one emergency contact.</p>
-                </div>
-              }
+              </div>
             </div>
           </div>
         }
 
         <!-- Step 3: Payment Method -->
         @if (memberDetails.emergencyContacts.length > 0 && !isPaymentMethodAdded) {
-          <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 rounded-2xl p-6">
-            <h4 class="text-blue-900 dark:text-blue-400 font-bold mb-6">Step 3: Payment Method</h4>
-            
-            <div class="space-y-6">
-              <div class="flex flex-wrap gap-4">
-                <div class="flex-1 min-w-[200px]">
-                  <div class="flex items-center p-4 bg-white dark:bg-zinc-900 rounded-xl border border-blue-200 dark:border-blue-900/50 cursor-pointer hover:shadow-md transition-shadow"
-                       (click)="memberDetails.primaryMember.modeOfPayment = 'DDR'; toogleStepAccountDetails('DDR')">
-                    <p-radioButton name="modeOfPayment" value="DDR" [(ngModel)]="memberDetails.primaryMember.modeOfPayment" (onChange)="toogleStepAccountDetails('DDR')"></p-radioButton>
-                    <label class="ml-3 font-semibold cursor-pointer">Direct Debit</label>
-                  </div>
+          <div class="bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 rounded-2xl overflow-hidden shadow-sm shadow-blue-500/5 transition-all duration-300">
+            <button (click)="isBankExpanded = !isBankExpanded"
+                    class="w-full p-6 flex items-center justify-between group outline-none">
+              <div class="flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                  <fa-icon [icon]="faCardIcon" class="text-blue-600 dark:text-blue-400"></fa-icon>
                 </div>
-                <div class="flex-1 min-w-[200px]">
-                  <div class="flex items-center p-4 bg-white dark:bg-zinc-900 rounded-xl border border-blue-200 dark:border-blue-900/50 cursor-pointer hover:shadow-md transition-shadow"
-                       (click)="memberDetails.primaryMember.modeOfPayment = 'BANK TRANSFER'; toogleStepAccountDetails('BANK TRANSFER')">
-                    <p-radioButton name="modeOfPayment" value="BANK TRANSFER" [(ngModel)]="memberDetails.primaryMember.modeOfPayment" (onChange)="toogleStepAccountDetails('BANK TRANSFER')"></p-radioButton>
-                    <label class="ml-3 font-semibold cursor-pointer">Bank Transfer</label>
-                  </div>
+                <div class="text-left">
+                  <h4 class="text-blue-900 dark:text-blue-400 font-bold leading-tight">Step 3: Payment Method</h4>
+                  <p class="text-xs text-blue-700/60 dark:text-blue-500/60 font-medium">How would you like to pay your membership?</p>
                 </div>
               </div>
-
-              @if (showBsbAndAccountNo) {
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-top-2 duration-300">
-                  <div class="space-y-1.5 flex flex-col">
-                    <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account Name <span class="text-red-500">*</span></label>
-                    <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.accountName" class="w-full !rounded-xl !border-blue-200 dark:!border-blue-800" />
+              <fa-icon [icon]="faChevronDown" class="text-blue-400 transition-transform duration-500 ease-in-out" 
+                       [class.rotate-180]="isBankExpanded"></fa-icon>
+            </button>
+            
+            <div class="grid transition-[grid-template-rows] duration-500 ease-in-out overflow-hidden"
+                 [class.grid-rows-[0fr]]="!isBankExpanded"
+                 [class.grid-rows-[1fr]]="isBankExpanded">
+              <div class="min-h-0">
+                <div class="px-6 pb-6 space-y-6 border-t border-blue-100/50 dark:border-blue-900/30 pt-6">
+                  <div class="flex flex-col space-y-4">
+                    <div class="bg-white/50 dark:bg-zinc-950/50 p-1.5 rounded-2xl flex border border-blue-100 dark:border-blue-900/30">
+                       <label class="flex-1 cursor-pointer group/radio">
+                          <input type="radio" name="paymentMethod" value="DDR" [(ngModel)]="memberDetails.primaryMember.modeOfPayment" (change)="toogleStepAccountDetails('DDR')" class="sr-only peer" />
+                          <div class="flex items-center justify-center gap-2 py-3 rounded-xl transition-all peer-checked:bg-white dark:peer-checked:bg-zinc-800 peer-checked:shadow-md peer-checked:text-blue-600 dark:peer-checked:text-blue-400 text-zinc-500 font-bold text-xs uppercase tracking-wide">
+                            <fa-icon [icon]="faCardIcon"></fa-icon>
+                            Direct Debit
+                          </div>
+                       </label>
+                       <label class="flex-1 cursor-pointer group/radio">
+                          <input type="radio" name="paymentMethod" value="BANK TRANSFER" [(ngModel)]="memberDetails.primaryMember.modeOfPayment" (change)="toogleStepAccountDetails('BANK TRANSFER')" class="sr-only peer" />
+                          <div class="flex items-center justify-center gap-2 py-3 rounded-xl transition-all peer-checked:bg-white dark:peer-checked:bg-zinc-800 peer-checked:shadow-md peer-checked:text-blue-600 dark:peer-checked:text-blue-400 text-zinc-500 font-bold text-xs uppercase tracking-wide">
+                            <fa-icon [icon]="faBankIcon"></fa-icon>
+                            Bank Transfer
+                          </div>
+                       </label>
+                    </div>
                   </div>
-                  <div class="space-y-1.5 flex flex-col">
-                    <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">BSB <span class="text-red-500">*</span></label>
-                    <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.bsb" class="w-full !rounded-xl !border-blue-200 dark:!border-blue-800 font-mono" />
-                  </div>
-                  <div class="space-y-1.5 flex flex-col">
-                    <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account Number <span class="text-red-500">*</span></label>
-                    <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.accountNo" class="w-full !rounded-xl !border-blue-200 dark:!border-blue-800 font-mono" />
+  
+                  @if (showMainBsbAndAccountNo) {
+                    <div class="p-6 bg-white dark:bg-zinc-900 rounded-3xl border border-blue-100 dark:border-blue-900/30 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
+                      <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-blue-50 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center">
+                          <fa-icon [icon]="faCardIcon" class="text-blue-600 dark:text-blue-400"></fa-icon>
+                        </div>
+                        <div>
+                          <h5 class="font-bold text-zinc-900 dark:text-white leading-tight font-sans">Bank Account Details</h5>
+                          <p class="text-xs text-zinc-500">For automated monthly contributions</p>
+                        </div>
+                      </div>
+                      
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-1.5 flex flex-col">
+                          <label class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-1">Account Name</label>
+                          <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.accountName" 
+                                 class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-zinc-50 dark:!bg-zinc-950 px-4 py-3 focus:!ring-2 focus:!ring-blue-500/20" />
+                        </div>
+                        <div class="space-y-1.5 flex flex-col">
+                          <label class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-1">BSB</label>
+                          <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.bsb" 
+                                 class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-zinc-50 dark:!bg-zinc-950 px-4 py-3 font-mono focus:!ring-2 focus:!ring-blue-500/20" />
+                        </div>
+                        <div class="space-y-1.5 flex flex-col">
+                          <label class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-1">Account Number</label>
+                          <input type="text" pInputText [(ngModel)]="memberDetails.primaryMember.accountNo" 
+                                 class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-zinc-50 dark:!bg-zinc-950 px-4 py-3 font-mono focus:!ring-2 focus:!ring-blue-500/20" />
+                        </div>
+                      </div>
+                    </div>
+                  }
+  
+                  @if (memberDetails.primaryMember.modeOfPayment === 'BANK TRANSFER') {
+                    <div class="p-6 bg-zinc-900 rounded-3xl border border-zinc-800 shadow-xl overflow-hidden relative group animate-in slide-in-from-top-4 duration-500">
+                      <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl transition-all group-hover:bg-blue-500/20"></div>
+                      <div class="flex items-center space-x-3 mb-6 relative z-10">
+                        <div class="w-10 h-10 bg-zinc-800 rounded-2xl flex items-center justify-center">
+                          <fa-icon [icon]="faBankIcon" class="text-blue-400"></fa-icon>
+                        </div>
+                        <div>
+                          <h5 class="font-bold text-white">Bank Transfer Info</h5>
+                        </div>
+                      </div>
+                      
+                      <div class="grid grid-cols-2 gap-6 relative z-10 font-sans">
+                        <div>
+                          <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">Account Name</p>
+                          <p class="text-sm font-semibold text-white">SA Muslim Funeral Services</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">Bank</p>
+                          <p class="text-sm font-semibold text-white">Westpac</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">BSB</p>
+                          <p class="text-sm font-bold text-white font-mono tracking-widest">035-002</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-500 uppercase font-bold mb-1">Account No</p>
+                          <p class="text-sm font-bold text-white font-mono tracking-widest">467819</p>
+                        </div>
+                      </div>
+                    </div>
+                  }
+  
+                  <div class="flex justify-end pt-4">
+                    <button (click)="saveFamilyMember(memberDetails.primaryMember)"
+                            class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2">
+                      <span>Save & Continue</span>
+                      <fa-icon [icon]="addIcon" class="text-xs"></fa-icon>
+                    </button>
                   </div>
                 </div>
-              }
-
-              <div class="flex justify-end pt-4">
-                <button (click)="saveFamilyMember(memberDetails.primaryMember)"
-                        class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20">
-                  Save Payment Method
-                </button>
               </div>
             </div>
           </div>
@@ -465,15 +565,15 @@
                 Thank you for completing your application details. Click below to finish the process and generate your membership invoice.
               </p>
               
-              @if (!isAttachmentUploaded) {
+              @if (!isAttachmentUploaded && memberDetails.primaryMember.isCompleted) {
                 <p class="text-red-400 font-bold bg-red-900/20 inline-block px-4 py-2 rounded-lg">
                     <fa-icon [icon]="faWarnIcon" class="mr-2"></fa-icon>
-                    Action Required: Please upload at least one document before finalizing.
+                    Action Required: Please upload at least one document.
                 </p>
               }
 
               <button (click)="saveAndGenerateInvoice()"
-                      [disabled]="isInvoiceButtonDisabled || !isAttachmentUploaded"
+                      [disabled]="isInvoiceButtonDisabled"
                       class="px-12 py-4 bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-700 disabled:cursor-not-allowed text-white rounded-2xl font-bold text-lg transition-all shadow-xl shadow-emerald-500/20 flex items-center justify-center mx-auto space-x-3">
                 @if (isInvoiceButtonDisabled) {
                   <span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
@@ -520,7 +620,7 @@
 
         <div class="space-y-1.5 flex flex-col">
           <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Date of Birth <span class="text-red-500">*</span></label>
-          <p-datepicker formControlName="dateofBirth" dateFormat="yy-mm-dd"
+          <p-datepicker dateFormat="dd/mm/yy" formControlName="dateofBirth"
                         [showIcon]="true" appendTo="body"
                         styleClass="w-full" inputStyleClass="!rounded-xl !border-zinc-200 dark:!border-zinc-800 !bg-white dark:!bg-zinc-900 font-mono">
           </p-datepicker>
@@ -532,38 +632,9 @@
         <input type="text" pInputText formControlName="phoneH" class="w-full !rounded-xl !border-zinc-200 dark:!border-zinc-800" />
       </div>
 
-      @if(showPaymentMethodField){
-        <div class="space-y-3 pt-2">
-          <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Payment Method <span class="text-red-500">*</span></label>
-          <div class="flex space-x-6">
-            <div class="flex items-center">
-              <p-radioButton name="modeOfPayment" value="DDR" formControlName="modeOfPayment" (onChange)="toogleAccountDetails()"></p-radioButton>
-              <label class="ml-2 text-sm font-medium">Direct Debit</label>
-            </div>
-            <div class="flex items-center">
-              <p-radioButton name="modeOfPayment" value="BANK TRANSFER" formControlName="modeOfPayment" (onChange)="toogleAccountDetails()"></p-radioButton>
-              <label class="ml-2 text-sm font-medium">Bank Transfer</label>
-            </div>
-          </div>
-        </div>
-      }
 
-      @if(showBsbAndAccountNo){
-        <div class="grid grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-1 duration-300">
-          <div class="col-span-3 space-y-1.5 flex flex-col">
-            <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account Name</label>
-            <input type="text" pInputText formControlName="accountName" class="w-full !rounded-xl" />
-          </div>
-          <div class="space-y-1.5 flex flex-col">
-            <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">BSB</label>
-            <input type="text" pInputText formControlName="bsb" class="w-full !rounded-xl font-mono" />
-          </div>
-          <div class="col-span-2 space-y-1.5 flex flex-col">
-            <label class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Account No</label>
-            <input type="text" pInputText formControlName="accountNo" class="w-full !rounded-xl font-mono" />
-          </div>
-        </div>
-      }
+
+
     </form>
   </ng-template>
 

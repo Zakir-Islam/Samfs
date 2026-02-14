@@ -7,7 +7,7 @@ import { AddFamilyMember } from '../../../Models/member-classes';
 import { ToastrService } from 'ngx-toastr';
 import { EmergencyContactDTO } from '../../../Models/emergency-contact-classes';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faContactCard, faEdit, faFile, faPlus, faTrash, faUserGroup, faExclamationTriangle, faPaperclip } from '@fortawesome/free-solid-svg-icons';
+import { faContactCard, faEdit, faFile, faPlus, faTrash, faUserGroup, faExclamationTriangle, faPaperclip, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 
 import { DialogModule } from 'primeng/dialog';
@@ -18,6 +18,8 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
+
 
 @Component({
   selector: 'app-admin-registration-details',
@@ -36,7 +38,8 @@ import { InputIconModule } from 'primeng/inputicon';
     SelectModule,
     DatePickerModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    PageHeaderComponent
   ],
   providers: [DatePipe],
   templateUrl: './admin-registration-details.component.html',
@@ -50,6 +53,8 @@ export class AdminRegistrationDetailsComponent implements OnInit {
   familyIcon = faUserGroup;
   faEditIcon = faEdit;
   faWarnIcon = faExclamationTriangle;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
 
   membershipForm!: FormGroup;
   emergencyContactForm!: FormGroup;
@@ -69,7 +74,10 @@ export class AdminRegistrationDetailsComponent implements OnInit {
   displayEmergencyModal: boolean = false;
 
   showBsbAndAccountNo = true;
-  showPaymentMethodField = true;
+
+  isFamilyExpanded = true;
+  isEmergencyExpanded = true;
+  isBankExpanded = true;
 
   constructor(
     private fb: FormBuilder,
@@ -165,8 +173,6 @@ export class AdminRegistrationDetailsComponent implements OnInit {
   openModal(type: string): void {
     this.selectedType = type;
     this.modalForm.reset({ memberId: 0, isActive: true });
-    this.showBsbAndAccountNo = false;
-    this.showPaymentMethodField = false;
     this.displayFamilyModal = true;
   }
 
@@ -299,16 +305,7 @@ export class AdminRegistrationDetailsComponent implements OnInit {
   }
 
   openMemberEditModal(member: any): void {
-    this.showBsbAndAccountNo = true;
-    this.showPaymentMethodField = true;
     this.modalForm.reset();
-
-    this.showBsbAndAccountNo = (member.modeOfPayment === 'DDR');
-
-    if (member.parentMemberId != 0) {
-      this.showBsbAndAccountNo = false;
-      this.showPaymentMethodField = false;
-    }
 
     const formattedDate = this.datePipe.transform(member.dateofBirth, "yyyy-MM-dd");
     this.modalForm.patchValue({
@@ -320,10 +317,6 @@ export class AdminRegistrationDetailsComponent implements OnInit {
     this.displayFamilyModal = true;
   }
 
-  toogleAccountDetails() {
-    const value = this.modalForm.value;
-    this.showBsbAndAccountNo = (value.modeOfPayment === 'DDR');
-  }
 
   get validationSummary(): string[] {
     const errors: string[] = [];

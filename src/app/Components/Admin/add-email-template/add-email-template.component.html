@@ -1,8 +1,9 @@
+<app-page-header 
+  title="New Email Template" 
+  subtitle="Configure your email template details below">
+</app-page-header>
+
 <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
-  <div class="mb-8">
-    <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">{{emailTemplate.emailTemplateName || 'New Email Template'}}</h2>
-    <p class="text-zinc-500 dark:text-zinc-400 mt-1">Configure your email template details below.</p>
-  </div>
 
   <form [formGroup]="updateEmailTemplateForm" (ngSubmit)="onSubmit()" class="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

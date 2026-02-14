@@ -7,7 +7,7 @@ import { AddFamilyMember } from '../../../Models/member-classes';
 import { ToastrService } from 'ngx-toastr';
 import { EmergencyContactDTO } from '../../../Models/emergency-contact-classes';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faContactCard, faEdit, faPlus, faFile, faTrash, faUserGroup, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { faContactCard, faEdit, faPlus, faFile, faTrash, faUserGroup, faExclamationTriangle, faCreditCard, faUniversity, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 
 import { DialogModule } from 'primeng/dialog';
@@ -18,6 +18,8 @@ import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-registration-details',
@@ -36,7 +38,9 @@ import { InputIconModule } from 'primeng/inputicon';
     SelectModule,
     DatePickerModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    SelectButtonModule,
+    PageHeaderComponent
   ],
   providers: [DatePipe],
   templateUrl: './registration-details.component.html',
@@ -57,6 +61,10 @@ export class RegistrationDetailsComponent implements OnInit {
   faEditIcon = faEdit;
   faAttachmentIcon = faFile;
   faWarnIcon = faExclamationTriangle;
+  faCardIcon = faCreditCard;
+  faBankIcon = faUniversity;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
 
   membershipForm!: FormGroup;
   emergencyContactForm!: FormGroup;
@@ -77,8 +85,16 @@ export class RegistrationDetailsComponent implements OnInit {
   displayFamilyModal: boolean = false;
   displayEmergencyModal: boolean = false;
 
-  showBsbAndAccountNo = true;
-  showPaymentMethodField = true;
+  showMainBsbAndAccountNo = true;
+
+  isFamilyExpanded = true;
+  isEmergencyExpanded = true;
+  isBankExpanded = true;
+
+  paymentOptions = [
+    { label: 'Direct Debit', value: 'DDR', icon: 'pi pi-credit-card' },
+    { label: 'Bank Transfer', value: 'BANK TRANSFER', icon: 'pi pi-university' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -126,6 +142,9 @@ export class RegistrationDetailsComponent implements OnInit {
         this.isSpouseFilled = !!data.spouse;
 
         const m = data.primaryMember;
+        if (!m.modeOfPayment) m.modeOfPayment = 'DDR';
+
+        this.showMainBsbAndAccountNo = (m.modeOfPayment === 'DDR');
         this.isPaymentMethodAdded = (m.modeOfPayment && m.accountNo && m.bsb && m.accountName) || m.modeOfPayment === "BANK TRANSFER";
         this.isDateOfBirthFilled = !!(m.dateofBirth && m.gender);
 
@@ -159,10 +178,9 @@ export class RegistrationDetailsComponent implements OnInit {
       gender: ['', Validators.required],
       dateofBirth: ['', Validators.required],
       phoneH: [''],
-      modeOfPayment: [''],
-      bsb: [''],
       accountNo: [''],
       accountName: [''],
+      modeOfPayment: ['DDR'],
       isActive: [false],
     });
   }
@@ -191,9 +209,7 @@ export class RegistrationDetailsComponent implements OnInit {
 
   openModal(type: string): void {
     this.selectedType = type;
-    this.modalForm.reset({ memberId: 0, isActive: false });
-    this.showBsbAndAccountNo = false;
-    this.showPaymentMethodField = false;
+    this.modalForm.reset({ memberId: 0, isActive: false, modeOfPayment: 'DDR' });
     this.displayFamilyModal = true;
   }
 
@@ -331,16 +347,7 @@ export class RegistrationDetailsComponent implements OnInit {
   }
 
   openMemberEditModal(member: any): void {
-    this.showBsbAndAccountNo = true;
-    this.showPaymentMethodField = true;
     this.modalForm.reset();
-
-    this.showBsbAndAccountNo = (member.modeOfPayment === 'DDR');
-
-    if (member.parentMemberId != 0) {
-      this.showBsbAndAccountNo = false;
-      this.showPaymentMethodField = false;
-    }
 
     const formattedDate = this.datePipe.transform(member.dateofBirth, "yyyy-MM-dd");
     this.modalForm.patchValue({
@@ -353,14 +360,10 @@ export class RegistrationDetailsComponent implements OnInit {
   }
 
   toogleStepAccountDetails(type: any): void {
-    this.showBsbAndAccountNo = (type === 'DDR');
+    this.showMainBsbAndAccountNo = (type === 'DDR');
     this.cdr.detectChanges();
   }
 
-  toogleAccountDetails(): void {
-    const value = this.modalForm.value;
-    this.showBsbAndAccountNo = (value.modeOfPayment === 'DDR');
-  }
 
   get validationSummary(): string[] {
     const errors: string[] = [];

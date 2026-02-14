@@ -1,8 +1,9 @@
+<app-page-header 
+  title="Member Attachments" 
+  subtitle="Upload and manage member-related documents">
+</app-page-header>
+
 <div class="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto">
-  <div class="mb-8">
-    <h2 class="text-3xl font-bold text-zinc-900 dark:text-white">Member Attachments</h2>
-    <p class="text-zinc-500 dark:text-zinc-400 mt-1">Upload and manage member-related documents.</p>
-  </div>
 
   <!-- Upload Form -->
   <div class="bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm mb-8">
@@ -29,7 +30,7 @@
   </div>
 
   <!-- Attachment List -->
-  <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[400px]">
+  <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[300px]">
     <div class="p-6 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
       <h3 class="text-lg font-bold text-zinc-900 dark:text-white">Document History</h3>
       @if (attachments.length > 0) {
@@ -39,7 +40,7 @@
       }
     </div>
     
-    <p-table [value]="attachments" [paginator]="true" [rows]="10" styleClass="p-datatable-sm" responsiveLayout="scroll">
+    <p-table [value]="attachments" styleClass="p-datatable-sm" responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr class="bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
           <th class="px-6 py-4 text-xs font-bold text-zinc-500 uppercase tracking-wider">Type</th>

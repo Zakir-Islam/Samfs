@@ -7,11 +7,12 @@ import { ActivatedRoute } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-email-log',
   standalone: true,
-  imports: [CommonModule, TableModule, DialogModule, ButtonModule],
+  imports: [CommonModule, TableModule, DialogModule, ButtonModule, PageHeaderComponent],
   templateUrl: './email-log.component.html',
   styleUrl: './email-log.component.css'
 })

@@ -8,37 +8,38 @@ import { Role } from '../../../Models/roles';
 // import url('https://rsms.me/inter/inter.css');
 
 @Component({
-    selector: 'app-header',
-    imports: [FontAwesomeModule, RouterLink],
-    templateUrl: './header.component.html',
-    styleUrl: './header.component.css'
+  selector: 'app-header',
+  imports: [FontAwesomeModule, RouterLink],
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.css'
 })
 export class HeaderComponent {
   faBell = faBell;
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) { }
 
   userProfilePictureUrl = '../../../assets/profile.jpg';
   userName = 'Zakir';
   isAuthenticated!: boolean;
-  isStoreAuthenticated!:boolean
+  isStoreAuthenticated!: boolean
   isLoginPage!: boolean;
   user!: User;
-  role!:Role;
+  role!: Role;
   ngOnInit(): void {
     this.user = this.authService.getUserData();
     this.router.events.subscribe((val: any) => {
       this.isLoginPage =
         this.router.url.includes('login') ||
-        this.router.url=="/"||
-        this.router.url.includes('registration-details')
-      if (this.authService.isAuthenticated() != null && this.authService.getUserData()!=null) {
-     
+        this.router.url == "/" ||
+        this.router.url.includes('registration-details') ||
+        this.router.url.includes('register-member')
+      if (this.authService.isAuthenticated() != null && this.authService.getUserData() != null) {
+
         var user = this.authService.getUserData();
-        this.role=user.role||{};
+        this.role = user.role || {};
         this.userName = user.firstName || '';
         this.isAuthenticated = true;
-      } 
-      else{
+      }
+      else {
         this.isAuthenticated = false;
       }
     });

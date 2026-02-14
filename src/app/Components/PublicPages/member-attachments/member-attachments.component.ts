@@ -9,11 +9,12 @@ import { bucketURL } from '../../../Core/Constants/constant';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-member-attachments',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectModule, ButtonModule, TableModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SelectModule, ButtonModule, TableModule, PageHeaderComponent],
   templateUrl: './member-attachments.component.html',
   styleUrl: './member-attachments.component.css'
 })

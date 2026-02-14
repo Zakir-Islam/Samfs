@@ -10,11 +10,12 @@ import { EmailTemplateService } from '../../../Services/email-template.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-update-email-template',
   standalone: true,
-  imports: [EditorComponent, ReactiveFormsModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule],
+  imports: [EditorComponent, ReactiveFormsModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule, PageHeaderComponent],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ],

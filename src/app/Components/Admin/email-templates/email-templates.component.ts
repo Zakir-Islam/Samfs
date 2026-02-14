@@ -5,11 +5,12 @@ import { EmailTemplateService } from '../../../Services/email-template.service';
 import { EmailTemplate } from '../../../Models/EmailTemplate';
 
 import { ButtonModule } from 'primeng/button';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-email-templates',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonModule],
+  imports: [CommonModule, RouterLink, ButtonModule, PageHeaderComponent],
   templateUrl: './email-templates.component.html',
   styleUrl: './email-templates.component.css'
 })

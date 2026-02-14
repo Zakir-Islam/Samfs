@@ -10,11 +10,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { PageHeaderComponent } from '../../Shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-contact-lists',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, TableModule, InputTextModule, ButtonModule, ConfirmDialogModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, TableModule, InputTextModule, ButtonModule, ConfirmDialogModule, PageHeaderComponent],
   providers: [ConfirmationService],
   templateUrl: './contact-lists.component.html',
   styleUrl: './contact-lists.component.css'
