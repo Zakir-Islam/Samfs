@@ -182,7 +182,7 @@
               </div>
               <div class="flex items-center space-x-4">
                 <span class="px-2 py-0.5 rounded-lg bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold text-zinc-600 dark:text-zinc-400">
-                  {{ (memberDetails.spouse ? 1 : 0) + memberDetails.dependentChild.length + memberDetails.dependentParents.length }} Members
+                  {{ (memberDetails.spouse ? 1 : 0) + memberDetails.dependentChild.length + memberDetails.dependentParents.length+ memberDetails.additionalDependentChild.length+ memberDetails.additionalIndependentChild.length }} Members
                 </span>
                 <fa-icon [icon]="faChevronDown" class="text-zinc-400 transition-transform duration-500 ease-in-out" 
                          [class.rotate-180]="isFamilyExpanded"></fa-icon>
@@ -269,7 +269,80 @@
                       </div>
                     </div>
                   }
-
+ <!-- Children -->
+                  @for (c of memberDetails.AdditionalDependentChild; track c) {
+                    <div class="p-6 border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Additional Dependent Child</span>
+                        <div class="flex space-x-1">
+                          <button [routerLink]="['/member-attachments', c.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                            <fa-icon [icon]="faAttachmentIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="openMemberEditModal(c)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                            <fa-icon [icon]="faEditIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="removeMember(c)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                            <fa-icon [icon]="trashIcon" class="text-sm"></fa-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Name</p>
+                          <p class="text-sm font-bold text-zinc-900 dark:text-white">{{ c.memberFName }} {{ c.memberLName }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Phone</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ c.phoneH || 'N/A' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">DOB</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400 font-mono">{{ c.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Fee</p>
+                          <p class="text-sm font-black text-emerald-600 dark:text-emerald-400">${{ c.membershipCategory.membershipFees.toFixed(2) }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                   <!-- Children -->
+                  @for (c of memberDetails.additionalIndependentChild; track c) {
+                    <div class="p-6 border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-emerald-500">Additional  Independent Child</span>
+                        <div class="flex space-x-1">
+                          <button [routerLink]="['/member-attachments', c.memberUID]" class="p-2 text-zinc-400 hover:text-blue-500 transition-colors" title="Manage Attachments">
+                            <fa-icon [icon]="faAttachmentIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="openMemberEditModal(c)" class="p-2 text-zinc-400 hover:text-amber-500 transition-colors">
+                            <fa-icon [icon]="faEditIcon" class="text-sm"></fa-icon>
+                          </button>
+                          <button (click)="removeMember(c)" class="p-2 text-zinc-400 hover:text-red-500 transition-colors">
+                            <fa-icon [icon]="trashIcon" class="text-sm"></fa-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Name</p>
+                          <p class="text-sm font-bold text-zinc-900 dark:text-white">{{ c.memberFName }} {{ c.memberLName }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Phone</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ c.phoneH || 'N/A' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">DOB</p>
+                          <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400 font-mono">{{ c.dateofBirth | date:'dd/MM/yyyy' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-[10px] text-zinc-400 uppercase font-bold mb-1">Fee</p>
+                          <p class="text-sm font-black text-emerald-600 dark:text-emerald-400">${{ c.membershipCategory.membershipFees.toFixed(2) }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  }
                   <!-- Parents -->
                   @for (p of memberDetails.dependentParents; track p) {
                     <div class="p-6 border-b border-zinc-50 dark:border-zinc-800/50 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
