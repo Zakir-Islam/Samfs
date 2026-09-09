@@ -273,7 +273,7 @@ export class RegistrationDetailsComponent implements OnInit {
       confirmButtonColor: '#ef4444'
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.memberService.DeleteMember(member.memberId).subscribe({
+        this.memberService.DeleteMember(member.memberUID).subscribe({
           next: (data: any) => {
             if (data == 1) {
               Swal.fire('Deleted!', 'Your family member has been deleted.', 'success');
@@ -296,7 +296,7 @@ export class RegistrationDetailsComponent implements OnInit {
       confirmButtonColor: '#ef4444'
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.memberService.deleteEmergencyContact(contact.contactId).subscribe({
+        this.memberService.deleteEmergencyContact(contact.encryptedContactId).subscribe({
           next: (data: any) => {
             if (data == 1) {
               Swal.fire('Deleted!', 'Your contact has been deleted.', 'success');

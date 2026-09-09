@@ -235,7 +235,7 @@ export class AdminRegistrationDetailsComponent implements OnInit {
       confirmButtonText: 'Yes, remove it!'
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.memberService.DeleteMember(member.memberId).subscribe((data: any) => {
+        this.memberService.DeleteMember(member.memberUID).subscribe((data: any) => {
           if (data == 1) {
             Swal.fire('Deleted!', 'Your family member has been deleted.', 'success');
             this.loadMemberDetails(this.memberUid);
@@ -256,7 +256,7 @@ export class AdminRegistrationDetailsComponent implements OnInit {
       confirmButtonText: 'Yes, remove it!'
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.memberService.deleteEmergencyContact(contact.contactId).subscribe((data: any) => {
+        this.memberService.deleteEmergencyContact(contact.encryptedContactId).subscribe((data: any) => {
           if (data == 1) {
             Swal.fire('Deleted!', 'Your contact has been deleted.', 'success');
             this.loadMemberDetails(this.memberUid);

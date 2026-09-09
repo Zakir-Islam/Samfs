@@ -23,7 +23,7 @@ export class MemberService {
     return this.http.post<any>(`${this.baseURL}/addFamilyMember`, member);
   }
   DeleteMember(memberId: any): Observable<any> {
-    return this.http.get<any>(`${this.baseURL}/DeleteMember?memberId=${memberId}`);
+    return this.http.get<any>(`${this.baseURL}/DeleteMember?uid=${memberId}`);
   }
   deleteEmergencyContact(emergencyContactId: any): Observable<any> {
     return this.http.get<any>(`${this.baseURL}/DeleteEmergencyContact?emergencyContactId=${emergencyContactId}`);
