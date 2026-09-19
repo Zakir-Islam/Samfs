@@ -1,6 +1,4 @@
-<app-page-header 
-  title="Members List" 
-  subtitle="View and manage all registered members">
+<app-page-header title="Members List" subtitle="View and manage all registered members">
 </app-page-header>
 
 <div class="px-4 sm:px-6">
@@ -76,9 +74,7 @@
         styleClass="p-datatable-striped" [tableStyle]="{'min-width': '60rem'}" responsiveLayout="scroll"
         [globalFilterFields]="[
     'membershipNo',
-    'memberFName',
-    'memberMName',
-    'memberLName',
+    'fullName',
     'email',
     'bsb',
     'accountNo',
@@ -88,18 +84,65 @@
   ]">
         <ng-template pTemplate="header">
           <tr class="bg-zinc-50 dark:bg-zinc-800/50">
-            <th pSortableColumn="membershipNo">Membership No <p-sortIcon field="membershipNo"></p-sortIcon></th>
-            <th>Type</th>
-            <th pSortableColumn="memberFName">Name <p-sortIcon field="memberFName"></p-sortIcon></th>
-            <th>Email</th>
-            <th>Renewal Date</th>
-            <th>Days</th>
-            <th>Invoice</th>
-            <th>BSB / Account</th>
-            <th>Payment</th>
-            <th>Reminder</th>
-            <th>Gender</th>
-            <th>Status</th>
+
+            <th pSortableColumn="membershipNo">
+              Membership No
+              <p-sortIcon field="membershipNo"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="membershipTypeId">
+              Type
+              <p-sortIcon field="membershipTypeId"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="fullName">
+              Name
+              <p-sortIcon field="fullName"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="email">
+              Email
+              <p-sortIcon field="email"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="validUpto">
+              Renewal Date
+              <p-sortIcon field="validUpto"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="daysRemaining">
+              Days
+              <p-sortIcon field="daysRemaining"></p-sortIcon>
+            </th>
+
+            <th>
+              Invoice
+            </th>
+
+            <th pSortableColumn="bsb">
+              BSB / Account
+              <p-sortIcon field="bsb"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="modeOfPayment">
+              Payment
+              <p-sortIcon field="modeOfPayment"></p-sortIcon>
+            </th>
+
+            <th>
+              Reminder
+            </th>
+
+            <th pSortableColumn="gender">
+              Gender
+              <p-sortIcon field="gender"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="status">
+              Status
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row>
@@ -108,11 +151,11 @@
             <td>
               <a href="javascript:void(0)" (click)="viewMember(row.memberUID)"
                 class="text-blue-600 hover:underline font-medium">
-                {{row.membershipNo}} 
+                {{row.membershipNo}}
               </a>
-              <button pButton class="p-button-danger p-button-sm "
-                  (click)="deleteMember(row.memberId)">   <i class="fa fa-trash"></i>
-                </button>
+              <button pButton class="p-button-danger p-button-sm " (click)="deleteMember(row.memberId)"> <i
+                  class="fa fa-trash"></i>
+              </button>
             </td>
             <td>
               <span

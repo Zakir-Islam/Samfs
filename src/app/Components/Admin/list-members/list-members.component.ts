@@ -49,7 +49,7 @@ export class ListMembersComponent {
   faEditIcon = faEdit;
 
   membershipTypeId = new FormControl(0);
-  status = new FormControl(0);
+  status = new FormControl(1);
   form!: FormGroup;
   updateForm!: FormGroup;
 
@@ -97,7 +97,16 @@ export class ListMembersComponent {
     this.isLoading = true;
     this.manageMemberService.getAllMembers(this.membershipTypeId.value || 0, this.status.value || 0).subscribe({
       next: (data: any) => {
-        this.members = data;
+        this.members = data.map((member: any) => ({
+          ...member,
+          fullName: [
+            member.memberFName,
+            member.memberMName,
+            member.memberLName
+          ]
+            .filter(x => x && x.trim())
+            .join(' ')
+        }));
         this.isLoading = false;
       },
       error: (err: any) => {
