@@ -183,7 +183,16 @@
             </td>
             <td>
               <div class="flex items-center space-x-2">
-                @if (row.lastOnlineInvoiceURL) {
+                <span *ngIf="row.lastInvoiceDate; else noInvoice" class="text-zinc-700 dark:text-zinc-300">
+                  {{row.lastInvoiceDate | date:'dd/MM/yyyy'}}
+                </span>
+
+                <ng-template #noInvoice>
+                  <span class="text-zinc-400 text-xs">
+                    No Invoice Date
+                  </span>
+                </ng-template>
+                @if (row.lastOnlineInvoiceURL && row.status!='Paid') {
                 <a [href]="row.lastOnlineInvoiceURL" target="_blank" class="text-red-500 hover:text-red-600">
                   <i class="fa fa-file-pdf"></i>
                 </a>
@@ -220,6 +229,11 @@
               <span *ngIf="row.status=='Paid'"
                 class="px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700">
                 {{row.status}}
+                @if (row.lastOnlineInvoiceURL) {
+                <a [href]="row.lastOnlineInvoiceURL" target="_blank" class="text-red-500 hover:text-red-600">
+                  <i class="fa fa-file-pdf"></i>
+                </a>
+                }
               </span>
               <span *ngIf="row.status=='Awaiting For Payment'"
                 class="px-2 py-0.5 rounded text-xs font-semibold bg-yellow-100 text-yellow-700">
